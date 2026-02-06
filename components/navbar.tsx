@@ -1,8 +1,6 @@
 import { Navbar as HeroUINavbar, NavbarContent, NavbarItem } from "@heroui/navbar";
 import { ThemeSwitch } from "./theme-switch";
 
-
-
 export const Navbar = () => {
   return (
     <HeroUINavbar maxWidth="xl" position="sticky">
