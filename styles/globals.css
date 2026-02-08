@@ -6,7 +6,17 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@theme {
-    --font-sans: "font", sans-serif;
-    --font-mono: "monospace", monospace;
+:root {
+	--brand: #1e8279;
+	--brand-foreground: #ffffff;
+	--surface: #f7f5ef;
+	--surface-foreground: #141414;
 }
+
+@theme {
+	--color-brand: var(--brand);
+	--color-brand-foreground: var(--brand-foreground);
+	--color-surface: var(--surface);
+	--color-surface-foreground: var(--surface-foreground);
+}
+

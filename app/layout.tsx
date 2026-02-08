@@ -1,14 +1,20 @@
 import "@/styles/globals.css";
 import { Metadata } from "next";
-import clsx from "clsx";
+import clsx from "clsx"; // for merging class names
 
 import { Providers } from "./providers";
 
 import { siteConfig } from "@/config/site";
-import { fontSans } from "@/config/fonts";
-import { Navbar } from "@/components/navbar";
-import AppShell from "@/components/ui/AppShell/AppShell";
+import { SessionProvider } from "next-auth/react";
+import AppShell from "@/components/AppShell";
 import { ToasterProvider } from "@/context/ToasterContext";
+import PesertaNavbar from "@/components/layouts/navbar/PesertaNavabr";
+import { Poppins } from "next/font/google";
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+});
 
 export const metadata: Metadata = {
   title: {
@@ -31,23 +37,21 @@ export default function RootLayout({
       <head />
       <body
         className={clsx(
-          "min-h-screen text-foreground bg-background font-sans antialiased",
-          fontSans.variable,
+          "min-h-screen text-foreground bg-white font-sans antialiased",
+          poppins.className,
         )}
       >
-        <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
+        <SessionProvider>
           <ToasterProvider>
             <div className="relative flex flex-col h-screen">
-              <Navbar />
-              <AppShell>
-                {children}
-              </AppShell>
-              <footer className="w-full flex items-center justify-center py-3">
+              <PesertaNavbar />
+              <AppShell className="flex-1">{children}</AppShell>
+              <footer className="w-full flex items-center text-brand justify-center py-3 mt-auto">
                 footer
               </footer>
             </div>
           </ToasterProvider>
-        </Providers>
+        </SessionProvider>
       </body>
     </html>
   );
