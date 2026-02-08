@@ -1,5 +1,4 @@
 import { Navbar as HeroUINavbar, NavbarContent, NavbarItem } from "@heroui/navbar";
-import { ThemeSwitch } from "./theme-switch";
 
 export const Navbar = () => {
   return (
@@ -9,7 +8,7 @@ export const Navbar = () => {
         justify="end"
       >
         <NavbarItem className="hidden sm:flex gap-2">
-          <ThemeSwitch />
+          test
         </NavbarItem>
       </NavbarContent>
     </HeroUINavbar>
