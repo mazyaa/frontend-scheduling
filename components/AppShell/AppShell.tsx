@@ -2,7 +2,6 @@
 
 import Toaster from "@/components/ui/Toaster/Toaster";
 import { defaultToaster, ToasterContext } from "@/context/ToasterContext";
-import { cn } from "@heroui/theme";
 import { ReactNode, useContext, useEffect } from "react";
 interface PropTypes {
   children: ReactNode;
