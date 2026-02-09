@@ -5,10 +5,8 @@ import clsx from "clsx"; // for merging class names
 import { Providers } from "./providers";
 
 import { siteConfig } from "@/config/site";
-import { SessionProvider } from "next-auth/react";
 import AppShell from "@/components/AppShell";
-import { ToasterProvider } from "@/context/ToasterContext";
-import PesertaNavbar from "@/components/layouts/navbar/PesertaNavabr";
+import Navbar from "@/components/layouts/navbar/Navbar";
 import { Poppins } from "next/font/google";
 
 const poppins = Poppins({
@@ -41,17 +39,15 @@ export default function RootLayout({
           poppins.className,
         )}
       >
-        <SessionProvider>
-          <ToasterProvider>
-            <div className="relative flex flex-col h-screen">
-              <PesertaNavbar />
-              <AppShell className="flex-1">{children}</AppShell>
-              <footer className="w-full flex items-center text-brand justify-center py-3 mt-auto">
-                footer
-              </footer>
-            </div>
-          </ToasterProvider>
-        </SessionProvider>
+        <Providers>
+          <div className="relative flex flex-col h-screen">
+            <Navbar />
+            <AppShell className="flex-1">{children}</AppShell>
+            <footer className="w-full flex items-center text-brand justify-center py-3 mt-auto">
+              footer
+            </footer>
+          </div>
+        </Providers>
       </body>
     </html>
   );
