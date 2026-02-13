@@ -1,13 +1,17 @@
-import GridBackground from "@/components/GridBackground";
+import AuthLayout from "@/components/layouts/AuthLayout";
+import Login from "@/components/views/Login/Login";
+import { Metadata } from "next";
 
-export default function Login() {
+export const metadata: Metadata = {
+  title: "Login",
+  description: "Masuk ke akun",
+  icons: { icon: "/images/general/veritrust-logo.png" },
+};
+
+export default function LoginPage() {
   return (
-    <>
-      <GridBackground />
-      LOGINSSSASAS
-      sdsakjdkalsd
-      <br />
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aperiam similique neque impedit amet, ipsum porro accusamus recusandae cupiditate ex, sapiente quis corrupti velit illum exercitationem nostrum facere obcaecati repellendus cumque.
-    </>
+    <AuthLayout>
+        <Login />
+    </AuthLayout>
   );
 }
