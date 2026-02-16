@@ -6,6 +6,7 @@ import { HeroUIProvider } from "@heroui/system";
 import { useRouter } from "next/navigation";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { ToastProvider } from "@heroui/toast";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 // import { SessionProvider } from "next-auth/react";
 import { ToasterProvider } from "@/context/ToasterContext";
 
@@ -22,15 +23,19 @@ declare module "@react-types/shared" {
   }
 }
 
+const queryClient = new QueryClient();
+
 export function Providers({ children, themeProps }: ProvidersProps) {
   const router = useRouter();
 
   return (
     <ToasterProvider>
-      <HeroUIProvider navigate={router.push}>
-        <ToastProvider />
-        <NextThemesProvider {...themeProps}>{children}</NextThemesProvider>
-      </HeroUIProvider>
+      <QueryClientProvider client={queryClient}>
+        <HeroUIProvider navigate={router.push}>
+          <ToastProvider />
+          <NextThemesProvider {...themeProps}>{children}</NextThemesProvider>
+        </HeroUIProvider>
+      </QueryClientProvider>
     </ToasterProvider>
   );
 }

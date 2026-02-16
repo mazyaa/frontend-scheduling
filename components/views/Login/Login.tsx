@@ -1,13 +1,28 @@
+"use client";
+
 import GridBackground from "@/components/GridBackground";
 import Image from "next/image";
 import Link from "next/link";
 import { cn } from "tailwind-variants";
-import { Button, Card, CardBody, Input } from "@heroui/react";
+import { Card, CardBody } from "@heroui/card";
+import { Input } from "@heroui/input";
+import { Button } from "@heroui/button";
+import useLogin from "./useLogin";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { Controller } from "react-hook-form";
-import { Spinner } from "@heroui/react";
+import { Spinner } from "@heroui/spinner";
 
 export default function Login() {
+  const {
+    isVisible,
+    toggleVisibility,
+    control,
+    handleSubmit,
+    handleLogin,
+    isPendingLogin,
+    errors,
+  } = useLogin();
+  
   return (
     <>
       <GridBackground />
@@ -37,21 +52,21 @@ export default function Login() {
               </p>
             </div>
 
-            {/* {errors.root && (
+            {errors.root && (
               <p className="mb-2 text-sm font-medium text-danger">
                 {errors?.root?.message}
               </p>
-            )} */}
+            )}
 
             <form
               className={cn(
                 "flex w-80 flex-col",
-                // Object.keys(errors).length > 0 ? "gap-2" : "gap-3",
+                Object.keys(errors).length > 0 ? "gap-2" : "gap-3",
               )}
-              // onSubmit={handleSubmit(handleLogin)}
+              onSubmit={handleSubmit(handleLogin)}
             >
               <Controller
-                name="identifier"
+                name="email"
                 control={control}
                 render={({ field }) => (
                   <Input
@@ -61,8 +76,8 @@ export default function Login() {
                     variant="bordered"
                     className="mb-4"
                     autoComplete="off"
-                    isInvalid={errors.identifier !== undefined}
-                    errorMessage={errors.identifier?.message}
+                    isInvalid={errors.email !== undefined}
+                    errorMessage={errors.email?.message}
                   />
                 )}
               />
