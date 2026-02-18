@@ -22,33 +22,29 @@ export default function Login() {
     isPendingLogin,
     errors,
   } = useLogin();
-  
+
   return (
     <>
       <GridBackground />
-      <div className="flex h-full w-full items-center justify-center gap-10 py-10 lg:flex-row lg:gap-20">
+      <div className="flex h-full w-full items-center justify-center gap-10 py-10 flex-col lg:flex-row lg:gap-20">
         <Image
           src="/images/iconLogin.png"
           alt="icon-login"
           width={400}
           height={400}
-          className="z-999"
+          className="z-999 lg:w-md w-sm"
         />
 
         <Card>
           <CardBody className="p-4 lg:p-8">
-            <div className="mb-5 flex flex-col">
-              <h1 className="text-xl font-bold text-danger-500 lg:text-2xl">
-                Create Account
+            <div className="mb-5 flex flex-col gap-3">
+              <h1 className="text-2xl font-semibold text-brand lg:text-2xl">
+                Login
               </h1>
               <p className="text-small">
-                Don&apos;t have an account?&nbsp;
-                <Link
-                  href="/auth/register"
-                  className="font-semibold text-danger-400"
-                >
-                  Register Here
-                </Link>
+                Silahkan&nbsp;
+                <span className="font-semibold text-brand">Login</span>
+                &nbsp;Terlebih Dahulu!
               </p>
             </div>
 
@@ -110,7 +106,7 @@ export default function Login() {
                   />
                 )}
               />
-              <Button color="danger" size="lg" type="submit">
+              <Button className="bg-brand text-white" size="lg" type="submit">
                 {isPendingLogin ? (
                   <Spinner
                     color="default"
