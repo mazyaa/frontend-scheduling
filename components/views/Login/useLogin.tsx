@@ -26,7 +26,7 @@ const useLogin = () => {
   const searchParams = useSearchParams(); // for getting query parameters from URL (e.g., callbackUrl)
   const [isVisible, setIsVisible] = useState(false);
   const toggleVisibility = () => setIsVisible(!isVisible);
-  const callbackUrl : string = (searchParams.get("callbackUrl") as string) || "/"; // default callback URL is home page if not provided in query parameters
+  const callbackUrl : string = (searchParams.get("callbackUrl") as string) || "/"; // e.g user access page protected page without login, it will redirect to login page with callbackUrl query parameter, after successful login it will redirect back to the protected page
   const { setToaster } = useContext(ToasterContext);
 
   // hooks from react for form handling
@@ -51,6 +51,8 @@ const useLogin = () => {
     if (result?.error && result?.status === 401) {
         throw new Error("Email is not matched with your password");
     }
+
+    console.log(result);
   }
 
   // useMutation from react-query for handling requests (POST) 
