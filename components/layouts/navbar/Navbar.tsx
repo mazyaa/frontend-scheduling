@@ -9,14 +9,12 @@ import { createPortal } from "react-dom";
 import { IoClose } from "react-icons/io5";
 import { HiMenuAlt3 } from "react-icons/hi";
 import { siteConfig } from "@/config/site";
-// import { signOut } from "next-auth/react";
-// import { useAuth } from "@/hooks/useAuth"
+import { signIn, signOut, useSession } from "next-auth/react";
 
 const Navbar = () => {
   const pathname = usePathname();
-  const { user, role, isLoggedIn } = useMockSession();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  // const { user, role, isLogin, loading } = useAuth()
+  const { status } = useSession();
 
   // if (loading) return null;
 
@@ -58,44 +56,41 @@ const Navbar = () => {
 
           {/* Desktop Menu */}
           <div className="hidden md:flex flex-row items-center mr-5">
-            {!isLoggedIn &&
-              PublicMenus.map((menu) => (
-                <Link
-                  key={menu.name}
-                  href={menu.href}
-                  className={`flex items-center px-3 py-3 rounded-lg ${
-                    pathname === menu.href
-                      ? "text-cyan-600 text-sm font-semibold"
-                      : "text-brand hover:text-brand/70 font-semibold text-sm"
-                  }`}
-                >
-                  {menu.icon && (
-                    <span className="w-5 h-5">
-                      <menu.icon />
-                    </span>
-                  )}
-                  {menu.isButton ? (
-                    <span className="px-4 py-2 ml-7 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition-colors">
-                      {menu.name}
-                    </span>
-                  ) : (
-                    menu.name
-                  )}
-                </Link>
-              ))}
-
-            {/* if logged in */}
-            {/* {isLoggedIn &&
-              (role as MockRole) === "peserta" &&
-              PesertaMenus.map((menu) => (
-                <Link
-                  key={menu.name}
-                  href={menu.href}
-                  className={`m-4 text-lg font-medium hover:text-brand ${pathname === menu.href ? "text-brand" : "text-foreground"}`}
-                >
-                  {menu.name}
-                </Link>
-              ))} */}
+            {PublicMenus.filter(menu => !menu.isButton).map((menu) => (
+              <Link
+                key={menu.name}
+                href={menu.href}
+                className={`flex items-center px-3 py-3 rounded-lg ${
+                  pathname === menu.href
+                    ? "text-cyan-600 text-sm font-semibold"
+                    : "text-brand hover:text-brand/70 font-semibold text-sm"
+                }`}
+              >
+                {menu.icon && (
+                  <span className="w-5 h-5">
+                    <menu.icon />
+                  </span>
+                )}
+                {menu.name}
+              </Link>
+            ))}
+            
+            {/* Auth Button */}
+            {status === 'authenticated' ? (
+              <span 
+                className="px-4 py-2 ml-7 bg-cyan-600 font-semibold text-white rounded-lg hover:bg-cyan-700 transition-colors cursor-pointer"
+                onClick={() => signOut()}
+              >
+                Logout
+              </span>
+            ) : (
+              <span 
+                className="px-4 py-2 ml-7 font-semibold bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition-colors cursor-pointer"
+                onClick={() => signIn()}
+              >
+                Login
+              </span>
+            )}
           </div>
 
           {/* Mobile Toggle Button */}
@@ -150,26 +145,40 @@ const Navbar = () => {
 
               {/* Mobile Menu Links */}
               <div className="flex flex-col p-4 gap-2 flex-1 overflow-y-auto">
-                {!isLoggedIn &&
-                  PublicMenus.map((menu) => (
-                    <Link
-                      key={menu.name}
-                      href={menu.href}
-                      onClick={closeMenu}
-                      className={`flex items-center gap-2 px-3 py-3 rounded-lg ${
-                        pathname === menu.href
-                          ? "text-brand bg-white font-semibold"
-                          : "text-white hover:text-brand hover:bg-white"
-                      }`}
-                    >
-                      {menu.icon && (
-                        <span className="w-5 h-5">
-                          <menu.icon />
-                        </span>
-                      )}
-                      {menu.name}
-                    </Link>
-                  ))}
+                {PublicMenus.filter(menu => !menu.isButton).map((menu) => (
+                  <Link
+                    key={menu.name}
+                    href={menu.href}
+                    onClick={closeMenu}
+                    className={`flex items-center gap-2 px-3 py-3 rounded-lg ${
+                      pathname === menu.href
+                        ? "text-brand bg-white font-semibold"
+                        : "text-white font-semibold hover:text-brand hover:bg-white"
+                    }`}
+                  >
+                    {menu.icon && (
+                      <span className="w-5 h-5">
+                        <menu.icon />
+                      </span>
+                    )}
+                    {menu.name}
+                  </Link>
+                ))}
+                
+                {/* Mobile Auth Button */}
+                <button
+                  onClick={() => {
+                    if (status === 'authenticated') {
+                      signOut();
+                    } else {
+                      signIn();
+                    }
+                    closeMenu();
+                  }}
+                  className="px-4 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition-colors cursor-pointer font-semibold mt-2"
+                >
+                  {status === 'authenticated' ? 'Logout' : 'Login'}
+                </button>
 
 
                 {/* {isLoggedIn &&
