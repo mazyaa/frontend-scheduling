@@ -30,6 +30,7 @@ export const siteConfig = {
         { name: "Beranda", href: "/", icon: IoHomeOutline },
         { name: "Jadwal Training", href: "/jadwal-training", icon: GrSchedules },
         { name: "Login", href: "/login", isButton: true },
+        { name: "Logout", href:"/logout", isButton: true}
     ] as MenuItem[],
 
     role: {
