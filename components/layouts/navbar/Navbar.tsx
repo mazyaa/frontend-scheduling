@@ -10,6 +10,7 @@ import { IoClose } from "react-icons/io5";
 import { HiMenuAlt3 } from "react-icons/hi";
 import { siteConfig } from "@/config/site";
 import { signIn, signOut, useSession } from "next-auth/react";
+import { Button } from "@heroui/button";
 
 const Navbar = () => {
   const pathname = usePathname();
@@ -77,19 +78,19 @@ const Navbar = () => {
             
             {/* Auth Button */}
             {status === 'authenticated' ? (
-              <span 
+              <Button 
                 className="px-4 py-2 ml-7 bg-cyan-600 font-semibold text-white rounded-lg hover:bg-cyan-700 transition-colors cursor-pointer"
-                onClick={() => signOut()}
+                onPress={() => signOut()}
               >
                 Logout
-              </span>
+              </Button>
             ) : (
-              <span 
+              <Button 
                 className="px-4 py-2 ml-7 font-semibold bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition-colors cursor-pointer"
-                onClick={() => signIn()}
+                onPress={() => signIn()}
               >
                 Login
-              </span>
+              </Button>
             )}
           </div>
 
@@ -166,7 +167,7 @@ const Navbar = () => {
                 ))}
                 
                 {/* Mobile Auth Button */}
-                <button
+                <Button
                   onClick={() => {
                     if (status === 'authenticated') {
                       signOut();
@@ -178,7 +179,7 @@ const Navbar = () => {
                   className="px-4 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition-colors cursor-pointer font-semibold mt-2"
                 >
                   {status === 'authenticated' ? 'Logout' : 'Login'}
-                </button>
+                </Button>
 
 
                 {/* {isLoggedIn &&
