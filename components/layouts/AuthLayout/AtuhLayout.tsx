@@ -7,7 +7,7 @@ export default function AuthLayout({
 }) {
   return (
     <div className="flex min-h-screen min-w-full flex-col items-center justify-center gap-10">
-      <Fragment> 
+      <Fragment>
         <section className="max-w-screen-3xl 3xl:container p-6">
           {children}
         </section>

@@ -7,11 +7,12 @@ import { useEffect } from "react";
 export default function AboutPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
- useEffect(() => {
+
+  useEffect(() => {
     if (status === "unauthenticated") {
-        router.push("/login");
+      router.push("/login");
     }
- }, [session, status])
+  }, [session, status]);
 
   return (
     <div>

@@ -1,28 +1,29 @@
-import { ReactNode, useEffect, useRef } from "react"
-import { CiCircleCheck, CiCircleRemove, CiCircleInfo } from "react-icons/ci"
-import { addToast } from "@heroui/toast"
-import { cn } from "@heroui/theme"
+import { ReactNode, useEffect, useRef } from "react";
+import { CiCircleCheck, CiCircleRemove, CiCircleInfo } from "react-icons/ci";
+import { addToast } from "@heroui/toast";
+import { cn } from "@heroui/theme";
 
 const iconList: { [key: string]: ReactNode } = {
   success: <CiCircleCheck className="text-3xl text-success-55" />,
   error: <CiCircleRemove className="text-3xl text-destructive-55" />,
   info: <CiCircleInfo className="text-3xl text-primary-55" />,
-}
+};
 
 interface ToasterProps {
-  title: string
-  type: string
-  message: string
+  title: string;
+  type: string;
+  message: string;
 }
 
 const Toaster = (props: ToasterProps) => {
-  const { title, type, message } = props
-  const lastKeyRef = useRef<string | null>(null)
+  const { title, type, message } = props;
+  const lastKeyRef = useRef<string | null>(null);
 
   useEffect(() => {
-    const key = `${type}|${title}|${message}`
-    if (lastKeyRef.current === key) return
-    lastKeyRef.current = key
+    const key = `${type}|${title}|${message}`;
+
+    if (lastKeyRef.current === key) return;
+    lastKeyRef.current = key;
 
     addToast({
       title,
@@ -36,10 +37,10 @@ const Toaster = (props: ToasterProps) => {
         ]),
       },
       icon: iconList[type],
-    })
-  }, [title, type, message])
+    });
+  }, [title, type, message]);
 
-  return null
-}
+  return null;
+};
 
-export default Toaster
+export default Toaster;
