@@ -2,15 +2,15 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { MockRole, useMockSession } from "@/hooks/useMockSession";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { IoClose } from "react-icons/io5";
 import { HiMenuAlt3 } from "react-icons/hi";
-import { siteConfig } from "@/config/site";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { Button } from "@heroui/button";
+
+import { siteConfig } from "@/config/site";
 
 const Navbar = () => {
   const pathname = usePathname();
@@ -39,33 +39,33 @@ const Navbar = () => {
           {/* Logo */}
           <div className="flex flex-row items-center ml-5">
             <Image
-              src="/images/general/main-logo.png"
               alt="Veritrust Logo"
-              width={120}
-              height={100}
               className="m-2"
+              height={100}
+              src="/images/general/main-logo.png"
+              width={120}
             />
 
             <Image
-              src="/images/general/tagline.png"
               alt="Veritrust Logo"
-              width={120}
-              height={100}
               className="m-2 hidden sm:block"
+              height={100}
+              src="/images/general/tagline.png"
+              width={120}
             />
           </div>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex flex-row items-center mr-5">
-            {PublicMenus.filter(menu => !menu.isButton).map((menu) => (
+            {PublicMenus.filter((menu) => !menu.isButton).map((menu) => (
               <Link
                 key={menu.name}
-                href={menu.href}
                 className={`flex items-center px-3 py-3 rounded-lg ${
                   pathname === menu.href
                     ? "text-cyan-600 text-sm font-semibold"
                     : "text-brand hover:text-brand/70 font-semibold text-sm"
                 }`}
+                href={menu.href}
               >
                 {menu.icon && (
                   <span className="w-5 h-5">
@@ -75,17 +75,17 @@ const Navbar = () => {
                 {menu.name}
               </Link>
             ))}
-            
+
             {/* Auth Button */}
-            {status === 'authenticated' ? (
-              <Button 
+            {status === "authenticated" ? (
+              <Button
                 className="px-4 py-2 ml-7 bg-cyan-600 font-semibold text-white rounded-lg hover:bg-cyan-700 transition-colors cursor-pointer"
                 onPress={() => signOut()}
               >
                 Logout
               </Button>
             ) : (
-              <Button 
+              <Button
                 className="px-4 py-2 ml-7 font-semibold bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition-colors cursor-pointer"
                 onPress={() => signIn()}
               >
@@ -95,17 +95,17 @@ const Navbar = () => {
           </div>
 
           {/* Mobile Toggle Button */}
-          <button
-            onClick={toggleMenu}
-            className="md:hidden p-2 mr-3 rounded-lg text-brand hover:bg-brand/10 transition-colors"
+          <Button
             aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            className="md:hidden p-2 mr-3 rounded-lg text-brand hover:bg-brand/10 transition-colors"
+            onPress={toggleMenu}
           >
             {isMenuOpen ? (
               <IoClose className="w-6 h-6" />
             ) : (
               <HiMenuAlt3 className="w-6 h-6" />
             )}
-          </button>
+          </Button>
         </div>
       </nav>
 
@@ -114,13 +114,13 @@ const Navbar = () => {
         createPortal(
           <>
             {/* Overlay */}
-            <div
+            <Button
               className={`fixed inset-0 z-[998] md:hidden transition-all duration-300 ${
                 isMenuOpen
                   ? "bg-black/30 backdrop-blur-sm pointer-events-auto"
                   : "pointer-events-none bg-transparent"
               }`}
-              onClick={closeMenu}
+              onPress={closeMenu}
             />
 
             {/* Drawer */}
@@ -135,27 +135,27 @@ const Navbar = () => {
               {/* Close button inside drawer */}
               <div className="flex items-center justify-between p-4 border-b-brand">
                 <span className="text-white font-semibold text-lg">Menu</span>
-                <button
-                  onClick={closeMenu}
-                  className="p-1 rounded-lg text-white hover:bg-brand/90 transition-colors"
+                <Button
                   aria-label="Close menu"
+                  className="p-1 rounded-lg text-white hover:bg-brand/90 transition-colors"
+                  onPress={closeMenu}
                 >
                   <IoClose className="w-6 h-6" />
-                </button>
+                </Button>
               </div>
 
               {/* Mobile Menu Links */}
               <div className="flex flex-col p-4 gap-2 flex-1 overflow-y-auto">
-                {PublicMenus.filter(menu => !menu.isButton).map((menu) => (
+                {PublicMenus.filter((menu) => !menu.isButton).map((menu) => (
                   <Link
                     key={menu.name}
-                    href={menu.href}
-                    onClick={closeMenu}
                     className={`flex items-center gap-2 px-3 py-3 rounded-lg ${
                       pathname === menu.href
                         ? "text-brand bg-white font-semibold"
                         : "text-white font-semibold hover:text-brand hover:bg-white"
                     }`}
+                    href={menu.href}
+                    onClick={closeMenu}
                   >
                     {menu.icon && (
                       <span className="w-5 h-5">
@@ -165,22 +165,21 @@ const Navbar = () => {
                     {menu.name}
                   </Link>
                 ))}
-                
+
                 {/* Mobile Auth Button */}
                 <Button
-                  onClick={() => {
-                    if (status === 'authenticated') {
+                  className="px-4 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition-colors cursor-pointer font-semibold mt-2"
+                  onPress={() => {
+                    if (status === "authenticated") {
                       signOut();
                     } else {
                       signIn();
                     }
                     closeMenu();
                   }}
-                  className="px-4 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition-colors cursor-pointer font-semibold mt-2"
                 >
-                  {status === 'authenticated' ? 'Logout' : 'Login'}
+                  {status === "authenticated" ? "Logout" : "Login"}
                 </Button>
-
 
                 {/* {isLoggedIn &&
                   (role as MockRole) === "peserta" &&
@@ -198,7 +197,6 @@ const Navbar = () => {
                       {menu.name}
                     </Link>
                   ))} */}
-
               </div>
             </div>
           </>,
