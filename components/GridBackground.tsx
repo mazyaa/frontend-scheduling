@@ -10,6 +10,7 @@ export default function GridBackground() {
 
   useEffect(() => {
     const svg = svgRef.current as SVGSVGElement;
+
     if (!svg) return;
 
     let squares: SVGRectElement[] = [];
@@ -31,8 +32,9 @@ export default function GridBackground() {
         const x = i * cellSize;
         const line = document.createElementNS(
           "http://www.w3.org/2000/svg",
-          "line"
+          "line",
         );
+
         line.setAttribute("x1", x.toString());
         line.setAttribute("y1", "0");
         line.setAttribute("x2", x.toString());
@@ -47,8 +49,9 @@ export default function GridBackground() {
         const y = i * cellSize;
         const line = document.createElementNS(
           "http://www.w3.org/2000/svg",
-          "line"
+          "line",
         );
+
         line.setAttribute("x1", "0");
         line.setAttribute("y1", y.toString());
         line.setAttribute("x2", width.toString());
@@ -63,7 +66,7 @@ export default function GridBackground() {
         for (let x = 0; x < cols; x++) {
           const rect = document.createElementNS(
             "http://www.w3.org/2000/svg",
-            "rect"
+            "rect",
           ) as SVGRectElement;
 
           rect.setAttribute("x", (x * cellSize + 1).toString());
@@ -82,7 +85,7 @@ export default function GridBackground() {
 
     function animateSquares() {
       squares.forEach((rect) => {
-        if (Math.random() > 0.90) {
+        if (Math.random() > 0.9) {
           rect.setAttribute("opacity", (Math.random() * 0.3).toString());
         } else {
           rect.setAttribute("opacity", "0");
@@ -94,6 +97,7 @@ export default function GridBackground() {
     animateSquares();
 
     const interval = setInterval(animateSquares, 1200);
+
     window.addEventListener("resize", buildGrid);
 
     return () => {
