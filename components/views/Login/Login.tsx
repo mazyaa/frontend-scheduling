@@ -32,7 +32,7 @@ export default function Login() {
           alt="icon-login"
           className="z-999 lg:w-md w-sm"
           height={400}
-          src="/images/iconLogin.png"
+          src="/Images/iconLogin.png"
           width={400}
         />
 
