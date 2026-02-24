@@ -1,7 +1,8 @@
-import environtment from "@/config/env";
-import { authServices } from "@/services/auth.service";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+
+import environtment from "@/config/env";
+import { authServices } from "@/services/auth.service";
 
 const authOptions: NextAuthOptions = {
   // use session as storage
@@ -64,15 +65,15 @@ const authOptions: NextAuthOptions = {
 
     // creating a session with the user data from the jwt token, which will be used in the client side to check if the user is authenticated and to get the user data
     async session({ session, token }) {
-        // inject the user data from the jwt token into the session, 
-        session.user = {
-            id: token.id as string,
-            email: token.email as string,
-            name: token.name as string,
-            role: token.role as string,
-        };
+      // inject the user data from the jwt token into the session,
+      session.user = {
+        id: token.id as string,
+        email: token.email as string,
+        name: token.name as string,
+        role: token.role as string,
+      };
 
-        session.accessToken = token.accessToken as string; // add the access token to the session
+      session.accessToken = token.accessToken as string; // add the access token to the session
 
       return session;
     },

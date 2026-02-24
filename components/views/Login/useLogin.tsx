@@ -4,10 +4,11 @@ import { useContext, useState } from "react";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { ILogin } from "@/types/Auth";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getSession, signIn } from "next-auth/react";
+
+import { ILogin } from "@/types/Auth";
 import { ToasterContext } from "@/context/ToasterContext";
 
 const loginSchema = yup.object().shape({
@@ -33,8 +34,7 @@ const useLogin = () => {
     control, // for controlling form inputs (get value, set value, etc.)
     handleSubmit,
     formState: { errors },
-    reset,
-    setError, // handling error manually from api response
+    reset, // handling error manually from api response
   } = useForm({
     resolver: yupResolver(loginSchema), // use function yupResolver form validation previously defined schema
   });
@@ -47,6 +47,7 @@ const useLogin = () => {
       redirect: false,
       callbackUrl: "/",
     });
+
     if (result?.error && result?.status === 401) {
       throw new Error("Email is not matched with your password");
     }
@@ -79,8 +80,9 @@ const useLogin = () => {
         asesor: "/asesor/dashboard",
         direktur: "/direktur/dashboard",
       };
-        
+
       const redirectUrl = (role && roleRoutes[role]) || callbackUrl || "/";
+
       router.push(redirectUrl);
     },
   });

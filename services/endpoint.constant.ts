@@ -1,3 +1,3 @@
 export const endpoint = {
-    AUTH: '/auth',
-}
+  AUTH: "/auth",
+};

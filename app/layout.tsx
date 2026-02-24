@@ -1,12 +1,12 @@
 import "@/styles/globals.css";
 import { Metadata } from "next";
 import clsx from "clsx"; // for merging class names
+import { Poppins } from "next/font/google";
 
 import { Providers } from "./providers";
 
 import { siteConfig } from "@/config/site";
 import AppShell from "@/components/AppShell";
-import { Poppins } from "next/font/google";
 
 const poppins = Poppins({
   subsets: ["latin"],

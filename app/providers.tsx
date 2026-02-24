@@ -5,8 +5,9 @@ import { HeroUIProvider } from "@heroui/system";
 import { useRouter } from "next/navigation";
 import { ToastProvider } from "@heroui/toast";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
-import { ToasterProvider } from "@/context/ToasterContext";
 import { SessionProvider } from "next-auth/react";
+
+import { ToasterProvider } from "@/context/ToasterContext";
 
 export interface ProvidersProps {
   children: React.ReactNode;
