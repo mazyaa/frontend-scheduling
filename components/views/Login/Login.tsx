@@ -1,16 +1,17 @@
 "use client";
 
-import GridBackground from "@/components/GridBackground";
 import Image from "next/image";
-import Link from "next/link";
 import { cn } from "tailwind-variants";
 import { Card, CardBody } from "@heroui/card";
 import { Input } from "@heroui/input";
 import { Button } from "@heroui/button";
-import useLogin from "./useLogin";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { Controller } from "react-hook-form";
 import { Spinner } from "@heroui/spinner";
+
+import useLogin from "./useLogin";
+
+import GridBackground from "@/components/GridBackground";
 
 export default function Login() {
   const {
@@ -28,11 +29,11 @@ export default function Login() {
       <GridBackground />
       <div className="flex h-full w-full items-center justify-center gap-10 py-10 flex-col lg:flex-row lg:gap-20">
         <Image
-          src="/images/iconLogin.png"
           alt="icon-login"
-          width={400}
-          height={400}
           className="z-999 lg:w-md w-sm"
+          height={400}
+          src="/images/iconLogin.png"
+          width={400}
         />
 
         <Card>
@@ -62,34 +63,29 @@ export default function Login() {
               onSubmit={handleSubmit(handleLogin)}
             >
               <Controller
-                name="email"
                 control={control}
+                name="email"
                 render={({ field }) => (
                   <Input
                     {...field}
-                    type="text"
-                    label="Email or Username"
-                    variant="bordered"
-                    className="mb-4"
                     autoComplete="off"
-                    isInvalid={errors.email !== undefined}
+                    className="mb-4"
                     errorMessage={errors.email?.message}
+                    isInvalid={errors.email !== undefined}
+                    label="Email or Username"
+                    type="text"
+                    variant="bordered"
                   />
                 )}
               />
               <Controller
-                name="password"
                 control={control}
+                name="password"
                 render={({ field }) => (
                   <Input
                     {...field}
-                    type={isVisible ? "text" : "password"}
-                    label="Password"
-                    variant="bordered"
-                    className="mb-4"
                     autoComplete="off"
-                    isInvalid={errors.password !== undefined}
-                    errorMessage={errors.password?.message}
+                    className="mb-4"
                     endContent={
                       <button
                         className="focus:outline-none"
@@ -103,14 +99,19 @@ export default function Login() {
                         )}
                       </button>
                     }
+                    errorMessage={errors.password?.message}
+                    isInvalid={errors.password !== undefined}
+                    label="Password"
+                    type={isVisible ? "text" : "password"}
+                    variant="bordered"
                   />
                 )}
               />
               <Button className="bg-brand text-white" size="lg" type="submit">
                 {isPendingLogin ? (
                   <Spinner
-                    color="default"
                     className="mb-3 h-5 w-5"
+                    color="default"
                     variant="wave"
                   />
                 ) : (

@@ -1,15 +1,16 @@
 "use client";
 
+import { ReactNode, useContext, useEffect } from "react";
+
 import Toaster from "@/components/ui/Toaster/Toaster";
 import { defaultToaster, ToasterContext } from "@/context/ToasterContext";
-import { ReactNode, useContext, useEffect } from "react";
 interface PropTypes {
   children: ReactNode;
   className?: string;
 }
 
 const AppShell = (props: PropTypes) => {
-  const { children, className } = props;
+  const { children } = props;
   const { toaster, setToaster } = useContext(ToasterContext);
 
   useEffect(() => {
@@ -25,9 +26,9 @@ const AppShell = (props: PropTypes) => {
       {children}
       {toaster.type !== "" && (
         <Toaster
+          message={toaster.message}
           title={toaster.title}
           type={toaster.type}
-          message={toaster.message}
         />
       )}
     </div>

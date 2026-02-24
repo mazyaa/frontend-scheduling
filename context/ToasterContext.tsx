@@ -3,9 +3,9 @@
 import { ReactNode, createContext, useState } from "react";
 
 interface IToaster {
-    title: string;
-    type: string;
-    message: string;
+  title: string;
+  type: string;
+  message: string;
 }
 
 interface IToasterState {
@@ -14,14 +14,14 @@ interface IToasterState {
 }
 
 const defaultToaster = {
-  title: "",  
+  title: "",
   type: "",
-  message: ""
-}
+  message: "",
+};
 
 const ToasterContext = createContext<IToasterState>({
-    toaster: defaultToaster,
-    setToaster: () => {},
+  toaster: defaultToaster,
+  setToaster: () => {},
 });
 
 const ToasterProvider = ({ children }: { children: ReactNode }) => {
@@ -29,11 +29,11 @@ const ToasterProvider = ({ children }: { children: ReactNode }) => {
 
   // Provide the context value to children components
   return (
-    <ToasterContext.Provider value={{ toaster, setToaster }}> 
+    <ToasterContext.Provider value={{ toaster, setToaster }}>
       {children}
     </ToasterContext.Provider>
   );
-}
+};
 
 export { ToasterContext, ToasterProvider, defaultToaster };
 export type { IToaster, IToasterState };
