@@ -42,7 +42,7 @@ const Navbar = () => {
               alt="Veritrust Logo"
               className="m-2"
               height={100}
-              src="/images/general/main-logo.png"
+              src="/Images/general/main-logo.png"
               width={120}
             />
 
@@ -50,7 +50,7 @@ const Navbar = () => {
               alt="Veritrust Logo"
               className="m-2 hidden sm:block"
               height={100}
-              src="/images/general/tagline.png"
+              src="/Images/general/tagline.png"
               width={120}
             />
           </div>
