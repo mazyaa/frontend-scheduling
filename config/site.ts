@@ -1,6 +1,5 @@
 export type SiteConfig = typeof siteConfig;
 import { IoHomeOutline } from "react-icons/io5";
-import { BsPersonCircle } from "react-icons/bs";
 import { GrSchedules } from "react-icons/gr";
 import { RiDashboardHorizontalFill } from "react-icons/ri";
 import { MdManageSearch } from "react-icons/md";
@@ -16,8 +15,8 @@ export type Role = "admin" | "instruktur" | "peserta" | "asesor" | "direktur";
 
 export type MenuItem = {
   name: string;
-  href: string;
-  icon?: React.ComponentType; // use React.ComponentType for icon components
+  href?: string;
+  icon?: React.ComponentType; // for menu items with icons
   isButton?: boolean; // indicates if the menu item is a button
   children?: MenuItem[]; // for nested menu items
 };
@@ -43,7 +42,6 @@ export const siteConfig = {
         },
         {
           name: "Akun",
-          icon: BsPersonCircle,
           children: [
             { name: "Profile Saya", href: "/peserta/profile" },
             { name: "Status Kompetensi", href: "/peserta/status-kompetensi" },
@@ -62,13 +60,12 @@ export const siteConfig = {
         },
         {
           name: "Akun",
-          icon: BsPersonCircle,
           children: [
             { name: "Profile Saya", href: "/instruktur/profile" },
             { name: "Daftar Peserta", href: "/daftar-peserta" },
             {
               name: "Kelola Materi Training",
-              href: "/instruktur/kelola-materi",
+              href: "/kelola-materi",
             },
             { name: "Logout", href: "/logout", isButton: true },
           ],
@@ -78,13 +75,12 @@ export const siteConfig = {
       asesor: [
         { name: "Beranda", href: "/asesor", icon: IoHomeOutline },
         {
-          name: "Jadwal Asesmen",
-          href: "/asesor/jadwal-asesmen",
+          name: "Jadwal Training",
+          href: "/jadwal-training",
           icon: GrSchedules,
         },
         {
           name: "Akun",
-          icon: BsPersonCircle,
           children: [
             { name: "Profile Saya", href: "/asesor/profile" },
             { name: "Daftar Peserta", href: "/daftar-peserta" },
