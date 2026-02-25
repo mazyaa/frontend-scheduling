@@ -81,7 +81,6 @@ const authOptions: NextAuthOptions = {
 
   pages: {
     signIn: "/login", // custom login page
-    signOut: "/",
   },
 };
 

@@ -9,6 +9,7 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "@heroui/dropdown";
+import { useRouter } from "next/navigation";
 
 import { type MenuItem } from "@/config/site";
 
@@ -19,6 +20,12 @@ interface UserDropdownProps {
 
 const UserDropdown = ({ menu, userName }: UserDropdownProps) => {
   const children = menu.children ?? [];
+
+  const router = useRouter();
+  const handleLogout = async () => {
+    await signOut({ redirect: false });
+    router.push("/");
+  };
 
   return (
     <Dropdown placement="bottom-end">
@@ -59,7 +66,7 @@ const UserDropdown = ({ menu, userName }: UserDropdownProps) => {
           const child = children.find((c) => c.name === key);
 
           if (child?.isButton && child.name === "Logout") {
-            signOut();
+            handleLogout();
           }
         }}
       >
