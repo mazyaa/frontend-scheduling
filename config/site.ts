@@ -92,46 +92,55 @@ export const siteConfig = {
 
       admin: [
         {
+          key: "dashboard",
           name: "Dashboard",
           href: "/admin/dashboard",
           icon: RiDashboardHorizontalFill,
         },
         {
+          key: "kelola-training",
           name: "Kelola Daftar Training",
           href: "/admin/kelola-training",
           icon: MdManageSearch,
         },
         {
+          key: "kelola-instruktur-asesor",
           name: "Kelola Instruktur & Asesor",
           href: "/admin/kelola-instruktur-asesor",
           icon: LiaChalkboardTeacherSolid,
         },
         {
+          key: "kelola-jadwal-training",
           name: "Kelola Jadwal Training",
           href: "/admin/kelola-jadwal-training",
           icon: HiOutlineCalendarDateRange,
         },
         {
+          key: "kelola-peserta",
           name: "Kelola Data Peserta",
           href: "/admin/kelola-peserta",
           icon: FaPeopleGroup,
         },
         {
+          key: "kelola-materi-training",
           name: "Kelola Materi Training",
           href: "/admin/kelola-materi-training",
           icon: RiBookShelfLine,
         },
         {
+          key: "kelola-penilaian",
           name: "Kelola Penilaian",
           href: "/admin/kelola-penilaian",
           icon: LuBookOpenCheck,
         },
         {
+          key: "kelola-sertifikat",
           name: "Kelola E-Sertifikat",
           href: "/admin/kelola-sertifikat",
           icon: PiCertificate,
         },
         {
+          key: "kelola-laporan",
           name: "Kelola Laporan",
           href: "/admin/kelola-laporan",
           icon: BsFileEarmarkArrowDown,
@@ -140,11 +149,13 @@ export const siteConfig = {
 
       direktur: [
         {
+          key: "dashboard",
           name: "Dashboard",
           href: "/direktur/dashboard",
           icon: RiDashboardHorizontalFill,
         },
         {
+          key: "kelola-laporan",
           name: "Kelola Laporan",
           href: "/direktur/kelola-laporan",
           icon: BsFileEarmarkArrowDown,
