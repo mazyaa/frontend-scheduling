@@ -25,13 +25,88 @@ export const siteConfig = {
   name: "Veritrust",
   description: "Pelatihan Terjadwal Sertifikat Terbit Digital",
   navigation: {
+    // Menu untuk halaman public (user belum login)
     public: [
       { name: "Beranda", href: "/", icon: IoHomeOutline },
       { name: "Jadwal Training", href: "/jadwal-training", icon: GrSchedules },
       { name: "Login", href: "/login", isButton: true },
-      { name: "Logout", href: "/logout", isButton: true },
     ] as MenuItem[],
 
+    // Menu sidebar khusus untuk dashboard (admin & direktur)
+    sidebar: {
+      admin: [
+        {
+          key: "dashboard",
+          name: "Dashboard",
+          href: "/admin/dashboard",
+          icon: RiDashboardHorizontalFill,
+        },
+        {
+          key: "kelola-training",
+          name: "Kelola Daftar Training",
+          href: "/admin/kelola-training",
+          icon: MdManageSearch,
+        },
+        {
+          key: "kelola-instruktur-asesor",
+          name: "Kelola Instruktur & Asesor",
+          href: "/admin/kelola-instruktur-asesor",
+          icon: LiaChalkboardTeacherSolid,
+        },
+        {
+          key: "kelola-jadwal-training",
+          name: "Kelola Jadwal Training",
+          href: "/admin/kelola-jadwal-training",
+          icon: HiOutlineCalendarDateRange,
+        },
+        {
+          key: "kelola-peserta",
+          name: "Kelola Data Peserta",
+          href: "/admin/kelola-peserta",
+          icon: FaPeopleGroup,
+        },
+        {
+          key: "kelola-materi-training",
+          name: "Kelola Materi Training",
+          href: "/admin/kelola-materi-training",
+          icon: RiBookShelfLine,
+        },
+        {
+          key: "kelola-penilaian",
+          name: "Kelola Penilaian",
+          href: "/admin/kelola-penilaian",
+          icon: LuBookOpenCheck,
+        },
+        {
+          key: "kelola-sertifikat",
+          name: "Kelola E-Sertifikat",
+          href: "/admin/kelola-sertifikat",
+          icon: PiCertificate,
+        },
+        {
+          key: "kelola-laporan",
+          name: "Kelola Laporan",
+          href: "/admin/kelola-laporan",
+          icon: BsFileEarmarkArrowDown,
+        },
+      ],
+      direktur: [
+        {
+          key: "dashboard",
+          name: "Dashboard",
+          href: "/direktur/dashboard",
+          icon: RiDashboardHorizontalFill,
+        },
+        {
+          key: "kelola-laporan",
+          name: "Kelola Laporan",
+          href: "/direktur/kelola-laporan",
+          icon: BsFileEarmarkArrowDown,
+        },
+      ],
+    },
+
+    // Menu dengan dropdown (untuk role selain admin/direktur di navbar)
     role: {
       peserta: [
         { name: "Beranda", href: "/", icon: IoHomeOutline },
@@ -90,75 +165,37 @@ export const siteConfig = {
         },
       ],
 
+      // Menu navbar untuk admin (saat di halaman public, bukan dashboard)
       admin: [
+        { name: "Beranda", href: "/", icon: IoHomeOutline },
         {
-          key: "dashboard",
-          name: "Dashboard",
-          href: "/admin/dashboard",
-          icon: RiDashboardHorizontalFill,
+          name: "Jadwal Training",
+          href: "/jadwal-training",
+          icon: GrSchedules,
         },
         {
-          key: "kelola-training",
-          name: "Kelola Daftar Training",
-          href: "/admin/kelola-training",
-          icon: MdManageSearch,
-        },
-        {
-          key: "kelola-instruktur-asesor",
-          name: "Kelola Instruktur & Asesor",
-          href: "/admin/kelola-instruktur-asesor",
-          icon: LiaChalkboardTeacherSolid,
-        },
-        {
-          key: "kelola-jadwal-training",
-          name: "Kelola Jadwal Training",
-          href: "/admin/kelola-jadwal-training",
-          icon: HiOutlineCalendarDateRange,
-        },
-        {
-          key: "kelola-peserta",
-          name: "Kelola Data Peserta",
-          href: "/admin/kelola-peserta",
-          icon: FaPeopleGroup,
-        },
-        {
-          key: "kelola-materi-training",
-          name: "Kelola Materi Training",
-          href: "/admin/kelola-materi-training",
-          icon: RiBookShelfLine,
-        },
-        {
-          key: "kelola-penilaian",
-          name: "Kelola Penilaian",
-          href: "/admin/kelola-penilaian",
-          icon: LuBookOpenCheck,
-        },
-        {
-          key: "kelola-sertifikat",
-          name: "Kelola E-Sertifikat",
-          href: "/admin/kelola-sertifikat",
-          icon: PiCertificate,
-        },
-        {
-          key: "kelola-laporan",
-          name: "Kelola Laporan",
-          href: "/admin/kelola-laporan",
-          icon: BsFileEarmarkArrowDown,
+          name: "Akun",
+          children: [
+            { name: "Dashboard", href: "/admin/dashboard" },
+            { name: "Logout", href: "/", isButton: true },
+          ],
         },
       ],
 
+      // Menu navbar untuk direktur (saat di halaman public, bukan dashboard)
       direktur: [
+        { name: "Beranda", href: "/", icon: IoHomeOutline },
         {
-          key: "dashboard",
-          name: "Dashboard",
-          href: "/direktur/dashboard",
-          icon: RiDashboardHorizontalFill,
+          name: "Jadwal Training",
+          href: "/jadwal-training",
+          icon: GrSchedules,
         },
         {
-          key: "kelola-laporan",
-          name: "Kelola Laporan",
-          href: "/direktur/kelola-laporan",
-          icon: BsFileEarmarkArrowDown,
+          name: "Akun",
+          children: [
+            { name: "Dashboard", href: "/direktur/dashboard" },
+            { name: "Logout", href: "/", isButton: true },
+          ],
         },
       ],
     },
