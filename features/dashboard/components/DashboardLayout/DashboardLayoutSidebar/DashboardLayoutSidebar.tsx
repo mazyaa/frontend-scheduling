@@ -3,7 +3,6 @@ import { Listbox, ListboxItem } from "@heroui/listbox";
 import { signOut } from "next-auth/react";
 import Image from "next/image";
 import { CiLogout } from "react-icons/ci";
-import { JSX } from "react";
 import Link from "next/link";
 import { cn } from "@heroui/theme";
 import { useRouter, usePathname } from "next/navigation";
@@ -12,7 +11,7 @@ interface ISidebarItem {
   key: string;
   name: string;
   href: string;
-  icon: JSX.Element;
+  icon: React.ComponentType;
 }
 
 interface PropTypes {
@@ -34,11 +33,11 @@ const DashboardLayoutSidebar = (props: PropTypes) => {
         },
       )}
     >
-      <div className="flex justify-center">
+      <div className="flex justify-center flex-col items-center">
         <Image
           alt="Logo Veritrust"
           className="mb-5 cursor-pointer"
-          height={50}
+          height={150}
           src="/Images/general/main-logo.png"
           width={150}
           onClick={() => router.push("/")}
@@ -59,7 +58,7 @@ const DashboardLayoutSidebar = (props: PropTypes) => {
                 "bg-brand text-white": pathname.startsWith(item.href),
               })}
               href={item.href}
-              startContent={item.icon}
+              startContent={<item.icon />} // use the icon component as the start content
               textValue={item.name}
             >
               <p className="text-small">{item.name}</p>
@@ -70,13 +69,14 @@ const DashboardLayoutSidebar = (props: PropTypes) => {
       <div className="flex items-center p-1">
         <Button
           fullWidth
-          className="flex justify-start rounded-lg px-2 py-1.5 text-brand"
-          size="lg"
+          className="flex justify-center rounded-lg text-brand"
+          size="md"
           variant="light"
           onPress={() => signOut()}
-        />
-        <CiLogout />
-        <span>Logout</span>
+        >
+          <CiLogout />
+          Logout
+        </Button>
       </div>
     </div>
   );
