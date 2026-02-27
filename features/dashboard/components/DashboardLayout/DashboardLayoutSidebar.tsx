@@ -59,7 +59,6 @@ const DashboardLayoutSidebar = (props: PropTypes) => {
               })}
               href={item.href}
               startContent={<item.icon />} // use the icon component as the start content
-              textValue={item.name}
             >
               <p className="text-small">{item.name}</p>
             </ListboxItem>

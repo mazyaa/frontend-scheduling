@@ -74,10 +74,10 @@ const useLogin = () => {
       const role = session?.user?.role;
 
       const roleRoutes: Record<string, string> = {
-        peserta: "/peserta/dashboard",
-        instruktur: "/instruktur/dashboard",
+        peserta: "/",
+        instruktur: "/",
         admin: "/admin/dashboard",
-        asesor: "/asesor/dashboard",
+        asesor: "/",
         direktur: "/direktur/dashboard",
       };
 
