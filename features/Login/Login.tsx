@@ -11,7 +11,7 @@ import { Spinner } from "@heroui/spinner";
 
 import useLogin from "./useLogin";
 
-import GridBackground from "@/components/GridBackground";
+import GridBackground from "@/features/GridBackground";
 
 export default function Login() {
   const {
