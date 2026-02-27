@@ -76,7 +76,7 @@ const useLogin = () => {
       const roleRoutes: Record<string, string> = {
         peserta: "/peserta/dashboard",
         instruktur: "/instruktur/dashboard",
-        admin: "/",
+        admin: "/admin/dashboard",
         asesor: "/asesor/dashboard",
         direktur: "/direktur/dashboard",
       };
