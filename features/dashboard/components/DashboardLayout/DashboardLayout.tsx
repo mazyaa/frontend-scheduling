@@ -18,8 +18,8 @@ const DashboardLayout = (props: PropTypes) => {
   const { children, description, title, type = "admin" } = props;
   const [open, setOpen] = useState(false);
 
-  const SIDEBAR_ADMIN = siteConfig.navigation.role.admin;
-  const SIDEBAR_DIREKTUR = siteConfig.navigation.role.direktur;
+  const SIDEBAR_ADMIN = siteConfig.navigation.sidebar.admin;
+  const SIDEBAR_DIREKTUR = siteConfig.navigation.sidebar.direktur;
 
   return (
     <div className="max-w-screen-3xl 3xl:container flex">
@@ -28,7 +28,7 @@ const DashboardLayout = (props: PropTypes) => {
         sidebarItems={type === "admin" ? SIDEBAR_ADMIN : SIDEBAR_DIREKTUR}
       />
 
-      <div className="h-screen w-full oferflow-y-auto p-8">
+      <div className="h-screen w-full overflow-y-auto p-8">
         {/* NAVBAR MOBILE */}
         <Navbar
           className="flex justify-between bg-transparent px-0"
