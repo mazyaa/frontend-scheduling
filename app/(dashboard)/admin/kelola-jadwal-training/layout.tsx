@@ -4,21 +4,22 @@ import DashboardLayout from "@/features/dashboard/components/DashboardLayout/Das
 import { IRouteLayout } from "@/types/layout";
 
 export const metadata: Metadata = {
-  title: "Dashboard Admin",
-  description: "Ringkasan informasi utama untuk memantau aktivitas sistem.",
+  title: "Kelola Jadwal Training",
+  description:
+    "Mengatur jadwal pelatihan agar seluruh sesi tersusun dan mudah dipantau.",
   icons: { icon: "/images/general/veritrust-logo.png" },
 };
 
-const DashboardRouteLayout = ({ children }: IRouteLayout) => {
+const KelolaJadwalTrainingRouteLayout = ({ children }: IRouteLayout) => {
   return (
     <DashboardLayout
       description={
         <>
-          Ringkasan informasi utama untuk{" "}
-          <span className="text-brand">memantau</span> aktivitas sistem.
+          Mengatur <span className="text-brand">jadwal pelatihan</span> agar
+          seluruh sesi tersusun dan mudah dipantau.
         </>
       }
-      title="Dashboard"
+      title="Kelola Jadwal Training"
       type="admin"
     >
       {children}
@@ -26,4 +27,4 @@ const DashboardRouteLayout = ({ children }: IRouteLayout) => {
   );
 };
 
-export default DashboardRouteLayout;
+export default KelolaJadwalTrainingRouteLayout;
