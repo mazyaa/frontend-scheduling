@@ -8,10 +8,13 @@ import { Button } from "@heroui/button";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { Controller } from "react-hook-form";
 import { Spinner } from "@heroui/spinner";
+import { useContext, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 
 import useLogin from "./useLogin";
 
 import GridBackground from "@/features/GridBackground";
+import { ToasterContext } from "@/context/ToasterContext";
 
 export default function Login() {
   const {
@@ -23,6 +26,21 @@ export default function Login() {
     isPendingLogin,
     errors,
   } = useLogin();
+
+  const searchParams = useSearchParams();
+  const { setToaster } = useContext(ToasterContext);
+
+  useEffect(() => {
+    const error = searchParams.get("error");
+
+    if (error === "unauthorized") {
+      setToaster({
+        title: "Unauthorized",
+        type: "unauthorized",
+        message: "You must be logged in to access this page",
+      });
+    }
+  }, [searchParams, setToaster]);
 
   return (
     <>

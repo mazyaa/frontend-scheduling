@@ -31,6 +31,8 @@ export const middleware = async (request: NextRequest) => {
 
       url.searchParams.set("callbackUrl", request.url); // set the callbackUrl after successful login
 
+      url.searchParams.set("error", "unauthorized");
+
       return NextResponse.redirect(url);
     }
   }
@@ -44,6 +46,8 @@ export const middleware = async (request: NextRequest) => {
       const url = new URL("/login", request.url); // redirect to login page if user is not authenticated or does not have the admin role
 
       url.searchParams.set("callbackUrl", request.url); // set the callbackUrl after successful login
+
+      url.searchParams.set("error", "unauthorized");
 
       return NextResponse.redirect(url);
     }

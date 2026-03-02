@@ -29,7 +29,6 @@ const useLogin = () => {
   const { setToaster } = useContext(ToasterContext);
 
   // hooks from react for form handling
-  //destructuring control, handleSubmit, formState, reset, setError from useForm
   const {
     control, // for controlling form inputs (get value, set value, etc.)
     handleSubmit,
@@ -45,7 +44,7 @@ const useLogin = () => {
       // use signIn from next-auth for handling login with credentials provider
       ...payload,
       redirect: false,
-      callbackUrl: "/",
+      callbackUrl,
     });
 
     if (result?.error && result?.status === 401) {
@@ -73,6 +72,12 @@ const useLogin = () => {
       const session = await getSession();
       const role = session?.user?.role;
 
+      if (callbackUrl) {
+        router.push(callbackUrl);
+
+        return;
+      }
+
       const roleRoutes: Record<string, string> = {
         peserta: "/",
         instruktur: "/",
@@ -81,7 +86,7 @@ const useLogin = () => {
         direktur: "/direktur/dashboard",
       };
 
-      const redirectUrl = (role && roleRoutes[role]) || callbackUrl || "/";
+      const redirectUrl = (role && roleRoutes[role]) || "/"; // redirect to role-based dashboard if role exists
 
       router.push(redirectUrl);
     },
