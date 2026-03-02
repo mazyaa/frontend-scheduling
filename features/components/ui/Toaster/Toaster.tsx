@@ -7,6 +7,7 @@ const iconList: { [key: string]: ReactNode } = {
   success: <CiCircleCheck className="text-3xl text-success-55" />,
   error: <CiCircleRemove className="text-3xl text-destructive-55" />,
   info: <CiCircleInfo className="text-3xl text-primary-55" />,
+  unauthorized: <CiCircleRemove className="text-3xl text-warning-55" />,
 };
 
 interface ToasterProps {
@@ -30,9 +31,10 @@ const Toaster = (props: ToasterProps) => {
       description: message,
       classNames: {
         base: cn([
+          "fixed top-18 right-4 z-50",
           "bg-white dark:bg-background shadow-sm",
           "border border-l-8 rounded-md rounded-l-none",
-          "flex flex-col items-start",
+          "flex flex-col items-end",
           "border-primary-200 dark:border-primary-100 border-l-primary",
         ]),
       },
