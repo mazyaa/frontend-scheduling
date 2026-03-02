@@ -4,21 +4,21 @@ import DashboardLayout from "@/features/dashboard/components/DashboardLayout/Das
 import { IRouteLayout } from "@/types/layout";
 
 export const metadata: Metadata = {
-  title: "Dashboard Direktur",
-  description: "Ringkasan informasi utama untuk memantau aktivitas sistem.",
+  title: "Kelola Laporan",
+  description: "Menampilkan keseluruhan data laporan training.",
   icons: { icon: "/images/general/veritrust-logo.png" },
 };
 
-const DashboardRouteLayout = ({ children }: IRouteLayout) => {
+const KelolaLaporanRouteLayout = ({ children }: IRouteLayout) => {
   return (
     <DashboardLayout
       description={
         <>
-          Ringkasan informasi utama untuk{" "}
-          <span className="text-brand">memantau</span> aktivitas sistem.
+          Menampilkan keseluruhan data{" "}
+          <span className="text-brand">laporan training</span>.
         </>
       }
-      title="Dashboard"
+      title="Kelola Laporan"
       type="direktur"
     >
       {children}
@@ -26,4 +26,4 @@ const DashboardRouteLayout = ({ children }: IRouteLayout) => {
   );
 };
 
-export default DashboardRouteLayout;
+export default KelolaLaporanRouteLayout;

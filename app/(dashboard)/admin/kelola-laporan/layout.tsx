@@ -5,7 +5,7 @@ import { IRouteLayout } from "@/types/layout";
 
 export const metadata: Metadata = {
   title: "Kelola Laporan",
-  description: "Menampilkan keseluruhan data laporan training..",
+  description: "Menampilkan keseluruhan data laporan training.",
   icons: { icon: "/images/general/veritrust-logo.png" },
 };
 
