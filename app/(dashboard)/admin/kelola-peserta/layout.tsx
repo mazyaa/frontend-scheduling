@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 
+import DashboardLayout from "@/components/layouts/DashboardLayout";
 import { IRouteLayout } from "@/types/layout";
-import DashboardLayout from "@/features/dashboard/components/DashboardLayout/DashboardLayout";
 
 export const metadata: Metadata = {
   title: "Kelola Data Peserta",

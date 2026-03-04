@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 
-import DashboardLayout from "@/features/dashboard/components/DashboardLayout/DashboardLayout";
+import DashboardLayout from "@/components/layouts/DashboardLayout";
 import { IRouteLayout } from "@/types/layout";
 
 export const metadata: Metadata = {
