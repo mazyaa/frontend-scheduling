@@ -3,8 +3,8 @@
 import { useContext, useEffect } from "react";
 
 import { ToasterContext } from "@/context/ToasterContext";
-import GridBackground from "@/features/GridBackground";
-import Navbar from "@/features/layouts/Navbar/Navbar";
+import GridBackground from "@/components/GridBackground";
+import Navbar from "@/components/layouts/Navbar/Navbar";
 
 export default function Home() {
   const { setToaster } = useContext(ToasterContext);
