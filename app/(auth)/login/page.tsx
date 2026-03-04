@@ -1,8 +1,8 @@
 import { Metadata } from "next";
 import { Suspense } from "react";
 
-import AuthLayout from "@/features/layouts/AuthLayout";
-import Login from "@/features/Login/Login";
+import AuthLayout from "@/components/layouts/AuthLayout";
+import Login from "@/components/features/Login/Login";
 
 export const metadata: Metadata = {
   title: "Login",

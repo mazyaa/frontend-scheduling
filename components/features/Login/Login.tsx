@@ -13,7 +13,7 @@ import { useSearchParams } from "next/navigation";
 
 import useLogin from "./useLogin";
 
-import GridBackground from "@/features/GridBackground";
+import GridBackground from "@/components/GridBackground";
 import { ToasterContext } from "@/context/ToasterContext";
 
 export default function Login() {
