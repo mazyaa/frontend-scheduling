@@ -44,7 +44,7 @@ export const siteConfig = {
         {
           key: "kelola-training",
           name: "Kelola Daftar Training",
-          href: "/admin/kelola-training",
+          href: "/admin/kelola-daftar-training",
           icon: MdManageSearch,
         },
         {
@@ -80,7 +80,7 @@ export const siteConfig = {
         {
           key: "kelola-sertifikat",
           name: "Kelola E-Sertifikat",
-          href: "/admin/kelola-sertifikat",
+          href: "/admin/kelola-e-sertifikat",
           icon: PiCertificate,
         },
         {

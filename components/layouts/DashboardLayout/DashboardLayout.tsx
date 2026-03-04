@@ -3,7 +3,7 @@
 import { ReactNode, useState } from "react";
 import { Navbar, NavbarMenuToggle } from "@heroui/navbar";
 
-import DashboardLayoutSidebar from "./DashboardLayoutSidebar";
+import DashboardLayoutSidebar from "./DashboardLayoutSidebar/DashboardLayoutSidebar";
 
 import { siteConfig } from "@/config/site";
 
