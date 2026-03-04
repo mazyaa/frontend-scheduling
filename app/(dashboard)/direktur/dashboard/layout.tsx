@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { ReactNode } from "react";
 
-import DashboardLayout from "@/features/dashboard/components/DashboardLayout/DashboardLayout";
+import DashboardLayout from "@/components/layouts/dashboardLayout/components/DashboardLayout/DashboardLayout";
 
 export const metadata: Metadata = {
   title: "Dashboard Direktur",

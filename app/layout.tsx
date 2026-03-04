@@ -6,7 +6,7 @@ import { Poppins } from "next/font/google";
 import { Providers } from "./providers";
 
 import { siteConfig } from "@/config/site";
-import AppShell from "@/features/AppShell";
+import AppShell from "@/components/AppShell";
 
 const poppins = Poppins({
   subsets: ["latin"],
