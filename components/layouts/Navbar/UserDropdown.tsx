@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { signOut } from "next-auth/react";
 import { Button } from "@heroui/button";
 import {
   Dropdown,
@@ -9,8 +8,8 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "@heroui/dropdown";
-import { useRouter } from "next/navigation";
 
+import useLogin from "@/components/features/Login/useLogin";
 import { type MenuItem } from "@/config/site";
 
 interface UserDropdownProps {
@@ -20,12 +19,7 @@ interface UserDropdownProps {
 
 const UserDropdown = ({ menu, userName }: UserDropdownProps) => {
   const children = menu.children ?? [];
-
-  const router = useRouter();
-  const handleLogout = async () => {
-    await signOut({ redirect: false });
-    router.push("/");
-  };
+  const { handleLogout } = useLogin();
 
   return (
     <Dropdown placement="bottom-end">

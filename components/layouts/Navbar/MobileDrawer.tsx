@@ -4,12 +4,13 @@ import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { IoClose } from "react-icons/io5";
-import { signIn, signOut } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import { Button } from "@heroui/button";
 import Image from "next/image";
 
 import NavLink from "./NavLink";
 
+import useLogin from "@/components/features/Login/useLogin";
 import { type MenuItem } from "@/config/site";
 
 interface MobileDrawerProps {
@@ -28,6 +29,7 @@ const MobileDrawer = ({
   authenticated,
 }: MobileDrawerProps) => {
   const [mounted, setMounted] = useState(false);
+  const { handleLogout } = useLogin();
 
   useEffect(() => {
     setMounted(true);
@@ -136,7 +138,7 @@ const MobileDrawer = ({
                             <Button
                               className="w-full px-4 py-2.5 bg-red-500/90 text-red-200 border border-red-400/20 rounded-xl hover:bg-red-500/30 transition-all duration-200 cursor-pointer font-semibold mt-3"
                               onPress={() => {
-                                signOut();
+                                handleLogout();
                                 onClose();
                               }}
                             >
