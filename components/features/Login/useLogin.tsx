@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
-import { getSession, signIn } from "next-auth/react";
+import { getSession, signIn, signOut } from "next-auth/react";
 
 import { ILogin } from "@/types/Auth";
 import { ToasterContext } from "@/context/ToasterContext";
@@ -24,8 +24,7 @@ const useLogin = () => {
   const searchParams = useSearchParams(); // for getting query parameters from URL (e.g., callbackUrl)
   const [isVisible, setIsVisible] = useState(false);
   const toggleVisibility = () => setIsVisible(!isVisible);
-  const callbackUrl: string =
-    (searchParams.get("callbackUrl") as string) || "/"; // e.g user access page protected page without login, it will redirect to login page with callbackUrl query parameter, after successful login it will redirect back to the protected page
+  const callbackUrl = searchParams.get("callbackUrl") ?? undefined; // e.g user access page protected page without login, it will redirect to login page with callbackUrl query parameter, after successful login it will redirect back to the protected page
   const { setToaster } = useContext(ToasterContext);
 
   // hooks from react for form handling
@@ -64,19 +63,14 @@ const useLogin = () => {
     },
     onSuccess: async () => {
       reset(); // reset form after successful registration
-      setToaster({
-        title: "Login Success",
-        type: "success",
-        message: "Login successfully!",
-      });
       const session = await getSession();
       const role = session?.user?.role;
 
-      if (callbackUrl) {
-        router.push(callbackUrl);
-
-        return;
-      }
+      setToaster({
+        title: "Login Success",
+        type: "success",
+        message: `Hello!, welcome back ${session?.user?.name || "bro"}`,
+      });
 
       const roleRoutes: Record<string, string> = {
         peserta: "/",
@@ -86,7 +80,19 @@ const useLogin = () => {
         direktur: "/direktur/dashboard",
       };
 
-      const redirectUrl = (role && roleRoutes[role]) || "/"; // redirect to role-based dashboard if role exists
+      // check if user is provided then set the roleRedirect based on the user's role
+      const roleRedirect = role ? roleRoutes[role] : null;
+
+      // parsed callbackUrl to pathname e.g http://localhost:3000/admin/dashboard => /admin/dashboard
+      const parsedCallback = callbackUrl
+        ? new URL(callbackUrl, window.location.origin).pathname
+        : null;
+
+      // redirect if callback is provided, and use roleRedirect if callback is not provided
+      const redirectUrl =
+        parsedCallback && parsedCallback !== "/"
+          ? parsedCallback
+          : roleRedirect || "/";
 
       router.push(redirectUrl);
     },
@@ -94,6 +100,17 @@ const useLogin = () => {
 
   // function for handling form submission
   const handleLogin = (data: ILogin) => mutateLogin(data);
+  const handleLogout = async () => {
+    await signOut({ redirect: false });
+
+    setToaster({
+      title: "Logout Success",
+      type: "success",
+      message: "You have been logged out",
+    });
+
+    router.push("/");
+  };
 
   return {
     isVisible,
@@ -104,6 +121,7 @@ const useLogin = () => {
     reset,
     isPendingLogin,
     errors,
+    handleLogout,
   };
 };
 
