@@ -32,11 +32,15 @@ const Toaster = (props: ToasterProps) => {
       classNames: {
         base: cn([
           "fixed top-18 right-4 z-50",
-          "bg-white dark:bg-background shadow-sm",
+          "inline-flex flex-col items-start gap-1",
+          "w-auto max-w-[90vw] sm:max-w-md",
+          "bg-white dark:bg-background shadow-md",
           "border border-l-8 rounded-md rounded-l-none",
-          "flex flex-col items-end",
           "border-primary-200 dark:border-primary-100 border-l-primary",
+          "px-4 py-3",
         ]),
+        title: "text-sm font-semibold text-left",
+        description: "text-sm text-left break-words whitespace-pre-wrap",
       },
       icon: iconList[type],
     });

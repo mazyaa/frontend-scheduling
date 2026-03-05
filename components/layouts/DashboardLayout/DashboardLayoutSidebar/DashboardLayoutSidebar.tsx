@@ -1,11 +1,12 @@
 import { Button } from "@heroui/button";
 import { Listbox, ListboxItem } from "@heroui/listbox";
-import { signOut } from "next-auth/react";
 import Image from "next/image";
 import { CiLogout } from "react-icons/ci";
 import Link from "next/link";
 import { cn } from "@heroui/theme";
 import { useRouter, usePathname } from "next/navigation";
+
+import useLogin from "@/components/features/Login/useLogin";
 
 interface ISidebarItem {
   key: string;
@@ -21,6 +22,7 @@ interface PropTypes {
 
 const DashboardLayoutSidebar = (props: PropTypes) => {
   const { sidebarItems, isOpen } = props;
+  const { handleLogout } = useLogin();
   const router = useRouter();
   const pathname = usePathname();
 
@@ -71,7 +73,7 @@ const DashboardLayoutSidebar = (props: PropTypes) => {
           className="flex justify-center rounded-lg text-brand"
           size="md"
           variant="light"
-          onPress={() => signOut()}
+          onPress={() => handleLogout()}
         >
           <CiLogout />
           Logout
