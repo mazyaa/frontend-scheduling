@@ -82,6 +82,7 @@ const DataTable = (props: PropTypes) => {
     onClickButtonTopContent,
   ]);
 
+  // for memoize bottom content
   const BottomContent = useMemo(() => {
     return (
       <div className="items-center flex justify-center px-2 py-2 lg:justify-between">
