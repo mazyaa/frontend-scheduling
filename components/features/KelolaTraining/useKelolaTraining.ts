@@ -6,14 +6,13 @@ import { useState } from "react";
 
 import useChangeUrl from "@/hooks/useChangeUrl";
 import { kelolaTrainingServices } from "@/services/kelolaTraining.services";
-import { IKelolaTraining } from "@/types/kelolaTraining";
 
 const useKelolaTraining = () => {
   const pathname = usePathname();
   const [selectedId, setSelectedId] = useState<string>("");
   const { currentLimit, currentPage, currentSearch } = useChangeUrl();
 
-  const getTraining = async (): Promise<IKelolaTraining[]> => {
+  const getTraining = async () => {
     let params = `limit=${currentLimit}&page=${currentPage}`;
 
     if (currentSearch) {
