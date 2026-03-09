@@ -107,7 +107,7 @@ const DataTable = (props: PropTypes) => {
           isCompact
           loop // for looping pagination, so when user click next in last page, it will go to first page, and when user click prev in first page, it will go to last page
           showControls
-          color="danger"
+          color="default"
           page={Number(currentPage) || 1}
           total={totalPages}
           onChange={handleChangePage}
@@ -150,7 +150,7 @@ const DataTable = (props: PropTypes) => {
         items={data}
         loadingContent={
           <div className="flex h-full w-full items-center justify-center bg-foreground-300/70 backdrop-blur-sm z-999">
-            <Spinner color="danger" />
+            <Spinner color="current" />
           </div>
         }
       >
