@@ -3,12 +3,15 @@
 import { useQuery } from "@tanstack/react-query";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { useSession } from "next-auth/react";
 
 import useChangeUrl from "@/hooks/useChangeUrl";
 import { kelolaTrainingServices } from "@/services/kelolaTraining.services";
 
 const useKelolaTraining = () => {
   const pathname = usePathname();
+  const { data: session } = useSession();
+  const token = session?.accessToken;
   const [selectedId, setSelectedId] = useState<string>("");
   const { currentLimit, currentPage, currentSearch } = useChangeUrl();
 
@@ -20,9 +23,12 @@ const useKelolaTraining = () => {
     }
 
     const response = await kelolaTrainingServices.getAllTraining(params);
-    const { data } = response.data;
+    const { data, pagination } = response.data;
 
-    return data;
+    return {
+      data,
+      pagination,
+    };
   };
 
   const {
@@ -34,7 +40,12 @@ const useKelolaTraining = () => {
     queryKey: ["KelolaTraining", currentPage, currentLimit, currentSearch], // for caching and refetching when these values change
     queryFn: getTraining, // fn for fetching data
     // only fetch data when on the correct page and both currentPage and currentLimit are available
-    enabled: pathname === "/kelola-training" && !!currentPage && !!currentLimit,
+    enabled:
+      pathname === "/admin/kelola-daftar-training" && // only fetch or auto refetch when on the correct page
+      !!currentPage &&
+      !!currentLimit &&
+      !!token,
+    refetchOnWindowFocus: false,
   });
 
   return {
