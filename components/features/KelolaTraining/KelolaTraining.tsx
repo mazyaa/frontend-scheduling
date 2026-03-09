@@ -16,6 +16,7 @@ import useKelolaTraining from "./useKelolaTraining";
 
 import useChangeUrl from "@/hooks/useChangeUrl";
 import DataTable from "@/components/ui/DataTable/DataTable";
+import { TablePageSkeleton } from "@/components/ui/Skeletons";
 
 const KelolaTraining = () => {
   const router = useRouter();
@@ -38,11 +39,11 @@ const KelolaTraining = () => {
   }, [searchParams]);
 
   const renderCell = useCallback(
-    (training: Record<string, unknown>, columnKey: Key) => {
-      const cellValue = training[columnKey as keyof typeof training]; // get value of cell by column key
+    (itemTraining: Record<string, unknown>, columnKey: Key) => {
+      const cellValue = itemTraining[columnKey as keyof typeof itemTraining]; // get value of cell by column key
 
       switch (columnKey) {
-        case "actions":
+        case "aksi":
           return (
             <Dropdown>
               <DropdownTrigger>
@@ -65,7 +66,7 @@ const KelolaTraining = () => {
                   key="delete-training-button"
                   className="text-danger-600"
                   onPress={() => {
-                    setSelectedId(`${training.id}`);
+                    setSelectedId(`${itemTraining.id}`);
                     // deleteTrainingModal.onOpen();
                   }}
                 >
@@ -83,21 +84,21 @@ const KelolaTraining = () => {
 
   return (
     <section>
-      {searchParams.size > 0 && (
+      {!dataKelolaTraining ? (
+        <TablePageSkeleton />
+      ) : (
         <DataTable
-          buttonTopContentLabel="Create Category"
+          buttonTopContentLabel="Tambah Training"
           columns={LIST_KELOLA_TRAINING}
           data={dataKelolaTraining?.data || []}
-          emptyContent="No category found"
+          emptyContent="Training tidak ditemukan"
           isLoading={isLoadingKelolaTraining || isRefetchingKelolaTraining}
-          //   onClickButtonTopContent={addCategoryModal.onOpen}
           renderCell={renderCell}
           totalPages={
             dataKelolaTraining ? dataKelolaTraining.pagination.totalPages : 1
           }
         />
       )}
-
       {/* <AddCategoryModal
         {...addCategoryModal}
         refetchCategory={refetchCategory}

@@ -103,17 +103,15 @@ const DataTable = (props: PropTypes) => {
         </Select>
 
         {/* Pagination content view */}
-        {totalPages > 1 && (
-          <Pagination
-            isCompact
-            loop // for looping pagination, so when user click next in last page, it will go to first page, and when user click prev in first page, it will go to last page
-            showControls
-            color="danger"
-            page={Number(currentPage) || 1}
-            total={totalPages}
-            onChange={handleChangePage}
-          />
-        )}
+        <Pagination
+          isCompact
+          loop // for looping pagination, so when user click next in last page, it will go to first page, and when user click prev in first page, it will go to last page
+          showControls
+          color="danger"
+          page={Number(currentPage) || 1}
+          total={totalPages}
+          onChange={handleChangePage}
+        />
       </div>
     );
   }, [
@@ -146,18 +144,19 @@ const DataTable = (props: PropTypes) => {
 
       {/* Table Body */}
       <TableBody
+        className="h-100"
         emptyContent={emptyContent}
         isLoading={isLoading}
         items={data}
         loadingContent={
-          <div className="flex h-full w-full items-center justify-center bg-foreground-300/70 backdrop-blur-sm">
+          <div className="flex h-full w-full items-center justify-center bg-foreground-300/70 backdrop-blur-sm z-999">
             <Spinner color="danger" />
           </div>
         }
       >
         {/* Table Row */}
         {(item) => (
-          <TableRow key={item._id as Key}>
+          <TableRow key={item.id as Key}>
             {(columnKey) => (
               <TableCell>{renderCell(item, columnKey)}</TableCell>
             )}
