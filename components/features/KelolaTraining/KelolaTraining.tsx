@@ -10,6 +10,7 @@ import {
 } from "@heroui/dropdown";
 import { Button } from "@heroui/button";
 import { CiMenuKebab } from "react-icons/ci";
+import { useSession } from "next-auth/react";
 
 import { LIST_KELOLA_TRAINING } from "./KelolaTraining.constants";
 import useKelolaTraining from "./useKelolaTraining";
@@ -21,6 +22,8 @@ import { TablePageSkeleton } from "@/components/ui/Skeletons";
 const KelolaTraining = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { status } = useSession();
+  const isLoadingSession = status === "loading";
 
   const {
     dataKelolaTraining,
@@ -84,7 +87,7 @@ const KelolaTraining = () => {
 
   return (
     <section>
-      {!dataKelolaTraining ? (
+      {isLoadingSession ? ( // show skeleton when if session is still loading
         <TablePageSkeleton />
       ) : (
         <DataTable
