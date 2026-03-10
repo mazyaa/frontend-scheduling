@@ -11,9 +11,11 @@ import {
 import { Button } from "@heroui/button";
 import { CiMenuKebab } from "react-icons/ci";
 import { useSession } from "next-auth/react";
+import { useDisclosure } from "@heroui/modal";
 
 import { LIST_KELOLA_TRAINING } from "./KelolaTraining.constants";
 import useKelolaTraining from "./useKelolaTraining";
+import TambahTrainingModal from "./TambahTrainingModal";
 
 import useChangeUrl from "@/hooks/useChangeUrl";
 import DataTable from "@/components/ui/DataTable/DataTable";
@@ -29,12 +31,14 @@ const KelolaTraining = () => {
     dataKelolaTraining,
     isLoadingKelolaTraining,
     isRefetchingKelolaTraining,
-    // refetchKelolaTraining,
+    refetchKelolaTraining,
     // selectedId,
     setSelectedId,
   } = useKelolaTraining();
 
   const { setUrl } = useChangeUrl();
+
+  const tambahTrainingModal = useDisclosure();
 
   // set url when searchParams change, so when user back to previous page, the url will be updated with the correct query
   useEffect(() => {
@@ -100,14 +104,17 @@ const KelolaTraining = () => {
           totalPages={
             dataKelolaTraining ? dataKelolaTraining.pagination.totalPages : 1
           }
+          onClickButtonTopContent={() => {
+            tambahTrainingModal.onOpen();
+          }}
         />
       )}
-      {/* <AddCategoryModal
-        {...addCategoryModal}
-        refetchCategory={refetchCategory}
+      <TambahTrainingModal
+        {...tambahTrainingModal}
+        refetchTraining={refetchKelolaTraining}
       />
 
-      <DeleteCategoryModal
+      {/* <DeleteCategoryModal
         {...deleteCategoryModal}
         selectedId={selectedId}
         setSelectedId={setSelectedId}
