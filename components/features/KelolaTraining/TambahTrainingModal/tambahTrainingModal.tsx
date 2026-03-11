@@ -1,3 +1,5 @@
+"use client";
+
 import { Controller } from "react-hook-form";
 import { useEffect, useRef } from "react";
 import {
@@ -11,7 +13,7 @@ import { Input, Textarea } from "@heroui/input";
 import { Button } from "@heroui/button";
 import { Spinner } from "@heroui/spinner";
 
-import useKelolaTrainingModal from "../TambahTrainingModal/useTambahTrainingModal";
+import useTambahTrainingModal from "./useTambahTrainingModal";
 
 interface PropTypes {
   isOpen: boolean;
@@ -31,7 +33,7 @@ const TambahTrainingModal = (props: PropTypes) => {
     isPendingMutateAddTraining,
     isSuccessMutateAddTraining,
     handleOnClose,
-  } = useKelolaTrainingModal();
+  } = useTambahTrainingModal();
 
   const disabledSubmit = isPendingMutateAddTraining;
 
