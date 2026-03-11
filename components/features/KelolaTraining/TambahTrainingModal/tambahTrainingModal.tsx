@@ -1,5 +1,5 @@
 import { Controller } from "react-hook-form";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import {
   Modal,
   ModalBody,
@@ -7,7 +7,7 @@ import {
   ModalFooter,
   ModalHeader,
 } from "@heroui/modal";
-import { Input } from "@heroui/input";
+import { Input, Textarea } from "@heroui/input";
 import { Button } from "@heroui/button";
 import { Spinner } from "@heroui/spinner";
 
@@ -15,13 +15,14 @@ import useKelolaTrainingModal from "../TambahTrainingModal/useTambahTrainingModa
 
 interface PropTypes {
   isOpen: boolean;
-  onClose: () => void;
-  onOpenChange: () => void;
+  onOpenChange: () => void; // for tracking open state of modal, because when user click cancel button, the state of isOpen will be set to false, but when user click add training button, the state of isOpen will be set to true, so we need to track the state of modal open or close
   refetchTraining: () => void;
 }
 
 const TambahTrainingModal = (props: PropTypes) => {
-  const { isOpen, onClose, onOpenChange, refetchTraining } = props;
+  const { isOpen, onOpenChange, refetchTraining } = props;
+  const onCloseRef = useRef<() => void>();
+
   const {
     control,
     errors,
@@ -29,94 +30,91 @@ const TambahTrainingModal = (props: PropTypes) => {
     handleAddTraining,
     isPendingMutateAddTraining,
     isSuccessMutateAddTraining,
-
     handleOnClose,
   } = useKelolaTrainingModal();
 
-  useEffect(() => {
-    if (isSuccessMutateAddTraining) {
-      handleOnClose(onClose);
-      refetchTraining();
-    }
-  }, [isSuccessMutateAddTraining, refetchTraining, onClose, handleOnClose]);
-
   const disabledSubmit = isPendingMutateAddTraining;
 
+  useEffect(() => {
+    if (isSuccessMutateAddTraining && onCloseRef.current) {
+      handleOnClose(onCloseRef.current);
+      refetchTraining();
+    }
+  }, [isSuccessMutateAddTraining, refetchTraining]);
+
   return (
-    <Modal
-      isOpen={isOpen}
-      placement="center"
-      onClose={() => handleOnClose(onClose)}
-      onOpenChange={onOpenChange}
-    >
-      <form onSubmit={handleSubmitForm(handleAddTraining)}>
-        <ModalContent className="m-4">
-          <ModalHeader>
-            <h3 className="text-lg font-medium">Tambah Training Baru</h3>
-          </ModalHeader>
+    <Modal isOpen={isOpen} placement="center" onOpenChange={onOpenChange}>
+      <ModalContent className="m-4">
+        {(onClose) => {
+          onCloseRef.current = onClose; // set onClose function to ref, so we can call it in useEffect when mutation is success, because onClose function is only available in this scope, so we need to set it to ref to make it available in useEffect scope
 
-          <ModalBody>
-            <Controller
-              control={control}
-              name="namaTraining"
-              render={({ field }) => {
-                return (
-                  <Input
-                    {...field}
-                    className="rounded"
-                    errorMessage={errors.namaTraining?.message}
-                    isInvalid={errors.namaTraining !== undefined}
-                    label="Nama Training"
-                    variant="bordered"
-                  />
-                );
-              }}
-            />
+          return (
+            <form onSubmit={handleSubmitForm(handleAddTraining)}>
+              <ModalHeader>
+                <h3 className="text-lg font-medium">Tambah Training Baru</h3>
+              </ModalHeader>
 
-            <Controller
-              control={control}
-              name="description"
-              render={({ field }) => {
-                return (
-                  <Input
-                    {...field}
-                    className="rounded"
-                    errorMessage={errors.description?.message}
-                    isInvalid={errors.description !== undefined}
-                    label="Deskripsi"
-                    variant="bordered"
-                  />
-                );
-              }}
-            />
-          </ModalBody>
+              <ModalBody>
+                <Controller
+                  control={control}
+                  name="namaTraining"
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      className="rounded"
+                      errorMessage={errors.namaTraining?.message}
+                      isInvalid={errors.namaTraining !== undefined}
+                      label="Nama Training"
+                      variant="bordered"
+                    />
+                  )}
+                />
 
-          <ModalFooter>
-            <div className="flex flex-row justify-end gap-3">
-              <Button
-                className="font-medium text-danger-500"
-                disabled={disabledSubmit}
-                type="button"
-                variant="flat"
-                onPress={() => handleOnClose(onClose)}
-              >
-                Cancel
-              </Button>
-              <Button
-                className="font-medium text-white bg-brand"
-                disabled={disabledSubmit}
-                type="submit"
-              >
-                {isPendingMutateAddTraining ? (
-                  <Spinner color="white" size="sm" />
-                ) : (
-                  "Tambah Training"
-                )}
-              </Button>
-            </div>
-          </ModalFooter>
-        </ModalContent>
-      </form>
+                <Controller
+                  control={control}
+                  name="description"
+                  render={({ field }) => (
+                    <Textarea
+                      {...field}
+                      className="rounded"
+                      errorMessage={errors.description?.message}
+                      isInvalid={errors.description !== undefined}
+                      label="Deskripsi"
+                      variant="bordered"
+                    />
+                  )}
+                />
+              </ModalBody>
+
+              <ModalFooter>
+                <div className="flex flex-row justify-end gap-3">
+                  <Button
+                    className="font-medium text-danger-500"
+                    disabled={disabledSubmit}
+                    type="button"
+                    variant="flat"
+                    onPress={() => handleOnClose(onClose)}
+                  >
+                    Cancel
+                  </Button>
+
+                  <Button
+                    className="font-medium text-white bg-brand"
+                    disabled={disabledSubmit}
+                    type="submit"
+                  >
+                    {isPendingMutateAddTraining ? (
+                      <Spinner color="white" size="sm" />
+                    ) : (
+                      "Tambah Training"
+                    )}
+                  </Button>
+                </div>
+              </ModalFooter>
+            </form>
+          );
+        }}
+      </ModalContent>
     </Modal>
   );
 };
