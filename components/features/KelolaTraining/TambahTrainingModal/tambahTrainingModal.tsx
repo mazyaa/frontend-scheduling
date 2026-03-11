@@ -81,6 +81,13 @@ const TambahTrainingModal = (props: PropTypes) => {
                       isInvalid={errors.description !== undefined}
                       label="Deskripsi"
                       variant="bordered"
+                      onKeyDown={(e) => {
+                        // submit form when user press ctrl + enter
+                        if (e.ctrlKey && e.key === "Enter") {
+                          e.preventDefault();
+                          document.querySelector("form")?.requestSubmit();
+                        }
+                      }}
                     />
                   )}
                 />
