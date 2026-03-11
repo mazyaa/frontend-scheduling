@@ -35,7 +35,6 @@ const useTambahTrainingModal = () => {
     mutate: mutateAddTraining,
     isPending: isPendingMutateAddTraining,
     isSuccess: isSuccessMutateAddTraining,
-    reset: resetMutateAddTraining,
   } = useMutation({
     mutationFn: tambahTraining,
     onError: (error) => {
@@ -60,12 +59,12 @@ const useTambahTrainingModal = () => {
 
   const handleOnClose = (onClose: () => void) => {
     onClose();
-    resetMutateAddTraining(); // reset state of mutation so when user open the modal again, the state will be reset
     reset();
   };
 
-  const handleAddTraining = (data: Omit<IKelolaTraining, "id">) =>
+  const handleAddTraining = (data: Omit<IKelolaTraining, "id">) => {
     mutateAddTraining(data);
+  };
 
   return {
     control,
