@@ -16,6 +16,7 @@ import { useDisclosure } from "@heroui/modal";
 import { LIST_KELOLA_TRAINING } from "./KelolaTraining.constants";
 import useKelolaTraining from "./useKelolaTraining";
 import TambahTrainingModal from "./TambahTrainingModal";
+import { EditTrainingModal } from "./EditTrainingModal";
 
 import useChangeUrl from "@/hooks/useChangeUrl";
 import DataTable from "@/components/ui/DataTable/DataTable";
@@ -32,13 +33,14 @@ const KelolaTraining = () => {
     isLoadingKelolaTraining,
     isRefetchingKelolaTraining,
     refetchKelolaTraining,
-    // selectedId,
+    selectedId,
     setSelectedId,
   } = useKelolaTraining();
 
   const { setUrl } = useChangeUrl();
 
   const tambahTrainingModal = useDisclosure();
+  const editTrainingModal = useDisclosure();
 
   // set url when searchParams change, so when user back to previous page, the url will be updated with the correct query
   useEffect(() => {
@@ -62,9 +64,10 @@ const KelolaTraining = () => {
               <DropdownMenu>
                 <DropdownItem
                   key="detail-training-button"
-                  //   onPress={
-                  //     //open modal
-                  //   }
+                  onPress={() => {
+                    setSelectedId(`${itemTraining.id}`);
+                    editTrainingModal.onOpen();
+                  }}
                 >
                   Edit Data Training
                 </DropdownItem>
@@ -112,6 +115,12 @@ const KelolaTraining = () => {
       <TambahTrainingModal
         {...tambahTrainingModal}
         refetchTraining={refetchKelolaTraining}
+      />
+
+      <EditTrainingModal
+        {...editTrainingModal}
+        refetchTraining={refetchKelolaTraining}
+        selectedId={selectedId}
       />
 
       {/* <DeleteCategoryModal
