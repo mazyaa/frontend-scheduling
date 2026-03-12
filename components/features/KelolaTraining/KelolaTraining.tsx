@@ -17,6 +17,7 @@ import { LIST_KELOLA_TRAINING } from "./KelolaTraining.constants";
 import useKelolaTraining from "./useKelolaTraining";
 import TambahTrainingModal from "./TambahTrainingModal";
 import { EditTrainingModal } from "./EditTrainingModal";
+import { DeleteTrainingModal } from "./DeleteTrainingModal";
 
 import useChangeUrl from "@/hooks/useChangeUrl";
 import DataTable from "@/components/ui/DataTable/DataTable";
@@ -41,6 +42,7 @@ const KelolaTraining = () => {
 
   const tambahTrainingModal = useDisclosure();
   const editTrainingModal = useDisclosure();
+  const deleteTrainingModal = useDisclosure();
 
   // set url when searchParams change, so when user back to previous page, the url will be updated with the correct query
   useEffect(() => {
@@ -77,10 +79,10 @@ const KelolaTraining = () => {
                   className="text-danger-600"
                   onPress={() => {
                     setSelectedId(`${itemTraining.id}`);
-                    // deleteTrainingModal.onOpen();
+                    deleteTrainingModal.onOpen();
                   }}
                 >
-                  Delete
+                  Delete Training
                 </DropdownItem>
               </DropdownMenu>
             </Dropdown>
@@ -123,12 +125,12 @@ const KelolaTraining = () => {
         selectedId={selectedId}
       />
 
-      {/* <DeleteCategoryModal
-        {...deleteCategoryModal}
+      <DeleteTrainingModal
+        {...deleteTrainingModal}
+        refetchTraining={refetchKelolaTraining}
         selectedId={selectedId}
         setSelectedId={setSelectedId}
-        refetchCategory={refetchCategory}
-      /> */}
+      />
     </section>
   );
 };
