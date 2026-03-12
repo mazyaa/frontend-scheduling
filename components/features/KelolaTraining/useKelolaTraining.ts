@@ -45,7 +45,6 @@ const useKelolaTraining = () => {
       !!currentPage &&
       !!currentLimit &&
       !!token,
-    refetchOnWindowFocus: false,
   });
 
   return {
