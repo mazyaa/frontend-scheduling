@@ -23,7 +23,6 @@ export const Greeting = ({ name, isOpen, onToggleSidebar }: GreetingProps) => {
 
       {/* Content */}
       <div className="relative flex flex-col items-center">
-        <p className="text-sm text-brand font-medium">Selamat datang kembali</p>
         <h1 className="text-xl font-bold text-brand truncate">Halo, {name}!</h1>
       </div>
     </div>
