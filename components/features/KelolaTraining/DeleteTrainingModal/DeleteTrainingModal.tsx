@@ -30,13 +30,16 @@ const DeleteTrainingModal = (props: PropTypes) => {
     handleDeleteTraining,
     isPendingDeleteTraining,
     isSuccessDeleteTraining,
+    resetDeleteTraining,
   } = useDeleteTrainingModal(refetchTraining);
 
   useEffect(() => {
     if (isSuccessDeleteTraining && onCloseRef.current) {
       onCloseRef.current(); // close modal when delete training successfully
+      setSelectedId(""); // reset selectedId when delete training successfully
+      resetDeleteTraining();
     }
-  });
+  }, [isSuccessDeleteTraining, resetDeleteTraining]);
 
   return (
     <Modal isOpen={isOpen} placement="center" onOpenChange={onOpenChange}>
