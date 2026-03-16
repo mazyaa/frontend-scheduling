@@ -17,6 +17,7 @@ const useDeleteTrainingModal = (refetchTraining: () => void) => {
     mutate: mutateDeleteTraining,
     isPending: isPendingDeleteTraining,
     isSuccess: isSuccessDeleteTraining,
+    reset: resetDeleteTraining,
   } = useMutation({
     mutationFn: deleteTrainingById,
     onError: (error) => {
@@ -40,6 +41,7 @@ const useDeleteTrainingModal = (refetchTraining: () => void) => {
     handleDeleteTraining: mutateDeleteTraining,
     isPendingDeleteTraining,
     isSuccessDeleteTraining,
+    resetDeleteTraining,
   };
 };
 

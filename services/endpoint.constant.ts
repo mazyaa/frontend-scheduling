@@ -2,4 +2,5 @@ export const endpoint = {
   AUTH: "/auth",
   KELOLA_TRAINING: "/training",
   KELOLA_INSTRUKTUR_ASESOR: "/instruktur-or-asesor",
+  MEDIA: "/media",
 };
