@@ -12,6 +12,7 @@ import { Button } from "@heroui/button";
 import { CiMenuKebab } from "react-icons/ci";
 import { useSession } from "next-auth/react";
 import { useDisclosure } from "@heroui/modal";
+import Image from "next/image";
 
 import { LIST_KELOLA_TRAINING } from "./KelolaTraining.constants";
 import useKelolaTraining from "./useKelolaTraining";
@@ -54,6 +55,10 @@ const KelolaTraining = () => {
       const cellValue = itemTraining[columnKey as keyof typeof itemTraining]; // get value of cell by column key
 
       switch (columnKey) {
+        case "image":
+          return (
+            <Image alt="image" height={200} src={`${cellValue}`} width={100} />
+          );
         case "aksi":
           return (
             <Dropdown>

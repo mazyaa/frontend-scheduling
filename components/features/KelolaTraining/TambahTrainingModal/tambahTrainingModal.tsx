@@ -15,6 +15,8 @@ import { Spinner } from "@heroui/spinner";
 
 import useTambahTrainingModal from "./useTambahTrainingModal";
 
+import InputFile from "@/components/ui/InputFile";
+
 interface PropTypes {
   isOpen: boolean;
   onOpenChange: () => void; // for tracking open state of modal, because when user click cancel button, the state of isOpen will be set to false, but when user click add training button, the state of isOpen will be set to true, so we need to track the state of modal open or close
@@ -32,10 +34,19 @@ const TambahTrainingModal = (props: PropTypes) => {
     handleAddTraining,
     isPendingMutateAddTraining,
     isSuccessMutateAddTraining,
+
+    preview,
+    handleUploadImage,
+    isPendingMutateUploadFile,
+    handleDeleteImage,
+    isPendingMutateDeleteFile,
     handleOnClose,
   } = useTambahTrainingModal();
 
-  const disabledSubmit = isPendingMutateAddTraining;
+  const disabledSubmit =
+    isPendingMutateAddTraining ||
+    isPendingMutateUploadFile ||
+    isPendingMutateDeleteFile;
 
   useEffect(() => {
     if (isSuccessMutateAddTraining && onCloseRef.current) {
@@ -93,6 +104,31 @@ const TambahTrainingModal = (props: PropTypes) => {
                     />
                   )}
                 />
+
+                <div className="flex flex-col gap-3">
+                  <Controller
+                    control={control}
+                    name="image"
+                    render={({ field: { onChange, ...field } }) => {
+                      return (
+                        <InputFile
+                          {...field} // inject some propperties like onChange, value, name, ref from react hook form to Input component because by default some properties like onChange and value are not connected to react hook form
+                          isDropable
+                          errorMessage={errors.image?.message}
+                          isDeleting={isPendingMutateDeleteFile}
+                          isInvalid={errors.image !== undefined} // show input error state if have error
+                          isUploading={isPendingMutateUploadFile}
+                          label={<p className="font-bold text-sm my-2">Icon</p>}
+                          preview={typeof preview === "string" ? preview : ""}
+                          onDelete={() => handleDeleteImage(onChange)} // onChange is coming from react hook form for setting value to form
+                          onUpload={(files) =>
+                            handleUploadImage(files, onChange)
+                          } // params files is coming from handleOnUpload in InputFile component, onChange is coming from react hook form for setting value to form
+                        />
+                      );
+                    }}
+                  />
+                </div>
               </ModalBody>
 
               <ModalFooter>
