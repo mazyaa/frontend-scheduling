@@ -1,7 +1,7 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
-import { Key, ReactNode, useCallback, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+import { Key, useCallback, useEffect } from "react";
 import {
   Dropdown,
   DropdownItem,
@@ -21,11 +21,10 @@ import { EditTrainingModal } from "./EditTrainingModal";
 import { DeleteTrainingModal } from "./DeleteTrainingModal";
 
 import useChangeUrl from "@/hooks/useChangeUrl";
-import DataTable from "@/components/ui/DataTable/DataTable";
+import CardTable from "@/components/ui/Card";
 import { TablePageSkeleton } from "@/components/ui/Skeletons";
 
 const KelolaTraining = () => {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const { status } = useSession();
   const isLoadingSession = status === "loading";
@@ -45,66 +44,102 @@ const KelolaTraining = () => {
   const editTrainingModal = useDisclosure();
   const deleteTrainingModal = useDisclosure();
 
-  // set url when searchParams change, so when user back to previous page, the url will be updated with the correct query
+  // sync URL
   useEffect(() => {
     setUrl();
   }, [searchParams]);
 
   const renderCell = useCallback(
     (itemTraining: Record<string, unknown>, columnKey: Key) => {
-      const cellValue = itemTraining[columnKey as keyof typeof itemTraining]; // get value of cell by column key
+      const cellValue = itemTraining[columnKey as keyof typeof itemTraining];
 
       switch (columnKey) {
-        case "image":
+        case "image": {
+          const imageSrc =
+            typeof cellValue === "string" && cellValue.trim() !== ""
+              ? cellValue
+              : "/images/placeholder.png";
+
           return (
-            <Image alt="image" height={200} src={`${cellValue}`} width={100} />
+            <div className="relative w-full h-24 overflow-hidden rounded-lg">
+              <Image
+                fill
+                alt="image"
+                className="object-cover transition duration-300 hover:scale-105"
+                sizes="100vw"
+                src={imageSrc}
+              />
+            </div>
           );
+        }
+
+        // ⚙️ ACTION (lebih modern & subtle)
         case "aksi":
           return (
-            <Dropdown>
+            <Dropdown placement="bottom-end">
               <DropdownTrigger>
-                <Button isIconOnly size="sm" variant="light">
-                  <CiMenuKebab className="text-default-700" />
+                <Button
+                  isIconOnly
+                  className="rounded-full hover:bg-gray-100 transition"
+                  size="sm"
+                  variant="light"
+                >
+                  <CiMenuKebab className="text-gray-600 text-lg" />
                 </Button>
               </DropdownTrigger>
 
-              <DropdownMenu>
+              <DropdownMenu aria-label="Actions" className="min-w-[160px]">
                 <DropdownItem
-                  key="detail-training-button"
+                  key="edit-training"
+                  className="text-sm"
                   onPress={() => {
-                    setSelectedId(`${itemTraining.id}`);
+                    setSelectedId(String(itemTraining.id));
                     editTrainingModal.onOpen();
                   }}
                 >
-                  Edit Data Training
+                  ✏️ Edit Training
                 </DropdownItem>
 
                 <DropdownItem
-                  key="delete-training-button"
-                  className="text-danger-600"
+                  key="delete-training"
+                  className="text-danger text-sm"
                   onPress={() => {
-                    setSelectedId(`${itemTraining.id}`);
+                    setSelectedId(String(itemTraining.id));
                     deleteTrainingModal.onOpen();
                   }}
                 >
-                  Delete Training
+                  🗑️ Delete Training
                 </DropdownItem>
               </DropdownMenu>
             </Dropdown>
           );
-        default:
-          return cellValue as ReactNode;
+
+        // 🧾 DEFAULT (lebih clean & readable)
+        default: {
+          const value =
+            typeof cellValue === "string" || typeof cellValue === "number"
+              ? cellValue
+              : null;
+
+          return (
+            <span className="text-sm text-gray-700 font-medium line-clamp-2">
+              {value || (
+                <span className="text-gray-400 italic">Tidak ada data</span>
+              )}
+            </span>
+          );
+        }
       }
     },
-    [router, setSelectedId],
+    [setSelectedId, editTrainingModal, deleteTrainingModal],
   );
 
   return (
     <section>
-      {isLoadingSession ? ( // show skeleton when if session is still loading
+      {isLoadingSession ? (
         <TablePageSkeleton />
       ) : (
-        <DataTable
+        <CardTable
           buttonTopContentLabel="Tambah Training"
           columns={LIST_KELOLA_TRAINING}
           data={dataKelolaTraining?.data || []}
@@ -119,6 +154,7 @@ const KelolaTraining = () => {
           }}
         />
       )}
+
       <TambahTrainingModal
         {...tambahTrainingModal}
         refetchTraining={refetchKelolaTraining}
