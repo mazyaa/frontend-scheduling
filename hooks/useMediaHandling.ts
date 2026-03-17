@@ -15,7 +15,7 @@ const useMediaHandling = () => {
   ) => {
     const formData = new FormData();
 
-    formData.append("file", file);
+    formData.append("file", file); // append the file to formData with key "file" because in backend we will receive the file with req.file (multer) which means the key must be "file"
     const {
       data: {
         data: { secure_url: image }, // destructuring secure_url from response and rename it to image
