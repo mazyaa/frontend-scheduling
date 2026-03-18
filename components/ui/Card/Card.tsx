@@ -243,7 +243,7 @@ const CardTable = (props: Proptypes) => {
                     <Image
                       fill
                       alt="training image"
-                      className="object-fit-cover p-2 rounded-2xl hover:scale-105 transition duration-500"
+                      className="p-2 object-cover object-top rounded-2xl hover:scale-105 transition duration-500"
                       sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                       src={imageSrc}
                     />
