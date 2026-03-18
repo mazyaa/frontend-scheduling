@@ -120,10 +120,10 @@ const InputFile = (props: PropTypes) => {
           !isUploading && ( // render this component if preview image is not available and isUploading is false
             <div className="flex flex-col items-center justify-center p-5">
               <CiSaveUp2 className="mb-2 h-10 w-10 text-gray-400" />
-              <p className="text-center text-sm font-semibold text-gray-500">
+              <p className="text-center text-[13px] font-semibold text-gray-500">
                 {isDropable
-                  ? "Drag and drop or click to upload file here"
-                  : "Click to upload file here"}
+                  ? "Drag and drop atau klik untuk mengunggah file di sini"
+                  : "Klik untuk mengunggah file"}
               </p>
             </div>
           )}
