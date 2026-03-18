@@ -9,18 +9,22 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { ToasterContext } from "@/context/ToasterContext";
 import { kelolaTrainingServices } from "@/services/kelolaTraining.services";
 import { IKelolaTraining } from "@/types/kelolaTraining";
+import useMediaHandling from "@/hooks/useMediaHandling";
 
 const schema = yup.object().shape({
   namaTraining: yup.string().required("Nama training wajib diisi"),
+  image: yup.string().required("Gambar training wajib diisi"),
   description: yup.string().required("Deskripsi training wajib diisi"),
 });
 
-const useEditTrainingModal = (
-  id: string,
-  refetchTraining: () => void,
-  isOpen: boolean,
-) => {
+const useEditTrainingModal = (id: string, isOpen: boolean) => {
   const { setToaster } = useContext(ToasterContext);
+  const {
+    mutateUploadFile,
+    isPendingMutateDeleteFile,
+    mutateDeleteFile,
+    isPendingMutateUploadFile,
+  } = useMediaHandling();
 
   const getTrainingById = async (id: string) => {
     const response = await kelolaTrainingServices.getTrainingById(id);
@@ -38,6 +42,9 @@ const useEditTrainingModal = (
     control: controlUpdateTraining,
     handleSubmit: handleSubmitUpdateTraining,
     formState: { errors: errorsUpdateTraining },
+    watch: watchUpdateTraining,
+    setValue: setValueUpdateTraining,
+    getValues: getValuesUpdateTraining,
     reset: resetUpdateTraining,
   } = useForm({
     resolver: yupResolver(schema),
@@ -45,9 +52,43 @@ const useEditTrainingModal = (
       ? {
           namaTraining: trainingDataById.data.namaTraining || "",
           description: trainingDataById.data.description || "",
+          image: trainingDataById.data.image || "",
         }
       : undefined,
   });
+
+  const preview = watchUpdateTraining("image");
+
+  // all about media handling
+  const handleUploadImage = (
+    files: FileList,
+    onChange: (file: FileList | undefined) => void,
+  ) => {
+    if (files.length !== 0) {
+      onChange(files); // set the file to callback function to update the form state with the selected file
+      mutateUploadFile({
+        file: files[0],
+        callback: (fileUrl: string) => {
+          setValueUpdateTraining("image", fileUrl); // set value of image field in form state with the uploaded file url
+        },
+      });
+    }
+  };
+
+  const handleDeleteImage = (
+    onChange: (files: FileList | undefined) => void,
+  ) => {
+    const fileUrl = getValuesUpdateTraining("image"); // get the current file url from form state
+
+    if (typeof fileUrl === "string") {
+      mutateDeleteFile({
+        fileUrl,
+        callback: () => {
+          onChange(undefined); // set the file to undefined to update the form state and remove the preview
+        },
+      });
+    }
+  };
 
   const editTraining = async (
     id: string,
@@ -83,13 +124,24 @@ const useEditTrainingModal = (
         message: "Training berhasil diedit",
       });
       resetUpdateTraining();
-      refetchTraining();
     },
   });
 
-  const handleOnClose = (onClose: () => void) => {
-    onClose();
-    resetUpdateTraining();
+  const handleOnClose = (onClose: () => void, isCancel: ConstrainBoolean) => {
+    const fileUrl = getValuesUpdateTraining("image");
+
+    if (isCancel && typeof fileUrl === "string") {
+      mutateDeleteFile({
+        fileUrl,
+        callback: () => {
+          resetUpdateTraining(); // reset the form state to initial values
+          onClose(); // call the onClose callback to close the modal
+        },
+      });
+    } else {
+      resetUpdateTraining(); // reset the form state to initial values
+      onClose(); // call the onClose callback to close the modal
+    }
   };
 
   const handleUpdateTraining = (data: Omit<IKelolaTraining, "id">) => {
@@ -101,6 +153,12 @@ const useEditTrainingModal = (
     handleSubmitUpdateTraining,
     errorsUpdateTraining,
     handleOnClose,
+
+    preview,
+    handleUploadImage,
+    isPendingMutateUploadFile,
+    handleDeleteImage,
+    isPendingMutateDeleteFile,
 
     trainingDataById,
 

@@ -1,18 +1,20 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { Key, useCallback, useEffect } from "react";
-import {
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
-} from "@heroui/dropdown";
+import { Key, ReactNode, useCallback, useEffect } from "react";
+// import {
+//   Dropdown,
+//   DropdownItem,
+//   DropdownMenu,
+//   DropdownTrigger,
+// } from "@heroui/dropdown";
+import { FiEdit2, FiTrash2 } from "react-icons/fi";
 import { Button } from "@heroui/button";
-import { CiMenuKebab } from "react-icons/ci";
+// import { CiMenuKebab } from "react-icons/ci";
 import { useSession } from "next-auth/react";
 import { useDisclosure } from "@heroui/modal";
 import Image from "next/image";
+import { cn } from "@heroui/theme";
 
 import { LIST_KELOLA_TRAINING } from "./KelolaTraining.constants";
 import useKelolaTraining from "./useKelolaTraining";
@@ -22,7 +24,7 @@ import { DeleteTrainingModal } from "./DeleteTrainingModal";
 
 import useChangeUrl from "@/hooks/useChangeUrl";
 import CardTable from "@/components/ui/Card";
-import { TablePageSkeleton } from "@/components/ui/Skeletons";
+import CardMapSkeleton from "@/components/ui/Skeletons/CardSkeleton";
 
 const KelolaTraining = () => {
   const searchParams = useSearchParams();
@@ -44,7 +46,6 @@ const KelolaTraining = () => {
   const editTrainingModal = useDisclosure();
   const deleteTrainingModal = useDisclosure();
 
-  // sync URL
   useEffect(() => {
     setUrl();
   }, [searchParams]);
@@ -60,75 +61,60 @@ const KelolaTraining = () => {
               ? cellValue
               : "/images/placeholder.png";
 
-          return (
-            <div className="relative w-full h-24 overflow-hidden rounded-lg">
-              <Image
-                fill
-                alt="image"
-                className="object-cover transition duration-300 hover:scale-105"
-                sizes="100vw"
-                src={imageSrc}
-              />
-            </div>
-          );
+          return <Image fill alt="image" src={imageSrc} />;
         }
 
-        // ⚙️ ACTION (lebih modern & subtle)
         case "aksi":
           return (
-            <Dropdown placement="bottom-end">
-              <DropdownTrigger>
-                <Button
-                  isIconOnly
-                  className="rounded-full hover:bg-gray-100 transition"
-                  size="sm"
-                  variant="light"
-                >
-                  <CiMenuKebab className="text-gray-600 text-lg" />
-                </Button>
-              </DropdownTrigger>
+            <div className="flex items-center flex-row justify-around w-full gap-2">
+              <Button
+                className={cn(
+                  "h-8 px-3 rounded-lg font-medium text-xs",
+                  "flex items-center gap-1.5",
+                  "bg-blue-50 hover:bg-blue-100",
+                  "text-blue-600 hover:text-blue-700",
+                  "border border-blue-100 hover:border-blue-200",
+                  "transition-all duration-200",
+                  "hover:scale-105 active:scale-95",
+                  "shadow-sm hover:shadow-md",
+                )}
+                size="sm"
+                variant="flat"
+                onPress={() => {
+                  setSelectedId(String(itemTraining.id));
+                  editTrainingModal.onOpen();
+                }}
+              >
+                <FiEdit2 size={13} />
+                Edit
+              </Button>
 
-              <DropdownMenu aria-label="Actions" className="min-w-[160px]">
-                <DropdownItem
-                  key="edit-training"
-                  className="text-sm"
-                  onPress={() => {
-                    setSelectedId(String(itemTraining.id));
-                    editTrainingModal.onOpen();
-                  }}
-                >
-                  ✏️ Edit Training
-                </DropdownItem>
-
-                <DropdownItem
-                  key="delete-training"
-                  className="text-danger text-sm"
-                  onPress={() => {
-                    setSelectedId(String(itemTraining.id));
-                    deleteTrainingModal.onOpen();
-                  }}
-                >
-                  🗑️ Delete Training
-                </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
+              <Button
+                className={cn(
+                  "h-8 px-3 rounded-lg font-medium text-xs",
+                  "flex items-center gap-1.5",
+                  "bg-red-50 hover:bg-red-100",
+                  "text-red-500 hover:text-red-600",
+                  "border border-red-100 hover:border-red-200",
+                  "transition-all duration-200",
+                  "hover:scale-105 active:scale-95",
+                  "shadow-sm hover:shadow-md",
+                )}
+                size="sm"
+                variant="flat"
+                onPress={() => {
+                  setSelectedId(String(itemTraining.id));
+                  deleteTrainingModal.onOpen();
+                }}
+              >
+                <FiTrash2 size={13} />
+                Delete
+              </Button>
+            </div>
           );
 
-        // 🧾 DEFAULT (lebih clean & readable)
-        default: {
-          const value =
-            typeof cellValue === "string" || typeof cellValue === "number"
-              ? cellValue
-              : null;
-
-          return (
-            <span className="text-sm text-gray-700 font-medium line-clamp-2">
-              {value || (
-                <span className="text-gray-400 italic">Tidak ada data</span>
-              )}
-            </span>
-          );
-        }
+        default:
+          return cellValue as ReactNode;
       }
     },
     [setSelectedId, editTrainingModal, deleteTrainingModal],
@@ -137,7 +123,7 @@ const KelolaTraining = () => {
   return (
     <section>
       {isLoadingSession ? (
-        <TablePageSkeleton />
+        <CardMapSkeleton />
       ) : (
         <CardTable
           buttonTopContentLabel="Tambah Training"
