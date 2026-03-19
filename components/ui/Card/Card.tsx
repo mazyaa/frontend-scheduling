@@ -13,13 +13,16 @@ import { Spinner } from "@heroui/spinner";
 
 import { LIMIT_LISTS } from "@/constants/list.constats";
 import useChangeUrl from "@/hooks/useChangeUrl";
+
 interface Proptypes {
   buttonTopContentLabel?: string;
+
   columns: Record<string, unknown>[];
   data: Record<string, React.ReactNode>[];
   emptyContent: string;
   isLoading?: boolean;
   onClickButtonTopContent?: () => void;
+  placeholderTopContent?: string;
   renderCell: (
     item: Record<string, unknown>,
     columnKey: Key,
@@ -34,6 +37,7 @@ const CardTable = (props: Proptypes) => {
     emptyContent,
     isLoading,
     onClickButtonTopContent,
+    placeholderTopContent,
     renderCell,
     totalPages,
   } = props;
@@ -54,7 +58,7 @@ const CardTable = (props: Proptypes) => {
         <Input
           isClearable // Enable the clear button
           className="w-full sm:max-w-[24%]"
-          placeholder="Cari Training..."
+          placeholder={placeholderTopContent || "Cari..."}
           startContent={<CiSearch />}
           onChange={handleChangeSearch}
           onClear={handleClearSearch}
@@ -242,7 +246,7 @@ const CardTable = (props: Proptypes) => {
                   <div className="relative w-full h-100 overflow-hidden">
                     <Image
                       fill
-                      alt="training image"
+                      alt="image"
                       className="p-2 object-cover object-top rounded-2xl hover:scale-105 transition duration-500"
                       sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                       src={imageSrc}
@@ -253,45 +257,55 @@ const CardTable = (props: Proptypes) => {
                 {/* information */}
                 <CardBody className="px-4 py-4 overflow-hidden">
                   <div className="grid grid-rows-2 gap-2">
-                    {columns
-                      .filter(
-                        (col) => col.uid !== "image" && col.uid !== "aksi",
-                      )
-                      .map((column, index) => (
-                        <motion.div
-                          key={column.uid as Key}
-                          animate={{ opacity: 1, scale: 1 }}
-                          className={cn(
-                            "flex flex-col items-center text-center gap-1 p-3 rounded-xl",
-                            "bg-default-50 hover:bg-default-100",
-                            "border border-default-100 hover:border-brand/20",
-                            "transition-all duration-200 group cursor-default",
-                          )}
-                          initial={{ opacity: 0, scale: 0.95 }}
-                          transition={{ duration: 0.2, delay: index * 0.05 }}
-                        >
-                          {/* Label */}
-                          <span
-                            className={cn(
-                              "text-[13px] font-bold uppercase tracking-[0.12em]",
-                              "text-default-400 group-hover:text-brand",
-                              "transition-colors duration-200",
-                            )}
-                          >
-                            {column.name as string}
-                          </span>
+                    {Array.isArray(columns)
+                      ? columns
+                          .filter(
+                            // fillter by isSummary false, and uid not image and uid not aksi
+                            (col) =>
+                              (col.isSummary === undefined ||
+                                col.isSummary === true) &&
+                              col.uid !== "image" &&
+                              col.uid !== "aksi",
+                          )
+                          .map((column, index) => (
+                            <motion.div
+                              key={column.uid as Key}
+                              animate={{ opacity: 1, scale: 1 }}
+                              className={cn(
+                                "flex flex-col items-center text-center gap-1 p-3 rounded-xl",
+                                "bg-default-50 hover:bg-default-100",
+                                "border border-default-100 hover:border-brand/20",
+                                "transition-all duration-200 group cursor-default",
+                              )}
+                              initial={{ opacity: 0, scale: 0.95 }}
+                              transition={{
+                                duration: 0.2,
+                                delay: index * 0.05,
+                              }}
+                            >
+                              {/* Label */}
+                              <span
+                                className={cn(
+                                  "text-[13px] font-bold uppercase tracking-[0.12em]",
+                                  "text-default-400 group-hover:text-brand",
+                                  "transition-colors duration-200",
+                                )}
+                              >
+                                {column.name as string}
+                              </span>
 
-                          {/* Value */}
-                          <span
-                            className={cn(
-                              "text-[13px] font-semibold text-default-800 leading-snug",
-                              "group-hover:text-default-900 transition-colors duration-200",
-                            )}
-                          >
-                            {renderCell(item, column.uid as Key)}
-                          </span>
-                        </motion.div>
-                      ))}
+                              {/* Value */}
+                              <span
+                                className={cn(
+                                  "text-[13px] font-semibold text-default-800 leading-snug",
+                                  "group-hover:text-default-900 transition-colors duration-200",
+                                )}
+                              >
+                                {renderCell(item, column.uid as Key)}
+                              </span>
+                            </motion.div>
+                          ))
+                      : null}
                   </div>
                 </CardBody>
 

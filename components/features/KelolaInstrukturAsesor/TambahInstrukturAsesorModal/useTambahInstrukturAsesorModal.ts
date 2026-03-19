@@ -7,9 +7,11 @@ import { useMutation } from "@tanstack/react-query";
 import { ToasterContext } from "@/context/ToasterContext";
 import { kelolaInstrukturAsesorServices } from "@/services/kelolaInstrukturAsesor";
 import { IKelolaInstrukturAsesor } from "@/types/kelolaInstrukturAsesor";
+import useMediaHandling from "@/hooks/useMediaHandling";
 
 const schema = yup.object().shape({
   name: yup.string().required("Nama wajib diisi"),
+  image: yup.string().required("Gambar wajib diisi"),
   email: yup
     .string()
     .email("Format email tidak valid")
@@ -24,15 +26,74 @@ const schema = yup.object().shape({
 
 const useTambahInstrukturAsesorModal = () => {
   const { setToaster } = useContext(ToasterContext);
+  const {
+    mutateUploadFile,
+    isPendingMutateDeleteFile,
+    mutateDeleteFile,
+    isPendingMutateUploadFile,
+  } = useMediaHandling();
 
   const {
     control,
     handleSubmit: handleSubmitForm,
     formState: { errors },
     reset,
+    watch,
+    getValues,
+    setValue,
   } = useForm({
     resolver: yupResolver(schema),
   });
+
+  const preview = watch("image"); // watch the image field to get the selected file url for preview
+
+  // all about media handling
+  const handleUploadImage = (
+    files: FileList,
+    onChange: (file: FileList | undefined) => void,
+  ) => {
+    if (files.length !== 0) {
+      onChange(files); // set the file to callback function to update the form state with the selected file
+      mutateUploadFile({
+        file: files[0],
+        callback: (fileUrl: string) => {
+          setValue("image", fileUrl); // set value of image field in form state with the uploaded file url
+        },
+      });
+    }
+  };
+
+  const handleDeleteImage = (
+    onChange: (files: FileList | undefined) => void,
+  ) => {
+    const fileUrl = getValues("image"); // get the current file url from form state
+
+    if (typeof fileUrl === "string") {
+      mutateDeleteFile({
+        fileUrl,
+        callback: () => {
+          onChange(undefined); // set the file to undefined to update the form state and remove the preview
+        },
+      });
+    }
+  };
+
+  const handleOnClose = (onClose: () => void) => {
+    const fileUrl = getValues("image");
+
+    if (typeof fileUrl === "string") {
+      mutateDeleteFile({
+        fileUrl,
+        callback: () => {
+          reset(); // reset the form state to initial values
+          onClose(); // call the onClose callback to close the modal
+        },
+      });
+    } else {
+      reset(); // reset the form state to initial values
+      onClose(); // call the onClose callback to close the modal
+    }
+  };
 
   const tambahInstrukturAsesor = async (
     payload: Omit<IKelolaInstrukturAsesor, "id">,
@@ -55,7 +116,7 @@ const useTambahInstrukturAsesorModal = () => {
         type: "error",
         message:
           error instanceof Error
-            ? error.message
+            ? error?.message
             : "Terjadi kesalahan saat menambahkan instruktur/asesor",
       });
     },
@@ -68,11 +129,6 @@ const useTambahInstrukturAsesorModal = () => {
       reset();
     },
   });
-
-  const handleOnClose = (onClose: () => void) => {
-    onClose();
-    reset();
-  };
 
   const handleAddInstrukturAsesor = (
     data: Omit<IKelolaInstrukturAsesor, "id">,
@@ -88,6 +144,12 @@ const useTambahInstrukturAsesorModal = () => {
     isPendingMutateAddInstrukturAsesor,
     isSuccessMutateAddInstrukturAsesor,
 
+    preview,
+
+    handleUploadImage,
+    handleDeleteImage,
+    isPendingMutateUploadFile,
+    isPendingMutateDeleteFile,
     handleOnClose,
   };
 };

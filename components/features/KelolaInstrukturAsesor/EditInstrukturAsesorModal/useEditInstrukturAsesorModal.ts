@@ -9,9 +9,11 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { ToasterContext } from "@/context/ToasterContext";
 import { kelolaInstrukturAsesorServices } from "@/services/kelolaInstrukturAsesor";
 import { IKelolaInstrukturAsesor } from "@/types/kelolaInstrukturAsesor";
+import useMediaHandling from "@/hooks/useMediaHandling";
 
 const schema = yup.object().shape({
   name: yup.string().required("Nama wajib diisi"),
+  image: yup.string().required("Gambar wajib diisi"),
   email: yup
     .string()
     .email("Format email tidak valid")
@@ -24,12 +26,14 @@ const schema = yup.object().shape({
   keahlian: yup.string().required("Keahlian wajib diisi"),
 });
 
-const useEditInstrukturAsesorModal = (
-  id: string,
-  refetchInstrukturAsesor: () => void,
-  isOpen: boolean,
-) => {
+const useEditInstrukturAsesorModal = (id: string, isOpen: boolean) => {
   const { setToaster } = useContext(ToasterContext);
+  const {
+    mutateUploadFile,
+    isPendingMutateDeleteFile,
+    mutateDeleteFile,
+    isPendingMutateUploadFile,
+  } = useMediaHandling();
 
   const getInstrukturAsesorById = async (id: string) => {
     const response =
@@ -49,11 +53,15 @@ const useEditInstrukturAsesorModal = (
     handleSubmit: handleSubmitUpdateInstrukturAsesor,
     formState: { errors: errorsUpdateInstrukturAsesor },
     reset: resetUpdateInstrukturAsesor,
+    watch: watchUpdateInstrukturAsesor,
+    setValue: setValueUpdateInstrukturAsesor,
+    getValues: getValuesUpdateInstrukturAsesor,
   } = useForm({
     resolver: yupResolver(schema),
     values: instrukturAsesorDataById
       ? {
           name: instrukturAsesorDataById.data.name || "",
+          image: instrukturAsesorDataById.data.image || "",
           email: instrukturAsesorDataById.data.email || "",
           noWa: instrukturAsesorDataById.data.noWa || "",
           role: instrukturAsesorDataById.data.role || "",
@@ -61,6 +69,56 @@ const useEditInstrukturAsesorModal = (
         }
       : undefined,
   });
+
+  const preview = watchUpdateInstrukturAsesor("image"); // watch the image field to get the selected file url for preview
+
+  // all about media handling
+  const handleUploadImage = (
+    files: FileList,
+    onChange: (file: FileList | undefined) => void,
+  ) => {
+    if (files.length !== 0) {
+      onChange(files); // set the file to callback function to update the form state with the selected file
+      mutateUploadFile({
+        file: files[0],
+        callback: (fileUrl: string) => {
+          setValueUpdateInstrukturAsesor("image", fileUrl); // set value of image field in form state with the uploaded file url
+        },
+      });
+    }
+  };
+
+  const handleDeleteImage = (
+    onChange: (files: FileList | undefined) => void,
+  ) => {
+    const fileUrl = getValuesUpdateInstrukturAsesor("image"); // get the current file url from form state
+
+    if (typeof fileUrl === "string") {
+      mutateDeleteFile({
+        fileUrl,
+        callback: () => {
+          onChange(undefined); // set the file to undefined to update the form state and remove the preview
+        },
+      });
+    }
+  };
+
+  const handleOnClose = (onClose: () => void, isCancel: Boolean) => {
+    const fileUrl = getValuesUpdateInstrukturAsesor("image");
+
+    if (isCancel && typeof fileUrl === "string") {
+      mutateDeleteFile({
+        fileUrl,
+        callback: () => {
+          resetUpdateInstrukturAsesor(); // reset the form state to initial values
+          onClose(); // call the onClose callback to close the modal
+        },
+      });
+    } else {
+      resetUpdateInstrukturAsesor(); // reset the form state to initial values
+      onClose(); // call the onClose callback to close the modal
+    }
+  };
 
   const editInstrukturAsesor = async (
     id: string,
@@ -100,14 +158,8 @@ const useEditInstrukturAsesorModal = (
         message: "Instruktur/Asesor berhasil diedit",
       });
       resetUpdateInstrukturAsesor();
-      refetchInstrukturAsesor();
     },
   });
-
-  const handleOnClose = (onClose: () => void) => {
-    onClose();
-    resetUpdateInstrukturAsesor();
-  };
 
   const handleUpdateInstrukturAsesor = (
     data: Omit<IKelolaInstrukturAsesor, "id">,
@@ -119,6 +171,13 @@ const useEditInstrukturAsesorModal = (
     controlUpdateInstrukturAsesor,
     handleSubmitUpdateInstrukturAsesor,
     errorsUpdateInstrukturAsesor,
+
+    preview,
+
+    handleUploadImage,
+    handleDeleteImage,
+    isPendingMutateUploadFile,
+    isPendingMutateDeleteFile,
     handleOnClose,
 
     instrukturAsesorDataById,
