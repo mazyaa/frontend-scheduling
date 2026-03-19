@@ -20,6 +20,7 @@ const useDeleteInstrukturAsesorModal = (
     mutate: mutateDeleteInstrukturAsesor,
     isPending: isPendingDeleteInstrukturAsesor,
     isSuccess: isSuccessDeleteInstrukturAsesor,
+    reset: resetDeleteInstrukturAsesor,
   } = useMutation({
     mutationFn: deleteInstrukturAsesorById,
     onError: (error) => {
@@ -43,6 +44,7 @@ const useDeleteInstrukturAsesorModal = (
     handleDeleteInstrukturAsesor: mutateDeleteInstrukturAsesor,
     isPendingDeleteInstrukturAsesor,
     isSuccessDeleteInstrukturAsesor,
+    resetDeleteInstrukturAsesor,
   };
 };
 

@@ -127,7 +127,7 @@ const useEditTrainingModal = (id: string, isOpen: boolean) => {
     },
   });
 
-  const handleOnClose = (onClose: () => void, isCancel: ConstrainBoolean) => {
+  const handleOnClose = (onClose: () => void, isCancel: Boolean) => {
     const fileUrl = getValuesUpdateTraining("image");
 
     if (isCancel && typeof fileUrl === "string") {

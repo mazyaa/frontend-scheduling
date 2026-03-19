@@ -131,6 +131,7 @@ const KelolaTraining = () => {
           data={dataKelolaTraining?.data || []}
           emptyContent="Training tidak ditemukan"
           isLoading={isLoadingKelolaTraining || isRefetchingKelolaTraining}
+          placeholderTopContent="Cari Training..."
           renderCell={renderCell}
           totalPages={
             dataKelolaTraining ? dataKelolaTraining.pagination.totalPages : 1
