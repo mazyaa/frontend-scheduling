@@ -25,6 +25,7 @@ interface PropTypes {
   emptyContent: string;
   isLoading?: boolean;
   onClickButtonTopContent?: () => void;
+  placeholderTopContent: string;
   renderCell: (
     item: Record<string, unknown>,
     columnKey: Key,
@@ -40,6 +41,7 @@ const DataTable = (props: PropTypes) => {
     emptyContent,
     isLoading,
     onClickButtonTopContent,
+    placeholderTopContent,
     renderCell,
     totalPages,
   } = props;
@@ -60,6 +62,7 @@ const DataTable = (props: PropTypes) => {
         <Input
           isClearable // Enable the clear button
           className="w-full sm:max-w-[24%]"
+          placeholder={placeholderTopContent}
           startContent={<CiSearch />}
           onChange={handleChangeSearch}
           onClear={handleClearSearch}
