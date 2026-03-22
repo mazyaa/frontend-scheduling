@@ -60,7 +60,7 @@ const KelolaJadwal = () => {
                 : "Nama training tidak ditemukan"}
             </span>
           );
-        case "tanggal_mulai":
+        case "startDate":
           if (!cellValue) return "-";
           const tanggal = new Date(cellValue as string);
 
@@ -75,8 +75,20 @@ const KelolaJadwal = () => {
               })}
             </span>
           );
-        case "durasi_training":
+        case "duration":
           return <span>{cellValue as string} HARI</span>;
+        case "meetingLink":
+          return (
+            <span className="text-blue-700 underline cursor-pointer">
+              <a
+                href={cellValue as string}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                {cellValue as string}
+              </a>
+            </span>
+          );
         case "aksi":
           return (
             <Dropdown>
@@ -91,14 +103,14 @@ const KelolaJadwal = () => {
                   Detail Jadwal
                 </DropdownItem>
                 <DropdownItem
-                  key="detail-jadwal-button"
+                  key="edit-jadwal-button"
                   className="text-green-700"
                   onPress={() => {}}
                 >
                   Edit Jadwal
                 </DropdownItem>
                 <DropdownItem
-                  key="detail-jadwal-button"
+                  key="delete-jadwal-button"
                   className="text-red-700"
                   onPress={() => {}}
                 >
