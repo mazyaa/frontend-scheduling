@@ -8,7 +8,7 @@ const DashboardSidebarSkeleton = () => {
       {/* Logo & Menu Items */}
       <div className="flex flex-col items-center justify-center">
         {/* Logo skeleton */}
-        <Skeleton className="mb-5 h-[150px] w-[150px] rounded-lg" />
+        <Skeleton className="mb-5 h-[50px] w-[150px] rounded-lg" />
 
         {/* Menu items skeleton */}
         <div className="flex w-full flex-col gap-2">
