@@ -16,7 +16,7 @@ const useKelolaJadwal = () => {
   const token = session?.accessToken;
   const [selectedId, setSelectedId] = useState<string>("");
   const { currentLimit, currentPage, currentSearch } = useChangeUrl();
-  const { dataKelolaTraining } = useKelolaTraining();
+  const { dataKelolaTraining, isLoadingKelolaTraining } = useKelolaTraining();
 
   const getAllSchedules = async () => {
     let params = `limit=${currentLimit}&page=${currentPage}`;
@@ -58,6 +58,7 @@ const useKelolaJadwal = () => {
     setSelectedId,
 
     dataKelolaTraining,
+    isLoadingKelolaTraining,
   };
 };
 
