@@ -11,9 +11,11 @@ import {
 import { Button } from "@heroui/button";
 import { CiMenuKebab } from "react-icons/ci";
 import { useSession } from "next-auth/react";
+import { useDisclosure } from "@heroui/modal";
 
 import useKelolaJadwal from "./useKelolaJadwal";
 import LISTS_KELOLA_JADWAL from "./kelolaJadwal.constants";
+import TambahJadwalModal from "./TambahJadwalModal/TambahJadwalModal";
 
 import useChangeUrl from "@/hooks/useChangeUrl";
 import DataTable from "@/components/ui/DataTable/DataTable";
@@ -29,12 +31,14 @@ const KelolaJadwal = () => {
     dataKelolaJadwal,
     isLoadingKelolaJadwal,
     isRefetchingKelolaJadwal,
-    // refetchKelolaJadwal,
+    refetchKelolaJadwal,
     // selectedId,
     setSelectedId,
 
     dataKelolaTraining,
   } = useKelolaJadwal();
+
+  const tambahJadwalTraining = useDisclosure();
 
   const { setUrl } = useChangeUrl();
 
@@ -146,9 +150,15 @@ const KelolaJadwal = () => {
           totalPages={
             dataKelolaJadwal ? dataKelolaJadwal.pagination.totalPages : 1
           }
-          onClickButtonTopContent={() => {}}
+          onClickButtonTopContent={() => {
+            tambahJadwalTraining.onOpen();
+          }}
         />
       )}
+      <TambahJadwalModal
+        {...tambahJadwalTraining}
+        refetchJadwalTraining={refetchKelolaJadwal}
+      />
     </section>
   );
 };
