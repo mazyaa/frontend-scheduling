@@ -55,7 +55,12 @@ const TambahJadwalModal = (props: PropTypes) => {
   }, [isSuccessMutateTambahJadwal, refetchJadwalTraining]);
 
   return (
-    <Modal isOpen={isOpen} placement="center" onOpenChange={onOpenChange}>
+    <Modal
+      isDismissable={false}
+      isOpen={isOpen}
+      placement="center"
+      onOpenChange={onOpenChange}
+    >
       <ModalContent className="m-4">
         {(onClose) => {
           onCloseRef.current = onClose;
@@ -109,18 +114,24 @@ const TambahJadwalModal = (props: PropTypes) => {
                   name="startDate"
                   render={({ field }) => (
                     <DatePicker
-                      errorMessage={errors.startDate?.message}
-                      isInvalid={errors.startDate !== undefined}
+                      {...field}
+                      errorMessage={errors.startDate?.message} // err message
+                      granularity="day" // only allow user to select date, not time
+                      isInvalid={errors.startDate !== undefined} // trigger style error
                       label="Tanggal Mulai"
                       value={
                         field.value
-                          ? fromDate(field.value, getLocalTimeZone())
+                          ? fromDate(new Date(field.value), getLocalTimeZone()) // created date object from ISO string to
                           : null
                       }
                       onChange={(dateValue) => {
                         const jsDate = dateValue?.toDate();
 
-                        field.onChange(jsDate ? jsDate.toISOString() : null);
+                        const formattedDate = jsDate
+                          ? jsDate.toLocaleDateString("sv-SE")
+                          : null; // format date to ISO string
+
+                        field.onChange(formattedDate);
                       }}
                     />
                   )}
@@ -169,7 +180,7 @@ const TambahJadwalModal = (props: PropTypes) => {
                       className="rounded"
                       errorMessage={errors.batch?.message}
                       isInvalid={errors.batch !== undefined}
-                      label="Keahlian"
+                      label="batch"
                       variant="bordered"
                       onKeyDown={(e) => {
                         // submit form when user press ctrl + enter
