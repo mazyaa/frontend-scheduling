@@ -5,6 +5,7 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 
 import { ToasterContext } from "@/context/ToasterContext";
 import { IKelolaJadwal } from "@/types/kelolaJadwal";
@@ -46,13 +47,21 @@ const useTambahJadwal = () => {
   } = useMutation({
     mutationFn: tambahJadwal,
     onError: (error) => {
+      let message = "Terjadi kesalahan saat menambahkan jadwal training";
+
+      if (axios.isAxiosError(error)) {
+        message =
+          error.response?.data?.message ||
+          error.response?.data?.error ||
+          error.message;
+      } else if (error instanceof Error) {
+        message = error.message;
+      }
+
       setToaster({
         title: "Gagal menambahkan jadwal training",
         type: "error",
-        message:
-          error instanceof Error
-            ? error.message
-            : "Terjadi kesalahan saat menambahkan jadwal training",
+        message,
       });
     },
     onSuccess: () => {
