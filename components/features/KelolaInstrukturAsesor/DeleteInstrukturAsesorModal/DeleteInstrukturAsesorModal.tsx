@@ -35,11 +35,14 @@ const DeleteInstrukturAsesorModal = (props: PropTypes) => {
     handleDeleteInstrukturAsesor,
     isPendingDeleteInstrukturAsesor,
     isSuccessDeleteInstrukturAsesor,
+    resetDeleteInstrukturAsesor,
   } = useDeleteInstrukturAsesorModal(refetchInstrukturAsesor);
 
   useEffect(() => {
     if (isSuccessDeleteInstrukturAsesor && onCloseRef.current) {
       onCloseRef.current(); // close modal when delete successfully
+      setSelectedId("");
+      resetDeleteInstrukturAsesor();
     }
   });
 

@@ -2,26 +2,22 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { Key, ReactNode, useCallback, useEffect } from "react";
-import {
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
-} from "@heroui/dropdown";
 import { Button } from "@heroui/button";
-import { CiMenuKebab } from "react-icons/ci";
 import { useSession } from "next-auth/react";
 import { useDisclosure } from "@heroui/modal";
+import { cn } from "@heroui/theme";
+import { FiEdit2, FiEye, FiTrash2 } from "react-icons/fi";
 
 import { LIST_KELOLA_INSTRUKTUR_ASESOR } from "./kelolaInstrukturAsesor.constants";
 import useKelolaInstrukturAsesor from "./useKelolaInstrukturAsesor";
 import TambahInstrukturAsesorModal from "./TambahInstrukturAsesorModal";
 import { EditInstrukturAsesorModal } from "./EditInstrukturAsesorModal";
 import { DeleteInstrukturAsesorModal } from "./DeleteInstrukturAsesorModal";
+import DetailInstrukturAsesorModal from "./DetailInstrukturAsesorModal/DetailInstrukturAsesorModal";
 
 import useChangeUrl from "@/hooks/useChangeUrl";
-import DataTable from "@/components/ui/DataTable/DataTable";
-import { TablePageSkeleton } from "@/components/ui/Skeletons";
+import { CardMapSkeleton } from "@/components/ui/Skeletons";
+import CardTable from "@/components/ui/Card";
 
 const KelolaInstrukturAsesor = () => {
   const router = useRouter();
@@ -43,11 +39,22 @@ const KelolaInstrukturAsesor = () => {
   const tambahInstrukturAsesorModal = useDisclosure();
   const editInstrukturAsesorModal = useDisclosure();
   const deleteInstrukturAsesorModal = useDisclosure();
+  const detailInstrukturAsesorModal = useDisclosure();
 
   // set url when searchParams change, so when user back to previous page, the url will be updated with the correct query
   useEffect(() => {
     setUrl();
   }, [searchParams]);
+
+  useEffect(() => {
+    if (selectedId) {
+      const isDetailModalOpen = detailInstrukturAsesorModal.isOpen;
+
+      if (!isDetailModalOpen) {
+        setSelectedId("");
+      }
+    }
+  }, [detailInstrukturAsesorModal.isOpen]);
 
   const renderCell = useCallback(
     (itemInstrukturAsesor: Record<string, unknown>, columnKey: Key) => {
@@ -57,36 +64,74 @@ const KelolaInstrukturAsesor = () => {
       switch (columnKey) {
         case "aksi":
           return (
-            <Dropdown>
-              <DropdownTrigger>
-                <Button isIconOnly size="sm" variant="light">
-                  <CiMenuKebab className="text-default-700" />
-                </Button>
-              </DropdownTrigger>
+            <div className="flex items-center flex-row justify-around w-full gap-2">
+              <Button
+                className={cn(
+                  "h-8 px-3 rounded-lg font-medium text-xs",
+                  "flex items-center gap-1.5",
+                  "bg-blue-50 hover:bg-blue-100",
+                  "text-blue-600 hover:text-blue-700",
+                  "border border-blue-100 hover:border-blue-200",
+                  "transition-all duration-200",
+                  "hover:scale-105 active:scale-95",
+                  "shadow-sm hover:shadow-md",
+                )}
+                size="sm"
+                variant="flat"
+                onPress={() => {
+                  setSelectedId(String(itemInstrukturAsesor.id));
+                  setTimeout(() => {
+                    detailInstrukturAsesorModal.onOpen();
+                  }, 0);
+                }}
+              >
+                <FiEye size={13} />
+                Detail
+              </Button>
 
-              <DropdownMenu>
-                <DropdownItem
-                  key="detail-instruktur-asesor-button"
-                  onPress={() => {
-                    setSelectedId(`${itemInstrukturAsesor.id}`);
-                    editInstrukturAsesorModal.onOpen();
-                  }}
-                >
-                  Edit Data
-                </DropdownItem>
+              <Button
+                className={cn(
+                  "h-8 px-3 rounded-lg font-medium text-xs",
+                  "flex items-center gap-1.5",
+                  "bg-blue-50 hover:bg-blue-100",
+                  "text-blue-600 hover:text-blue-700",
+                  "border border-blue-100 hover:border-blue-200",
+                  "transition-all duration-200",
+                  "hover:scale-105 active:scale-95",
+                  "shadow-sm hover:shadow-md",
+                )}
+                size="sm"
+                variant="flat"
+                onPress={() => {
+                  setSelectedId(String(itemInstrukturAsesor.id));
+                }}
+              >
+                <FiEdit2 size={13} />
+                Edit
+              </Button>
 
-                <DropdownItem
-                  key="delete-instruktur-asesor-button"
-                  className="text-danger-600"
-                  onPress={() => {
-                    setSelectedId(`${itemInstrukturAsesor.id}`);
-                    deleteInstrukturAsesorModal.onOpen();
-                  }}
-                >
-                  Delete Data
-                </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
+              <Button
+                className={cn(
+                  "h-8 px-3 rounded-lg font-medium text-xs",
+                  "flex items-center gap-1.5",
+                  "bg-red-50 hover:bg-red-100",
+                  "text-red-500 hover:text-red-600",
+                  "border border-red-100 hover:border-red-200",
+                  "transition-all duration-200",
+                  "hover:scale-105 active:scale-95",
+                  "shadow-sm hover:shadow-md",
+                )}
+                size="sm"
+                variant="flat"
+                onPress={() => {
+                  setSelectedId(String(itemInstrukturAsesor.id));
+                  deleteInstrukturAsesorModal.onOpen();
+                }}
+              >
+                <FiTrash2 size={13} />
+                Delete
+              </Button>
+            </div>
           );
         case "role":
           return cellValue === "instruktur" ? (
@@ -108,9 +153,9 @@ const KelolaInstrukturAsesor = () => {
   return (
     <section>
       {isLoadingSession ? ( // show skeleton when if session is still loading
-        <TablePageSkeleton />
+        <CardMapSkeleton />
       ) : (
-        <DataTable
+        <CardTable
           buttonTopContentLabel="Tambah Instruktur/Asesor"
           columns={LIST_KELOLA_INSTRUKTUR_ASESOR}
           data={dataKelolaInstrukturAsesor?.data || []}
@@ -119,6 +164,7 @@ const KelolaInstrukturAsesor = () => {
             isLoadingKelolaInstrukturAsesor ||
             isRefetchingKelolaInstrukturAsesor
           }
+          placeholderTopContent="Cari Instruktur atau Asesor..."
           renderCell={renderCell}
           totalPages={
             dataKelolaInstrukturAsesor
@@ -146,6 +192,13 @@ const KelolaInstrukturAsesor = () => {
         refetchInstrukturAsesor={refetchKelolaInstrukturAsesor}
         selectedId={selectedId}
         setSelectedId={setSelectedId}
+      />
+
+      <DetailInstrukturAsesorModal
+        {...detailInstrukturAsesorModal}
+        columns={LIST_KELOLA_INSTRUKTUR_ASESOR}
+        renderCell={renderCell}
+        selectedId={selectedId}
       />
     </section>
   );
