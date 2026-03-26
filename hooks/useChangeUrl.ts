@@ -28,7 +28,27 @@ const useChangeUrl = () => {
       params.set(key, value); // change query by key and value parameter
     });
 
-    router.push(`${pathName}?${params.toString()}`); // push url by new query string
+    router.replace(`${pathName}?${params.toString()}`); // replace url with new query, but not add to history, so user can back to previous page without new query
+  };
+
+  const setUrl = () => {
+    const params = new URLSearchParams(searchParams);
+
+    params.set("limit", currentLimit.toString());
+    params.set("page", currentPage.toString());
+
+    if (currentSearch) {
+      params.set("search", currentSearch);
+    } else {
+      params.delete("search");
+    }
+
+    const newUrl = `${pathName}?${params.toString()}`;
+
+    //validate if newUrl is different with current url
+    if (newUrl !== `${pathName}?${searchParams.toString()}`) {
+      router.replace(newUrl);
+    }
   };
 
   const handleChangePage = (page: number) => {
@@ -69,6 +89,7 @@ const useChangeUrl = () => {
     currentPage,
     currentSearch,
 
+    setUrl,
     handleChangePage,
     handleChangeLimit,
     handleChangeSearch,

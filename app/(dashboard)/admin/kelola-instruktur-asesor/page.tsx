@@ -1,5 +1,11 @@
+import KelolaInstrukturAsesor from "@/components/features/KelolaInstrukturAsesor";
+
 const KelolaInstrukturAsesorPage = () => {
-  return null;
+  return (
+    <div>
+      <KelolaInstrukturAsesor />
+    </div>
+  );
 };
 
 export default KelolaInstrukturAsesorPage;
