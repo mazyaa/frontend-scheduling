@@ -18,13 +18,8 @@ const useDetailInstrukturAsesorModal = (id: string, isOpen: boolean) => {
     enabled: !!id && isOpen,
   });
 
-  const handleOnClose = (onClose: () => void) => {
-    onClose();
-  };
-
   return {
     instrukturAsesorDataById,
-    handleOnClose,
   };
 };
 

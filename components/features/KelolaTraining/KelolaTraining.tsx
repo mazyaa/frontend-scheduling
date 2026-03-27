@@ -2,15 +2,8 @@
 
 import { useSearchParams } from "next/navigation";
 import { Key, ReactNode, useCallback, useEffect } from "react";
-// import {
-//   Dropdown,
-//   DropdownItem,
-//   DropdownMenu,
-//   DropdownTrigger,
-// } from "@heroui/dropdown";
 import { FiEdit2, FiTrash2 } from "react-icons/fi";
 import { Button } from "@heroui/button";
-// import { CiMenuKebab } from "react-icons/ci";
 import { useSession } from "next-auth/react";
 import { useDisclosure } from "@heroui/modal";
 import Image from "next/image";
