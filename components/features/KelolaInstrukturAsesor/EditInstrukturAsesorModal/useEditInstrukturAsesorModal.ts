@@ -10,6 +10,7 @@ import { ToasterContext } from "@/context/ToasterContext";
 import { kelolaInstrukturAsesorServices } from "@/services/kelolaInstrukturAsesor";
 import { IKelolaInstrukturAsesor } from "@/types/kelolaInstrukturAsesor";
 import useMediaHandling from "@/hooks/useMediaHandling";
+import errorHandling from "@/utils/errrorHandling";
 
 const schema = yup.object().shape({
   name: yup.string().required("Nama wajib diisi"),
@@ -142,13 +143,13 @@ const useEditInstrukturAsesorModal = (id: string, isOpen: boolean) => {
     mutationFn: (payload: Omit<IKelolaInstrukturAsesor, "id">) =>
       editInstrukturAsesor(id, payload),
     onError: (error) => {
+      const message = errorHandling(error);
+
       setToaster({
         title: "Edit Instruktur/Asesor Gagal",
         type: "error",
         message:
-          error instanceof Error
-            ? error.message
-            : "Terjadi kesalahan saat mengedit instruktur/asesor",
+          message || "Terjadi kesalahan saat merubah data instruktur/asesor",
       });
     },
     onSuccess: () => {

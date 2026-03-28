@@ -8,6 +8,7 @@ import { ToasterContext } from "@/context/ToasterContext";
 import { kelolaTrainingServices } from "@/services/kelolaTraining.services";
 import { IKelolaTraining } from "@/types/kelolaTraining";
 import useMediaHandling from "@/hooks/useMediaHandling";
+import errorHandling from "@/utils/errrorHandling";
 
 const schema = yup.object().shape({
   namaTraining: yup.string().required("Nama training wajib diisi"),
@@ -100,13 +101,12 @@ const useTambahTrainingModal = () => {
   } = useMutation({
     mutationFn: tambahTraining,
     onError: (error) => {
+      const message = errorHandling(error);
+
       setToaster({
         title: "Tambah Training Gagal",
         type: "error",
-        message:
-          error instanceof Error
-            ? error.message
-            : "Terjadi kesalahan saat menambahkan training",
+        message: message || "Terjadi kesalahan dalam menambahkan training",
       });
     },
     onSuccess: () => {

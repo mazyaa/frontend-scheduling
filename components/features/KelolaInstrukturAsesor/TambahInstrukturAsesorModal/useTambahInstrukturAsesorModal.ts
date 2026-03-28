@@ -8,6 +8,7 @@ import { ToasterContext } from "@/context/ToasterContext";
 import { kelolaInstrukturAsesorServices } from "@/services/kelolaInstrukturAsesor";
 import { IKelolaInstrukturAsesor } from "@/types/kelolaInstrukturAsesor";
 import useMediaHandling from "@/hooks/useMediaHandling";
+import errorHandling from "@/utils/errrorHandling";
 
 const schema = yup.object().shape({
   name: yup.string().required("Nama wajib diisi"),
@@ -111,13 +112,13 @@ const useTambahInstrukturAsesorModal = () => {
   } = useMutation({
     mutationFn: tambahInstrukturAsesor,
     onError: (error) => {
+      const message = errorHandling(error);
+
       setToaster({
         title: "Tambah Instruktur/Asesor Gagal",
         type: "error",
         message:
-          error instanceof Error
-            ? error?.message
-            : "Terjadi kesalahan saat menambahkan instruktur/asesor",
+          message || "Terjadi Kesalahan saat menambahkan instruktur/asesor!",
       });
     },
     onSuccess: () => {
