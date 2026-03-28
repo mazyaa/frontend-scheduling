@@ -46,16 +46,6 @@ const KelolaInstrukturAsesor = () => {
     setUrl();
   }, [searchParams]);
 
-  useEffect(() => {
-    if (selectedId) {
-      const isDetailModalOpen = detailInstrukturAsesorModal.isOpen;
-
-      if (!isDetailModalOpen) {
-        setSelectedId("");
-      }
-    }
-  }, [detailInstrukturAsesorModal.isOpen]);
-
   const renderCell = useCallback(
     (itemInstrukturAsesor: Record<string, unknown>, columnKey: Key) => {
       const cellValue =
@@ -80,9 +70,7 @@ const KelolaInstrukturAsesor = () => {
                 variant="flat"
                 onPress={() => {
                   setSelectedId(String(itemInstrukturAsesor.id));
-                  setTimeout(() => {
-                    detailInstrukturAsesorModal.onOpen();
-                  }, 0);
+                  detailInstrukturAsesorModal.onOpen();
                 }}
               >
                 <FiEye size={13} />
@@ -104,6 +92,7 @@ const KelolaInstrukturAsesor = () => {
                 variant="flat"
                 onPress={() => {
                   setSelectedId(String(itemInstrukturAsesor.id));
+                  editInstrukturAsesorModal.onOpen();
                 }}
               >
                 <FiEdit2 size={13} />

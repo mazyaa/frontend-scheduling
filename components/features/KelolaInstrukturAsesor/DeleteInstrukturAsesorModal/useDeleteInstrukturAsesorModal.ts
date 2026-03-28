@@ -3,6 +3,7 @@ import { useContext } from "react";
 
 import { kelolaInstrukturAsesorServices } from "@/services/kelolaInstrukturAsesor";
 import { ToasterContext } from "@/context/ToasterContext";
+import errorHandling from "@/utils/errrorHandling";
 
 const useDeleteInstrukturAsesorModal = (
   refetchInstrukturAsesor: () => void,
@@ -24,10 +25,13 @@ const useDeleteInstrukturAsesorModal = (
   } = useMutation({
     mutationFn: deleteInstrukturAsesorById,
     onError: (error) => {
+      const message = errorHandling(error);
+
       setToaster({
         title: "Gagal menghapus instruktur/asesor",
         type: "error",
-        message: error instanceof Error ? error.message : "Terjadi kesalahan",
+        message:
+          message || "Terjadi kesalahan dalam menghapus data instruktur/asesor",
       });
     },
     onSuccess: () => {

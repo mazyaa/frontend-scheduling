@@ -1,6 +1,6 @@
 "use client";
 
-import { Key, useEffect, useRef } from "react";
+import { Key, useRef } from "react";
 import { motion } from "framer-motion";
 import { Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/modal";
 import { Skeleton } from "@heroui/skeleton";
@@ -23,14 +23,10 @@ const DetailInstrukturAsesorModal = (props: PropTypes) => {
   const { columns, isOpen, selectedId, onOpenChange, renderCell } = props;
   const onCloseRef = useRef<() => void>();
 
-  const { instrukturAsesorDataById, handleOnClose } =
-    useDetailInstrukturAsesorModal(selectedId, isOpen);
-
-  useEffect(() => {
-    if (onCloseRef.current) {
-      handleOnClose(onCloseRef.current);
-    }
-  }, [instrukturAsesorDataById]);
+  const { instrukturAsesorDataById } = useDetailInstrukturAsesorModal(
+    selectedId,
+    isOpen,
+  );
 
   return (
     <Modal isOpen={isOpen} placement="center" onOpenChange={onOpenChange}>

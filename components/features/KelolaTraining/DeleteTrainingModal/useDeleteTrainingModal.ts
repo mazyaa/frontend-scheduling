@@ -3,6 +3,7 @@ import { useContext } from "react";
 
 import { kelolaTrainingServices } from "@/services/kelolaTraining.services";
 import { ToasterContext } from "@/context/ToasterContext";
+import errorHandling from "@/utils/errrorHandling";
 
 const useDeleteTrainingModal = (refetchTraining: () => void) => {
   const { setToaster } = useContext(ToasterContext);
@@ -21,10 +22,12 @@ const useDeleteTrainingModal = (refetchTraining: () => void) => {
   } = useMutation({
     mutationFn: deleteTrainingById,
     onError: (error) => {
+      const message = errorHandling(error);
+
       setToaster({
         title: "Gagal menghapus training",
         type: "error",
-        message: error instanceof Error ? error.message : "Terjadi kesalahan",
+        message: message || "Terjadi kesalahan dalam menghapus data training",
       });
     },
     onSuccess: () => {
