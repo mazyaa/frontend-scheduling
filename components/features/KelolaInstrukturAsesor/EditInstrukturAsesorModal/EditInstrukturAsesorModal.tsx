@@ -50,7 +50,10 @@ const EditInstrukturAsesorModal = (props: PropTypes) => {
     isSuccessMutateUpdateInstrukturAsesor,
   } = useEditInstrukturAsesorModal(selectedId, isOpen);
 
-  const disabledSubmit = isPendingMutateUpdateInstrukturAsesor;
+  const disabledSubmit =
+    isPendingMutateUpdateInstrukturAsesor ||
+    isPendingMutateDeleteFile ||
+    isPendingMutateUploadFile;
 
   useEffect(() => {
     if (isSuccessMutateUpdateInstrukturAsesor && onCloseRef.current) {

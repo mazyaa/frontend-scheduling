@@ -16,6 +16,7 @@ import { useDisclosure } from "@heroui/modal";
 import useKelolaJadwal from "./useKelolaJadwal";
 import LISTS_KELOLA_JADWAL from "./kelolaJadwal.constants";
 import TambahJadwalModal from "./TambahJadwalModal/TambahJadwalModal";
+import EditJadwalModal from "./EditJadwalModal";
 
 import useChangeUrl from "@/hooks/useChangeUrl";
 import DataTable from "@/components/ui/DataTable/DataTable";
@@ -32,13 +33,14 @@ const KelolaJadwal = () => {
     isLoadingKelolaJadwal,
     isRefetchingKelolaJadwal,
     refetchKelolaJadwal,
-    // selectedId,
+    selectedId,
     setSelectedId,
 
     dataKelolaTraining,
   } = useKelolaJadwal();
 
   const tambahJadwalTraining = useDisclosure();
+  const editJadwalTraining = useDisclosure();
 
   const { setUrl } = useChangeUrl();
 
@@ -109,7 +111,10 @@ const KelolaJadwal = () => {
                 <DropdownItem
                   key="edit-jadwal-button"
                   className="text-green-700"
-                  onPress={() => {}}
+                  onPress={() => {
+                    setSelectedId(String(itemJadwal.id));
+                    editJadwalTraining.onOpen();
+                  }}
                 >
                   Edit Jadwal
                 </DropdownItem>
@@ -158,6 +163,12 @@ const KelolaJadwal = () => {
       <TambahJadwalModal
         {...tambahJadwalTraining}
         refetchJadwalTraining={refetchKelolaJadwal}
+      />
+
+      <EditJadwalModal
+        {...editJadwalTraining}
+        refetchJadwalTraining={refetchKelolaJadwal}
+        selectedId={selectedId}
       />
     </section>
   );

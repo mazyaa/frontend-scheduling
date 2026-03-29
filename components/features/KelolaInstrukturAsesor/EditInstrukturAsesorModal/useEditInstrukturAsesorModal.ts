@@ -163,9 +163,9 @@ const useEditInstrukturAsesorModal = (id: string, isOpen: boolean) => {
   });
 
   const handleUpdateInstrukturAsesor = (
-    data: Omit<IKelolaInstrukturAsesor, "id">,
+    payload: Omit<IKelolaInstrukturAsesor, "id">,
   ) => {
-    mutateEditInstrukturAsesor(data);
+    mutateEditInstrukturAsesor(payload);
   };
 
   return {

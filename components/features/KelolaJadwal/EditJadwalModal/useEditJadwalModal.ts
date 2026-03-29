@@ -67,7 +67,11 @@ const useEditJadwalModal = (id: string, isOpen: boolean) => {
     return response;
   };
 
-  const {} = useMutation({
+  const {
+    mutate: mutateEditJadwalTraining,
+    isPending: isPendingEditJadwalTraining,
+    isSuccess: isSuccessEditJadwalTraining,
+  } = useMutation({
     mutationFn: (payload: Omit<IKelolaJadwal, "id">) =>
       editJadwalTraining(id, payload),
     onError: (error) => {
@@ -89,12 +93,21 @@ const useEditJadwalModal = (id: string, isOpen: boolean) => {
     },
   });
 
+  const handleUpdateJadwalTraining = (payload: Omit<IKelolaJadwal, "id">) =>
+    mutateEditJadwalTraining(payload);
+
   return {
     controlUpdateJadwalTraining,
     handleSubmitUpdateJadwalTraining,
     errorsUpdateJadwalTraining,
-    handleOnClose,
     resetUpdateJadwalTraining,
+
+    jadwalTrainingDataById,
+    handleOnClose,
+
+    handleUpdateJadwalTraining,
+    isPendingEditJadwalTraining,
+    isSuccessEditJadwalTraining,
   };
 };
 
