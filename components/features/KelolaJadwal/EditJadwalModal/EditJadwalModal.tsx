@@ -277,7 +277,7 @@ const EditJadwalModal = (props: PropTypes) => {
                       {isPendingEditJadwalTraining ? (
                         <Spinner color="white" size="sm" />
                       ) : (
-                        "Tambah Jadwal Training"
+                        "Edit Jadwal Training"
                       )}
                     </Button>
                   </div>
