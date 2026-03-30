@@ -44,11 +44,11 @@ const useEditJadwalModal = (id: string, isOpen: boolean) => {
     resolver: yupResolver(schema),
     values: jadwalTrainingDataById
       ? {
-          trainingId: jadwalTrainingDataById.trainingId,
-          startDate: jadwalTrainingDataById.startDate,
-          duration: jadwalTrainingDataById.duration,
-          meetingLink: jadwalTrainingDataById.meetingLink,
-          batch: jadwalTrainingDataById.batch,
+          trainingId: jadwalTrainingDataById.data.trainingId,
+          startDate: jadwalTrainingDataById.data.startDate,
+          duration: jadwalTrainingDataById.data.duration,
+          meetingLink: jadwalTrainingDataById.data.meetingLink,
+          batch: jadwalTrainingDataById.data.batch,
         }
       : undefined,
   });
