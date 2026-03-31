@@ -64,7 +64,9 @@ const TambahTrainingModal = (props: PropTypes) => {
           return (
             <form onSubmit={handleSubmitForm(handleAddTraining)}>
               <ModalHeader>
-                <h3 className="text-lg font-medium">Tambah Training Baru</h3>
+                <h3 className="text-lg font-medium text-brand">
+                  Tambah Training Baru
+                </h3>
               </ModalHeader>
 
               <ModalBody>
@@ -118,7 +120,11 @@ const TambahTrainingModal = (props: PropTypes) => {
                           isDeleting={isPendingMutateDeleteFile}
                           isInvalid={errors.image !== undefined} // show input error state if have error
                           isUploading={isPendingMutateUploadFile}
-                          label={<p className="font-bold text-sm my-2">Icon</p>}
+                          label={
+                            <p className="font-bold text-sm my-2 text-brand">
+                              Image
+                            </p>
+                          }
                           preview={typeof preview === "string" ? preview : ""}
                           onDelete={() => handleDeleteImage(onChange)} // onChange is coming from react hook form for setting value to form
                           onUpload={(files) =>

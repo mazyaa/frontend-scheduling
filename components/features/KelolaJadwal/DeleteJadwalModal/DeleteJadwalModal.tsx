@@ -11,40 +11,41 @@ import {
 import { Button } from "@heroui/button";
 import { Spinner } from "@heroui/spinner";
 
-import useDeleteInstrukturAsesorModal from "./useDeleteInstrukturAsesorModal";
+import useDeleteJadwal from "./useDeleteJadwalModal";
 
 interface PropTypes {
   isOpen: boolean;
   selectedId: string;
-  setSelectedId: Dispatch<SetStateAction<string>>; // for setting selectedId when user click delete button
-  onOpenChange: () => void; // for tracking open state of modal, because when user click cancel button, the state of isOpen will be set to false, but when user click add button, the state of isOpen will be set to true, so we need to track the state of modal open or close
-  refetchInstrukturAsesor: () => void;
+  setSelectedId: Dispatch<SetStateAction<string>>;
+  onOpenChange: () => void;
+  refetchJadwalTraining: () => void;
 }
 
-const DeleteInstrukturAsesorModal = (props: PropTypes) => {
+const DeleteJadwalModal = (props: PropTypes) => {
   const {
     isOpen,
-    onOpenChange,
     selectedId,
     setSelectedId,
-    refetchInstrukturAsesor,
+    onOpenChange,
+    refetchJadwalTraining,
   } = props;
+
   const onCloseRef = useRef<() => void>();
 
   const {
-    handleDeleteInstrukturAsesor,
-    isPendingDeleteInstrukturAsesor,
-    isSuccessDeleteInstrukturAsesor,
-    resetDeleteInstrukturAsesor,
-  } = useDeleteInstrukturAsesorModal(refetchInstrukturAsesor);
+    handleDeleteTraining,
+    isPendingDeleteJadwalTraining,
+    isSuccessDeleteJadwalTraining,
+    resetDeleteJadwalTraining,
+  } = useDeleteJadwal(refetchJadwalTraining);
 
   useEffect(() => {
-    if (isSuccessDeleteInstrukturAsesor && onCloseRef.current) {
-      onCloseRef.current(); // close modal when delete successfully
+    if (isSuccessDeleteJadwalTraining && onCloseRef.current) {
+      onCloseRef.current();
       setSelectedId("");
-      resetDeleteInstrukturAsesor();
+      resetDeleteJadwalTraining();
     }
-  }, [isSuccessDeleteInstrukturAsesor, resetDeleteInstrukturAsesor]);
+  }, [isSuccessDeleteJadwalTraining, resetDeleteJadwalTraining]);
 
   return (
     <Modal isOpen={isOpen} placement="center" onOpenChange={onOpenChange}>
@@ -55,13 +56,13 @@ const DeleteInstrukturAsesorModal = (props: PropTypes) => {
           return (
             <div className="flex flex-col gap-2">
               <ModalHeader>
-                <h3 className="text-brand">Delete Instruktur/Asesor</h3>
+                <h3 className="text-brand">Delete Jadwal Training</h3>
               </ModalHeader>
               <ModalBody>
                 <p className="text-sm">
                   Apakah anda yakin ingin{" "}
-                  <span className="text-danger">menghapus</span>{" "}
-                  instruktur/asesor ini?
+                  <span className="text-danger">menghapus</span> Jadwal Training
+                  ini?
                 </p>
               </ModalBody>
 
@@ -69,7 +70,7 @@ const DeleteInstrukturAsesorModal = (props: PropTypes) => {
                 <div className="flex flex-row justify-end gap-3">
                   <Button
                     className="font-medium text-danger-500"
-                    disabled={isPendingDeleteInstrukturAsesor}
+                    disabled={isPendingDeleteJadwalTraining}
                     type="button"
                     variant="flat"
                     onPress={() => {
@@ -82,14 +83,14 @@ const DeleteInstrukturAsesorModal = (props: PropTypes) => {
 
                   <Button
                     className="font-medium text-white bg-danger"
-                    disabled={isPendingDeleteInstrukturAsesor}
+                    disabled={isPendingDeleteJadwalTraining}
                     type="submit"
-                    onPress={() => handleDeleteInstrukturAsesor(selectedId)}
+                    onPress={() => handleDeleteTraining(selectedId)}
                   >
-                    {isPendingDeleteInstrukturAsesor ? (
+                    {isPendingDeleteJadwalTraining ? (
                       <Spinner color="white" size="sm" />
                     ) : (
-                      "Delete Instruktur/Asesor"
+                      "Delete Jadwal"
                     )}
                   </Button>
                 </div>
@@ -102,4 +103,4 @@ const DeleteInstrukturAsesorModal = (props: PropTypes) => {
   );
 };
 
-export default DeleteInstrukturAsesorModal;
+export default DeleteJadwalModal;
