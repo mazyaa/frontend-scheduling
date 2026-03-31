@@ -17,6 +17,7 @@ import useKelolaJadwal from "./useKelolaJadwal";
 import LISTS_KELOLA_JADWAL from "./kelolaJadwal.constants";
 import TambahJadwalModal from "./TambahJadwalModal/TambahJadwalModal";
 import EditJadwalModal from "./EditJadwalModal";
+import DeleteJadwalModal from "./DeleteJadwalModal/DeleteJadwalModal";
 
 import useChangeUrl from "@/hooks/useChangeUrl";
 import DataTable from "@/components/ui/DataTable/DataTable";
@@ -41,6 +42,7 @@ const KelolaJadwal = () => {
 
   const tambahJadwalTraining = useDisclosure();
   const editJadwalTraining = useDisclosure();
+  const deleteJadwalTraining = useDisclosure();
 
   const { setUrl } = useChangeUrl();
 
@@ -121,7 +123,10 @@ const KelolaJadwal = () => {
                 <DropdownItem
                   key="delete-jadwal-button"
                   className="text-red-700"
-                  onPress={() => {}}
+                  onPress={() => {
+                    setSelectedId(String(itemJadwal.id));
+                    deleteJadwalTraining.onOpen();
+                  }}
                 >
                   Delete Jadwal
                 </DropdownItem>
@@ -169,6 +174,13 @@ const KelolaJadwal = () => {
         {...editJadwalTraining}
         refetchJadwalTraining={refetchKelolaJadwal}
         selectedId={selectedId}
+      />
+
+      <DeleteJadwalModal
+        {...deleteJadwalTraining}
+        refetchJadwalTraining={refetchKelolaJadwal}
+        selectedId={selectedId}
+        setSelectedId={setSelectedId}
       />
     </section>
   );
