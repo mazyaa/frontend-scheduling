@@ -231,9 +231,15 @@ const CardTable = (props: Proptypes) => {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
           {data.map((item) => {
+            const rawImageSrc =
+              typeof item.image === "string" ? item.image.trim() : "";
             const imageSrc =
-              typeof item.image === "string" && item.image.trim() !== ""
-                ? item.image
+              rawImageSrc &&
+              (/^(https?:\/\/)/.test(rawImageSrc) ||
+                rawImageSrc.startsWith("/") ||
+                rawImageSrc.startsWith("data:image/") ||
+                rawImageSrc.startsWith("blob:"))
+                ? rawImageSrc
                 : "/images/default.png";
 
             return (

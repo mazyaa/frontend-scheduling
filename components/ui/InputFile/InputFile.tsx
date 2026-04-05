@@ -96,25 +96,26 @@ const InputFile = (props: PropTypes) => {
         )}
         htmlFor={`dropzone-file-${dropZoneId}`}
       >
-        {preview && ( // render this component if preview image is available
-          <div className="relative flex flex-col items-center justify-center p-5">
-            <div className="mb-2 w-1/2">
-              <Image fill alt="image" className="!relative" src={preview} />
-              <Button
-                isIconOnly
-                className="absolute right-2 top-2 h-9 w-9 items-center justify-center rounded bg-danger-100"
-                disabled={isDeleting}
-                onPress={onDelete}
-              >
-                {isDeleting ? (
-                  <Spinner color="danger" size="sm" />
-                ) : (
-                  <CiTrash className="h-5 w-5 text-danger-500" />
-                )}
-              </Button>
+        {preview &&
+          preview.startsWith("http") && ( // render this component if preview image is available and is a valid URL
+            <div className="relative flex flex-col items-center justify-center p-5">
+              <div className="mb-2 w-1/2">
+                <Image fill alt="image" className="!relative" src={preview} />
+                <Button
+                  isIconOnly
+                  className="absolute right-2 top-2 h-9 w-9 items-center justify-center rounded bg-danger-100"
+                  disabled={isDeleting}
+                  onPress={onDelete}
+                >
+                  {isDeleting ? (
+                    <Spinner color="danger" size="sm" />
+                  ) : (
+                    <CiTrash className="h-5 w-5 text-danger-500" />
+                  )}
+                </Button>
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
         {!preview &&
           !isUploading && ( // render this component if preview image is not available and isUploading is false
