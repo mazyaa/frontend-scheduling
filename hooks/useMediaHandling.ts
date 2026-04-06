@@ -4,7 +4,7 @@ import { useContext } from "react";
 import { useMutation } from "@tanstack/react-query";
 
 import { ToasterContext } from "@/context/ToasterContext";
-import { uploadServices } from "@/services/upload.services";
+import { uploadServices } from "@/services/upload.service";
 
 const useMediaHandling = () => {
   const { setToaster } = useContext(ToasterContext);

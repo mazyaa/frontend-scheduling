@@ -6,7 +6,7 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 
 import useChangeUrl from "@/hooks/useChangeUrl";
-import { kelolaInstrukturAsesorServices } from "@/services/kelolaInstrukturAsesor";
+import { kelolaInstrukturAsesorServices } from "@/services/kelolaInstrukturAsesor.service";
 
 const useKelolaInstrukturAsesor = () => {
   const pathname = usePathname();

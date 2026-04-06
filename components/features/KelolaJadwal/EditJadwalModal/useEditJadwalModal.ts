@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useContext } from "react";
 
-import { kelolaJadwalServices } from "@/services/kelolaJadwal.constants";
+import { kelolaJadwalServices } from "@/services/kelolaJadwal.service";
 import { ToasterContext } from "@/context/ToasterContext";
 import { IKelolaJadwal } from "@/types/kelolaJadwal";
 import errorHandling from "@/utils/errrorHandling";

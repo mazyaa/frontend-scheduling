@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { useContext } from "react";
 
-import { kelolaInstrukturAsesorServices } from "@/services/kelolaInstrukturAsesor";
+import { kelolaInstrukturAsesorServices } from "@/services/kelolaInstrukturAsesor.service";
 import { ToasterContext } from "@/context/ToasterContext";
 import errorHandling from "@/utils/errrorHandling";
 

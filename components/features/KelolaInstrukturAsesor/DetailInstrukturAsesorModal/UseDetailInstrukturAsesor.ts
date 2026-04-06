@@ -2,7 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 
-import { kelolaInstrukturAsesorServices } from "@/services/kelolaInstrukturAsesor";
+import { kelolaInstrukturAsesorServices } from "@/services/kelolaInstrukturAsesor.service";
 
 const useDetailInstrukturAsesorModal = (id: string, isOpen: boolean) => {
   const getInstrukturAsesorById = async (id: string) => {

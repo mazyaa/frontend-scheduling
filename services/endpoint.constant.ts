@@ -4,4 +4,5 @@ export const endpoint = {
   KELOLA_INSTRUKTUR_ASESOR: "/instruktur-or-asesor",
   MEDIA: "/media",
   JADWAL: "/schedule",
+  DETAIL_JADWAL: "/detail-schedule",
 };
