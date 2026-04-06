@@ -5,7 +5,7 @@ import * as yup from "yup";
 import { useMutation } from "@tanstack/react-query";
 
 import { ToasterContext } from "@/context/ToasterContext";
-import { kelolaInstrukturAsesorServices } from "@/services/kelolaInstrukturAsesor";
+import { kelolaInstrukturAsesorServices } from "@/services/kelolaInstrukturAsesor.service";
 import { IKelolaInstrukturAsesor } from "@/types/kelolaInstrukturAsesor";
 import useMediaHandling from "@/hooks/useMediaHandling";
 import errorHandling from "@/utils/errrorHandling";

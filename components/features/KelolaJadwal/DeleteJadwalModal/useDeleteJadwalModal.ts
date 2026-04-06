@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { useMutation } from "@tanstack/react-query";
 
 import { ToasterContext } from "@/context/ToasterContext";
-import { kelolaJadwalServices } from "@/services/kelolaJadwal.constants";
+import { kelolaJadwalServices } from "@/services/kelolaJadwal.service";
 import errorHandling from "@/utils/errrorHandling";
 
 const useDeleteJadwal = (refetchKelolaJadwal: () => void) => {

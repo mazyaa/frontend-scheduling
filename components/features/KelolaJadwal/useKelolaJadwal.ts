@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import useKelolaTraining from "../KelolaTraining/useKelolaTraining";
 
-import { kelolaJadwalServices } from "@/services/kelolaJadwal.constants";
+import { kelolaJadwalServices } from "@/services/kelolaJadwal.service";
 import useChangeUrl from "@/hooks/useChangeUrl";
 
 const useKelolaJadwal = () => {
