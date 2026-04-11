@@ -1,5 +1,9 @@
-import TablePageSkeleton from "@/components/ui/Skeletons/TablePageSkeleton";
+const DetailJadwalTraining = () => {
+  return (
+    <div>
+      <h1>Test</h1>
+    </div>
+  );
+};
 
-export default function Loading() {
-  return <TablePageSkeleton />;
-}
+export default DetailJadwalTraining;

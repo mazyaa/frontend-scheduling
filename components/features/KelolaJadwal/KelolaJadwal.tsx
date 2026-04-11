@@ -25,6 +25,7 @@ import { TablePageSkeleton } from "@/components/ui/Skeletons";
 
 const KelolaJadwal = () => {
   const router = useRouter();
+  const { push } = router;
   const searchParams = useSearchParams();
   const { status } = useSession();
   const isLoadingSession = status === "loading";
@@ -107,7 +108,13 @@ const KelolaJadwal = () => {
               </DropdownTrigger>
 
               <DropdownMenu>
-                <DropdownItem key="detail-jadwal-button" onPress={() => {}}>
+                <DropdownItem
+                  key="detail-jadwal-button"
+                  onPress={() => {
+                    setSelectedId(String(itemJadwal.id));
+                    push(`/admin/kelola-jadwal-training/${itemJadwal.id}`);
+                  }}
+                >
                   Detail Jadwal
                 </DropdownItem>
                 <DropdownItem
