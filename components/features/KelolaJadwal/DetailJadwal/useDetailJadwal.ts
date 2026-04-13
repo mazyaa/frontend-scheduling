@@ -1,7 +1,7 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { usePathname } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 
@@ -11,7 +11,9 @@ import useChangeUrl from "@/hooks/useChangeUrl";
 import { kelolaDetailJadwalServices } from "@/services/kelolaDetailJadwal.service";
 
 const useDetailJadwal = () => {
-  const pathname = usePathname();
+  // const pathname = usePathname();
+  const params = useParams();
+  const id = params.id;
   const { data: session } = useSession();
   const token = session?.accessToken;
   const [selectedId, setSelectedId] = useState<string>("");
@@ -44,11 +46,7 @@ const useDetailJadwal = () => {
   } = useQuery({
     queryKey: ["DetailKelolaJadwal", currentPage, currentLimit, currentSearch],
     queryFn: getAllDetailSchedule,
-    enabled:
-      pathname === `/admin/kelola-jadwal-training/${selectedId}` &&
-      !!currentPage &&
-      !!currentLimit &&
-      !!token,
+    enabled: !!id && !!currentPage && !!currentLimit && !!token,
   });
 
   return {
