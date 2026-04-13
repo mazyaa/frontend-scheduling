@@ -42,7 +42,8 @@ const useKelolaTraining = () => {
     // only fetch data when on the correct page and both currentPage and currentLimit are available
     enabled:
       (pathname === "/admin/kelola-daftar-training" ||
-        pathname === "/admin/kelola-jadwal-training") && // only fetch or auto refetch when on the correct page
+        pathname === "/admin/kelola-jadwal-training" ||
+        pathname.startsWith("/admin/kelola-jadwal-training/")) && // only fetch or auto refetch when on the correct page
       !!currentPage &&
       !!currentLimit &&
       !!token,

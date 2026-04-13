@@ -1,7 +1,9 @@
+import DetailJadwal from "@/components/features/KelolaJadwal/DetailJadwal/DetailJadwal";
+
 const DetailJadwalTraining = () => {
   return (
     <div>
-      <h1>Test</h1>
+      <DetailJadwal />
     </div>
   );
 };
