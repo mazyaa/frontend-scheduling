@@ -36,7 +36,6 @@ const DetailJadwal = () => {
     selectedId,
     // setSelectedId,
 
-    dataKelolaTraining,
     // isLoadingKelolaTraining,
   } = useDetailJadwal();
 
@@ -53,16 +52,10 @@ const DetailJadwal = () => {
 
       switch (columnKey) {
         case "nama_training":
-          const namaTraining = dataKelolaTraining?.data.find(
-            (training: any) =>
-              String(training.id) === String(itemDetailJadwal.trainingId),
-          );
-
           return (
             <span>
-              {namaTraining
-                ? namaTraining.namaTraining
-                : "Nama training tidak ditemukan"}
+              {(itemDetailJadwal as any)?.jadwalTraining?.training
+                ?.namaTraining ?? "Nama training tidak ditemukan"}
             </span>
           );
         case "hari":
@@ -80,6 +73,10 @@ const DetailJadwal = () => {
               })}
             </span>
           );
+        case "nama_instruktur":
+          if (!cellValue) return "-";
+        case "nama_asesor":
+          if (!cellValue) return "-";
         case "aksi":
           return (
             <Dropdown>
@@ -92,6 +89,9 @@ const DetailJadwal = () => {
               <DropdownMenu>
                 <DropdownItem key="Tambah-keterangan-button" onPress={() => {}}>
                   Tambah Keterangan
+                </DropdownItem>
+                <DropdownItem key="Tambah-sesi-button" onPress={() => {}}>
+                  Generate Sesi Otomatis
                 </DropdownItem>
                 <DropdownItem key="edit-detail-jadwal" onPress={() => {}}>
                   Edit Detail Jadwal
@@ -109,7 +109,7 @@ const DetailJadwal = () => {
           return cellValue as React.ReactNode;
       }
     },
-    [router, selectedId, dataKelolaTraining],
+    [router, selectedId],
   );
 
   return (
