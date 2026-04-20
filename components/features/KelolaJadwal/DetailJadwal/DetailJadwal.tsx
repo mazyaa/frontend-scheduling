@@ -122,7 +122,7 @@ const DetailJadwal = () => {
           data={dataDetailJadwal?.data || []}
           emptyContent="Detail Jadwal Tidak Ditemukan"
           isLoading={isLoadiangDetailJadwal || isRefetchingDetailJadwal}
-          placeholderTopContent="Cari Jadwal berdasarkan nama training..."
+          placeholderTopContent="Cari berdasarkan hari ke-"
           renderCell={renderCell}
           totalPages={
             dataDetailJadwal ? dataDetailJadwal.pagination.totalPages : 1

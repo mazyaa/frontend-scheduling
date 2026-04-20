@@ -61,7 +61,7 @@ const DataTable = (props: PropTypes) => {
         {/* top content input & button*/}
         <Input
           isClearable // Enable the clear button
-          className="w-full sm:max-w-[24%]"
+          className="max-w-64 lg:max-w-80"
           placeholder={placeholderTopContent}
           startContent={<CiSearch />}
           onChange={handleChangeSearch}

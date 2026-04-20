@@ -24,8 +24,10 @@ const useDetailJadwal = () => {
       params += `&search=${currentSearch}`;
     }
 
-    const response =
-      await kelolaDetailJadwalServices.getAllDetailJadwal(params);
+    const response = await kelolaDetailJadwalServices.getAllDetailJadwal(
+      id as string,
+      params,
+    );
 
     const { data, pagination } = response.data;
 

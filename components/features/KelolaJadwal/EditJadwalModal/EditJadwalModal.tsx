@@ -11,10 +11,10 @@ import { Controller } from "react-hook-form";
 import { Select, SelectItem } from "@heroui/select";
 import { Spinner } from "@heroui/spinner";
 import { DatePicker } from "@heroui/date-picker";
-import { fromDate, getLocalTimeZone } from "@internationalized/date";
 import { NumberInput } from "@heroui/number-input";
 import { Input } from "@heroui/input";
 import { Button } from "@heroui/button";
+import { parseDate } from "@internationalized/date";
 
 import useKelolaJadwal from "../useKelolaJadwal";
 
@@ -57,7 +57,12 @@ const EditJadwalModal = (props: PropTypes) => {
   }, [isSuccessEditJadwalTraining]);
 
   return (
-    <Modal isOpen={isOpen} placement="center" onOpenChange={onOpenChange}>
+    <Modal
+      isDismissable={false}
+      isOpen={isOpen}
+      placement="center"
+      onOpenChange={onOpenChange}
+    >
       <ModalContent className="m-4">
         {(onClose) => {
           onCloseRef.current = onClose;
@@ -138,27 +143,15 @@ const EditJadwalModal = (props: PropTypes) => {
                             ? errorsUpdateJadwalTraining.startDate
                             : undefined
                         } // err message
-                        granularity="day" // only allow user to select date, not time
                         isInvalid={
                           errorsUpdateJadwalTraining.startDate !== undefined
-                        } // trigger style error
+                        }
                         label="Tanggal Mulai"
                         value={
-                          field.value
-                            ? fromDate(
-                                new Date(field.value),
-                                getLocalTimeZone(),
-                              ) // created date object from ISO string to
-                            : null
+                          field.value ? parseDate(String(field.value)) : null
                         }
                         onChange={(dateValue) => {
-                          const jsDate = dateValue?.toDate();
-
-                          const formattedDate = jsDate
-                            ? jsDate.toLocaleDateString("sv-SE")
-                            : null; // format date to ISO string
-
-                          field.onChange(formattedDate);
+                          field.onChange(dateValue ? dateValue.toString() : "");
                         }}
                       />
                     )}
