@@ -1,7 +1,7 @@
 export interface IKelolaJadwal {
   id: string;
   trainingId: string;
-  startDate: Date;
+  startDate: string;
   duration: number;
   meetingLink: string;
   batch: string;

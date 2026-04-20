@@ -12,7 +12,7 @@ import errorHandling from "@/utils/errrorHandling";
 const schema = yup.object().shape({
   trainingId: yup.string().required("Pelatihan wajib diisi!"),
   startDate: yup
-    .date()
+    .string()
     .required("Tanggal mulai wajib diisi!")
     .typeError("Tanggal mulai wajib diisi!"),
   duration: yup.number().required("Durasi wajib diisi!"),

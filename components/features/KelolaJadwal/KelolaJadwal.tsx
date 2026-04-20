@@ -57,16 +57,10 @@ const KelolaJadwal = () => {
 
       switch (columnKey) {
         case "nama_training":
-          const namaTraining = dataKelolaTraining?.data.find(
-            (training: any) =>
-              String(training.id) === String(itemJadwal.trainingId),
-          );
-
           return (
             <span>
-              {namaTraining
-                ? namaTraining.namaTraining
-                : "Nama training tidak ditemukan"}
+              {(itemJadwal as any)?.training?.namaTraining ??
+                "Nama training tidak ditemukan"}
             </span>
           );
         case "startDate":
@@ -162,7 +156,7 @@ const KelolaJadwal = () => {
             isRefetchingKelolaJadwal ||
             !dataKelolaTraining
           }
-          placeholderTopContent="Cari Jadwal berdasarkan nama training..."
+          placeholderTopContent="Cari berdasarkan nama training..."
           renderCell={renderCell}
           totalPages={
             dataKelolaJadwal ? dataKelolaJadwal.pagination.totalPages : 1
