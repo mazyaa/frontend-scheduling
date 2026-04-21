@@ -12,6 +12,8 @@ export const kelolaDetailJadwalServices = {
     instance.put(`${endpoint.DETAIL_JADWAL}/${id}`, payload),
   getDetailScheduleById: (id: string) =>
     instance.get(`${endpoint.DETAIL_JADWAL}/${id}`),
-  updateDetailJadwal: (id: string, payload: Omit<IDetailJadwal, "id">) =>
-    instance.put(`${endpoint.DETAIL_JADWAL}/${id}`, payload),
+  updateDetailJadwal: (
+    id: string,
+    payload: Partial<Omit<IDetailJadwal, "id">>,
+  ) => instance.put(`${endpoint.DETAIL_JADWAL}/${id}`, payload),
 };

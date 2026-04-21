@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import React, { Key, useCallback, useEffect } from "react";
 import {
   Dropdown,
@@ -12,31 +11,32 @@ import { Button } from "@heroui/button";
 import { CiMenuKebab } from "react-icons/ci";
 import { useSession } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
+import { useDisclosure } from "@heroui/modal";
 
 import useDetailJadwal from "./useDetailJadwal";
 import LISTS_DETAIL_KELOLA_JADWAL from "./detailJadwal.constants";
+import TambahKeteranganModal from "./TambahKeteranganModal";
 
 import { TablePageSkeleton } from "@/components/ui/Skeletons";
 import DataTable from "@/components/ui/DataTable/DataTable";
 import useChangeUrl from "@/hooks/useChangeUrl";
 
 const DetailJadwal = () => {
-  const router = useRouter();
-  // const { push } = router();
   const searchParams = useSearchParams();
   const { status } = useSession();
   const isLoadingSession = status === "loading";
+  const tambahKeteranganModal = useDisclosure();
 
   const {
     dataDetailJadwal,
     isLoadiangDetailJadwal,
     isRefetchingDetailJadwal,
-    // refetchDetailKelolaJadwal,
+    refetchDetailKelolaJadwal,
 
     selectedId,
-    // setSelectedId,
+    setSelectedId,
 
-    // isLoadingKelolaTraining,
+    isLoadingPersonNameById,
   } = useDetailJadwal();
 
   const { setUrl } = useChangeUrl();
@@ -73,10 +73,6 @@ const DetailJadwal = () => {
               })}
             </span>
           );
-        case "nama_instruktur":
-          if (!cellValue) return "-";
-        case "nama_asesor":
-          if (!cellValue) return "-";
         case "aksi":
           return (
             <Dropdown>
@@ -87,7 +83,13 @@ const DetailJadwal = () => {
               </DropdownTrigger>
 
               <DropdownMenu>
-                <DropdownItem key="Tambah-keterangan-button" onPress={() => {}}>
+                <DropdownItem
+                  key="Tambah-keterangan-button"
+                  onPress={() => {
+                    setSelectedId(String(itemDetailJadwal.id));
+                    tambahKeteranganModal.onOpen();
+                  }}
+                >
                   Tambah Keterangan
                 </DropdownItem>
                 <DropdownItem key="Tambah-sesi-button" onPress={() => {}}>
@@ -109,7 +111,7 @@ const DetailJadwal = () => {
           return cellValue as React.ReactNode;
       }
     },
-    [router, selectedId],
+    [setSelectedId, tambahKeteranganModal],
   );
 
   return (
@@ -121,7 +123,11 @@ const DetailJadwal = () => {
           columns={LISTS_DETAIL_KELOLA_JADWAL}
           data={dataDetailJadwal?.data || []}
           emptyContent="Detail Jadwal Tidak Ditemukan"
-          isLoading={isLoadiangDetailJadwal || isRefetchingDetailJadwal}
+          isLoading={
+            isLoadiangDetailJadwal ||
+            isRefetchingDetailJadwal ||
+            isLoadingPersonNameById
+          }
           placeholderTopContent="Cari berdasarkan hari ke-"
           renderCell={renderCell}
           totalPages={
@@ -129,6 +135,12 @@ const DetailJadwal = () => {
           }
         />
       )}
+
+      <TambahKeteranganModal
+        {...tambahKeteranganModal}
+        refetchDetailJadwal={refetchDetailKelolaJadwal}
+        selectedId={selectedId}
+      />
     </section>
   );
 };

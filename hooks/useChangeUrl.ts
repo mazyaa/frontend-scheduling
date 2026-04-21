@@ -67,9 +67,25 @@ const useChangeUrl = () => {
   };
 
   const handleChangeSearch = (e: ChangeEvent<HTMLInputElement>) => {
-    const search = e.target.value;
+    const raw = e.target.value;
 
     debounce(() => {
+      const search = raw.trim();
+
+      if (raw.length > 0 && search.length === 0 && !currentSearch) {
+        // if user input is only whitespace, and current search is empty, so we don't need to update url, because it will be the same with current url
+        return;
+      }
+
+      if (search.length === 0) {
+        handleClearSearch();
+
+        return;
+      }
+
+      if (search === currentSearch) {
+        return;
+      }
       updateUrl({
         search,
         page: PAGE_DEFAULT.toString(), // reset page

@@ -148,7 +148,9 @@ const EditJadwalModal = (props: PropTypes) => {
                         }
                         label="Tanggal Mulai"
                         value={
-                          field.value ? parseDate(String(field.value)) : null
+                          field.value
+                            ? parseDate(String(field.value).split("T")[0]) // only get YYYY-MM-DD
+                            : null
                         }
                         onChange={(dateValue) => {
                           field.onChange(dateValue ? dateValue.toString() : "");
