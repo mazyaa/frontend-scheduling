@@ -45,7 +45,7 @@ const useEditJadwalModal = (id: string, isOpen: boolean) => {
     values: jadwalTrainingDataById
       ? {
           trainingId: jadwalTrainingDataById.data.trainingId,
-          startDate: jadwalTrainingDataById.data.startDate,
+          startDate: jadwalTrainingDataById.data.startDate.split("T")[0],
           duration: jadwalTrainingDataById.data.duration,
           meetingLink: jadwalTrainingDataById.data.meetingLink,
           batch: jadwalTrainingDataById.data.batch,
