@@ -35,8 +35,6 @@ const DetailJadwal = () => {
 
     selectedId,
     setSelectedId,
-
-    isLoadingPersonNameById,
   } = useDetailJadwal();
 
   const { setUrl } = useChangeUrl();
@@ -46,7 +44,7 @@ const DetailJadwal = () => {
   }, [searchParams]);
 
   const renderCell = useCallback(
-    (itemDetailJadwal: Record<string, unknown>, columnKey: Key) => {
+    (itemDetailJadwal: any, columnKey: Key) => {
       const cellValue =
         itemDetailJadwal[columnKey as keyof typeof itemDetailJadwal];
 
@@ -54,8 +52,8 @@ const DetailJadwal = () => {
         case "nama_training":
           return (
             <span>
-              {(itemDetailJadwal as any)?.jadwalTraining?.training
-                ?.namaTraining ?? "Nama training tidak ditemukan"}
+              {itemDetailJadwal?.jadwalTraining?.training?.namaTraining ??
+                "Nama training tidak ditemukan"}
             </span>
           );
         case "hari":
@@ -73,6 +71,10 @@ const DetailJadwal = () => {
               })}
             </span>
           );
+        case "nama_instruktur":
+          return <span>{itemDetailJadwal.instruktur?.name || "-"}</span>;
+        case "nama_asesor":
+          return <span>{itemDetailJadwal.asesor?.name || "-"}</span>;
         case "aksi":
           return (
             <Dropdown>
@@ -123,11 +125,7 @@ const DetailJadwal = () => {
           columns={LISTS_DETAIL_KELOLA_JADWAL}
           data={dataDetailJadwal?.data || []}
           emptyContent="Detail Jadwal Tidak Ditemukan"
-          isLoading={
-            isLoadiangDetailJadwal ||
-            isRefetchingDetailJadwal ||
-            isLoadingPersonNameById
-          }
+          isLoading={isLoadiangDetailJadwal || isRefetchingDetailJadwal}
           placeholderTopContent="Cari berdasarkan hari ke-"
           renderCell={renderCell}
           totalPages={

@@ -46,8 +46,8 @@ const TambahKeteranganModal = (props: PropTypes) => {
     handleSubmitTambahKeterangan,
     errorsTambahKeterangan,
 
-    detailScheduleById,
     isLoadingDetailScheduleById,
+    dataTambahKeterangan,
 
     instrukturOptions,
     asesorOptions,
@@ -63,21 +63,6 @@ const TambahKeteranganModal = (props: PropTypes) => {
   } = useTambahKeteranganModal(selectedId, isOpen);
 
   const disabledSubmit = isPendingTambahKeterangan;
-
-  const namaTraining =
-    detailScheduleById?.data?.jadwalTraining?.training?.namaTraining || "-";
-  const hariKe = detailScheduleById?.data?.hariKe
-    ? `Hari ke-${detailScheduleById.data.hariKe}`
-    : "-";
-  const tanggal = detailScheduleById?.data?.hari
-    ? new Date(detailScheduleById.data.hari).toLocaleDateString("id-ID", {
-        weekday: "long",
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-        timeZone: "Asia/Jakarta",
-      })
-    : "-";
 
   useEffect(() => {
     if (isSuccessTambahKeterangan && onCloseRef.current) {
@@ -122,7 +107,7 @@ const TambahKeteranganModal = (props: PropTypes) => {
                     <Input
                       isDisabled
                       label="Nama Training"
-                      value={namaTraining}
+                      value={dataTambahKeterangan.namaTraining}
                       variant="bordered"
                     />
                   </div>
@@ -137,7 +122,7 @@ const TambahKeteranganModal = (props: PropTypes) => {
                     <Input
                       isDisabled
                       label="Hari"
-                      value={hariKe}
+                      value={dataTambahKeterangan.hari}
                       variant="bordered"
                     />
                   </div>
@@ -152,7 +137,7 @@ const TambahKeteranganModal = (props: PropTypes) => {
                     <Input
                       isDisabled
                       label="Tanggal"
-                      value={tanggal}
+                      value={dataTambahKeterangan.tanggal}
                       variant="bordered"
                     />
                   </div>
