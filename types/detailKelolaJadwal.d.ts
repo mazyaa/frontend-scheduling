@@ -4,6 +4,9 @@ export interface IDetailJadwal {
   hari: Date;
   hariKe: number;
   aktivitas: string;
-  instrukturId: string;
-  asesorId: string;
+  instrukturId: string | null;
+  asesorId: string | null;
+  instruktur?: { name: string } | null;
+  asesor?: { name: string } | null;
+  jadwalTraining?: any;
 }

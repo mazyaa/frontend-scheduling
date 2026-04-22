@@ -1,6 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useContext, useMemo } from "react";
-import { useForm } from "react-hook-form";
+import { useContext } from "react";
+import { Resolver, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
@@ -12,8 +12,11 @@ import { IDetailJadwal } from "@/types/detailKelolaJadwal";
 import errorHandling from "@/utils/errrorHandling";
 
 interface ITambahKeteranganForm {
-  instrukturId?: string;
-  asesorId?: string;
+  namaTraining: string;
+  hari: string;
+  tanggal: string;
+  instrukturId: string;
+  asesorId: string;
 }
 
 type IUpdateKeteranganPayload = Partial<
@@ -21,6 +24,9 @@ type IUpdateKeteranganPayload = Partial<
 >;
 
 const schema = yup.object().shape({
+  namaTraining: yup.string().notRequired(),
+  hari: yup.string().notRequired(),
+  tanggal: yup.string().notRequired(),
   instrukturId: yup.string().when("$isLastDay", {
     is: false,
     then: (currentSchema) =>
@@ -34,6 +40,20 @@ const schema = yup.object().shape({
     otherwise: (currentSchema) => currentSchema.notRequired(),
   }),
 });
+
+const formatScheduleDate = (dateValue?: string) => {
+  if (!dateValue) {
+    return "-";
+  }
+
+  return new Date(dateValue).toLocaleDateString("id-ID", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "Asia/Jakarta",
+  });
+};
 
 const useTambahKeteranganModal = (id: string, isOpen: boolean) => {
   const { setToaster } = useContext(ToasterContext);
@@ -89,49 +109,70 @@ const useTambahKeteranganModal = (id: string, isOpen: boolean) => {
     handleSubmit: handleSubmitTambahKeterangan,
     formState: { errors: errorsTambahKeterangan },
     reset: resetTambahKeterangan,
-  } = useForm({
-    resolver: yupResolver(schema, { context: { isLastDay } }),
+    watch,
+  } = useForm<ITambahKeteranganForm>({
+    resolver: yupResolver(schema, {
+      context: { isLastDay },
+    }) as Resolver<ITambahKeteranganForm>,
     values: detailScheduleById
       ? {
+          namaTraining:
+            detailScheduleById.data?.jadwalTraining?.training?.namaTraining ||
+            "-",
+          hari: detailScheduleById.data?.hariKe
+            ? `Hari ke-${detailScheduleById.data.hariKe}`
+            : "-",
+          tanggal: formatScheduleDate(detailScheduleById.data?.hari),
           instrukturId: detailScheduleById.data.instrukturId || "",
           asesorId: detailScheduleById.data.asesorId || "",
         }
-      : undefined,
+      : {
+          namaTraining: "-",
+          hari: "-",
+          tanggal: "-",
+          instrukturId: "",
+          asesorId: "",
+        },
   });
 
-  const getAllInstrukturAsesor = async () => {
+  const getInstrukturAsesorOptions = async () => {
     const response =
       await kelolaInstrukturAsesorServices.getAllInstrukturAndAsesor(
         "limit=1000&page=1",
       );
+    const data = (response.data?.data || []) as IKelolaInstrukturAsesor[];
 
-    return response.data?.data || [];
+    return data.reduce<{
+      instrukturOptions: IKelolaInstrukturAsesor[];
+      asesorOptions: IKelolaInstrukturAsesor[];
+    }>(
+      (acc, item) => {
+        if (item.role === "instruktur") {
+          acc.instrukturOptions.push(item);
+        }
+
+        if (item.role === "asesor") {
+          acc.asesorOptions.push(item);
+        }
+
+        return acc;
+      },
+      { instrukturOptions: [], asesorOptions: [] },
+    );
   };
 
   const {
-    data: instrukturAsesorData = [],
+    data: instrukturAsesorOptions,
     isLoading: isLoadingInstrukturAsesor,
   } = useQuery({
     queryKey: ["instrukturAsesorForDetailJadwal"],
-    queryFn: getAllInstrukturAsesor,
+    queryFn: getInstrukturAsesorOptions,
     enabled: isOpen,
   });
 
-  const instrukturOptions = useMemo(
-    () =>
-      instrukturAsesorData.filter(
-        (item: IKelolaInstrukturAsesor) => item.role === "instruktur",
-      ),
-    [instrukturAsesorData],
-  );
-
-  const asesorOptions = useMemo(
-    () =>
-      instrukturAsesorData.filter(
-        (item: IKelolaInstrukturAsesor) => item.role === "asesor",
-      ),
-    [instrukturAsesorData],
-  );
+  const instrukturOptions = instrukturAsesorOptions?.instrukturOptions || [];
+  const asesorOptions = instrukturAsesorOptions?.asesorOptions || [];
+  const dataTambahKeterangan = watch();
 
   const handleOnClose = (onClose: () => void) => {
     onClose();
@@ -191,6 +232,7 @@ const useTambahKeteranganModal = (id: string, isOpen: boolean) => {
 
     detailScheduleById,
     isLoadingDetailScheduleById,
+    dataTambahKeterangan,
 
     instrukturOptions,
     asesorOptions,
