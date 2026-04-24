@@ -11,7 +11,7 @@ import { IKelolaInstrukturAsesor } from "@/types/kelolaInstrukturAsesor";
 import { IDetailJadwal } from "@/types/detailKelolaJadwal";
 import errorHandling from "@/utils/errrorHandling";
 
-interface ITambahKeteranganForm {
+interface IEditKeteranganForm {
   namaTraining: string;
   hari: string;
   tanggal: string;
@@ -55,7 +55,7 @@ const formatScheduleDate = (dateValue?: string) => {
   });
 };
 
-const useTambahKeteranganModal = (id: string, isOpen: boolean) => {
+const useEditDetailJadwalModal = (id: string, isOpen: boolean) => {
   const { setToaster } = useContext(ToasterContext);
 
   const getDetailScheduleById = async (detailId: string) => {
@@ -105,15 +105,15 @@ const useTambahKeteranganModal = (id: string, isOpen: boolean) => {
   const isLastDay = currentHariKe > 0 && currentHariKe === maxHariKe;
 
   const {
-    control: controlTambahKeterangan,
-    handleSubmit: handleSubmitTambahKeterangan,
-    formState: { errors: errorsTambahKeterangan },
-    reset: resetTambahKeterangan,
+    control: controlEditKeterangan,
+    handleSubmit: handleSubmitEditKeterangan,
+    formState: { errors: errorsEditKeterangan },
+    reset: resetEditKeterangan,
     watch,
-  } = useForm<ITambahKeteranganForm>({
+  } = useForm<IEditKeteranganForm>({
     resolver: yupResolver(schema, {
-      context: { isLastDay }, // variable for use on schema validation like this $isLastDay
-    }) as Resolver<ITambahKeteranganForm>,
+      context: { isLastDay },
+    }) as Resolver<IEditKeteranganForm>,
     values: detailScheduleById
       ? {
           namaTraining:
@@ -159,18 +159,18 @@ const useTambahKeteranganModal = (id: string, isOpen: boolean) => {
 
   const instrukturOptions = instrukturAsesorOptions?.instrukturOptions || [];
   const asesorOptions = instrukturAsesorOptions?.asesorOptions || [];
-  const dataTambahKeterangan = watch();
+  const dataEditKeterangan = watch();
 
   const handleOnClose = (onClose: () => void) => {
     onClose();
-    resetTambahKeterangan();
+    resetEditKeterangan();
   };
 
   const updateKeteranganById = async (
     detailId: string,
     payload: IUpdateKeteranganPayload,
   ) => {
-    const response = await kelolaDetailJadwalServices.createDetailJadwal(
+    const response = await kelolaDetailJadwalServices.updateDetailJadwal(
       detailId,
       payload,
     );
@@ -179,10 +179,10 @@ const useTambahKeteranganModal = (id: string, isOpen: boolean) => {
   };
 
   const {
-    mutate: mutateTambahKeterangan,
-    isPending: isPendingTambahKeterangan,
-    isSuccess: isSuccessTambahKeterangan,
-    reset: resetTambahKeteranganMutation,
+    mutate: mutateEditKeterangan,
+    isPending: isPendingEditKeterangan,
+    isSuccess: isSuccessEditKeterangan,
+    reset: resetEditKeteranganMutation,
   } = useMutation({
     mutationFn: (payload: IUpdateKeteranganPayload) =>
       updateKeteranganById(id, payload),
@@ -190,36 +190,36 @@ const useTambahKeteranganModal = (id: string, isOpen: boolean) => {
       const message = errorHandling(error);
 
       setToaster({
-        title: "Tambah Keterangan Gagal",
+        title: "Edit Keterangan Gagal",
         type: "error",
-        message: message || "Terjadi kesalahan saat menambahkan keterangan",
+        message: message || "Terjadi kesalahan saat mengedit keterangan",
       });
     },
     onSuccess: () => {
       setToaster({
-        title: "Tambah Keterangan Berhasil",
+        title: "Edit Keterangan Berhasil",
         type: "success",
         message: "Keterangan jadwal berhasil diperbarui",
       });
     },
   });
 
-  const handleTambahKeterangan = (payload: ITambahKeteranganForm) => {
+  const handleEditKeterangan = (payload: IEditKeteranganForm) => {
     const updatePayload = isLastDay
       ? { asesorId: payload.asesorId || "" }
       : { instrukturId: payload.instrukturId || "" };
 
-    mutateTambahKeterangan(updatePayload);
+    mutateEditKeterangan(updatePayload);
   };
 
   return {
-    controlTambahKeterangan,
-    handleSubmitTambahKeterangan,
-    errorsTambahKeterangan,
+    controlEditKeterangan,
+    handleSubmitEditKeterangan,
+    errorsEditKeterangan,
 
     detailScheduleById,
     isLoadingDetailScheduleById,
-    dataTambahKeterangan,
+    dataEditKeterangan,
 
     instrukturOptions,
     asesorOptions,
@@ -228,11 +228,11 @@ const useTambahKeteranganModal = (id: string, isOpen: boolean) => {
     isLastDay,
 
     handleOnClose,
-    handleTambahKeterangan,
-    isPendingTambahKeterangan,
-    isSuccessTambahKeterangan,
-    resetTambahKeteranganMutation,
+    handleEditKeterangan,
+    isPendingEditKeterangan,
+    isSuccessEditKeterangan,
+    resetEditKeteranganMutation,
   };
 };
 
-export default useTambahKeteranganModal;
+export default useEditDetailJadwalModal;
