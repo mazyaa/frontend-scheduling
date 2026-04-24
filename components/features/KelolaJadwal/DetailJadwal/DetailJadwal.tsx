@@ -16,6 +16,7 @@ import { useDisclosure } from "@heroui/modal";
 import useDetailJadwal from "./useDetailJadwal";
 import LISTS_DETAIL_KELOLA_JADWAL from "./detailJadwal.constants";
 import TambahKeteranganModal from "./TambahKeteranganModal";
+import EditDetailJadwalModal from "./EditDetailJadwalModal";
 
 import { TablePageSkeleton } from "@/components/ui/Skeletons";
 import DataTable from "@/components/ui/DataTable/DataTable";
@@ -26,6 +27,7 @@ const DetailJadwal = () => {
   const { status } = useSession();
   const isLoadingSession = status === "loading";
   const tambahKeteranganModal = useDisclosure();
+  const editDetailJadwalModal = useDisclosure();
 
   const {
     dataDetailJadwal,
@@ -97,7 +99,13 @@ const DetailJadwal = () => {
                 <DropdownItem key="Tambah-sesi-button" onPress={() => {}}>
                   Generate Sesi Otomatis
                 </DropdownItem>
-                <DropdownItem key="edit-detail-jadwal" onPress={() => {}}>
+                <DropdownItem
+                  key="edit-detail-jadwal"
+                  onPress={() => {
+                    setSelectedId(String(itemDetailJadwal.id));
+                    editDetailJadwalModal.onOpen();
+                  }}
+                >
                   Edit Detail Jadwal
                 </DropdownItem>
                 <DropdownItem key="kirim-notifikasi-button" onPress={() => {}}>
@@ -113,7 +121,7 @@ const DetailJadwal = () => {
           return cellValue as React.ReactNode;
       }
     },
-    [setSelectedId, tambahKeteranganModal],
+    [setSelectedId, tambahKeteranganModal, editDetailJadwalModal],
   );
 
   return (
@@ -136,6 +144,11 @@ const DetailJadwal = () => {
 
       <TambahKeteranganModal
         {...tambahKeteranganModal}
+        refetchDetailJadwal={refetchDetailKelolaJadwal}
+        selectedId={selectedId}
+      />
+      <EditDetailJadwalModal
+        {...editDetailJadwalModal}
         refetchDetailJadwal={refetchDetailKelolaJadwal}
         selectedId={selectedId}
       />

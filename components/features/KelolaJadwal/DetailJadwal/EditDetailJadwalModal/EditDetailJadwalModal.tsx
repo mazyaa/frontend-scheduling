@@ -14,7 +14,7 @@ import { Select, SelectItem } from "@heroui/select";
 import { Spinner } from "@heroui/spinner";
 import { FiInfo } from "react-icons/fi";
 
-import useTambahKeteranganModal from "./useTambahKeteranganModal";
+import useEditDetailJadwalModal from "./useEditDetailJadwalModal";
 
 import { IKelolaInstrukturAsesor } from "@/types/kelolaInstrukturAsesor";
 
@@ -34,17 +34,17 @@ const DisabledInformation = ({ message }: { message: string }) => {
   );
 };
 
-const TambahKeteranganModal = (props: PropTypes) => {
+const EditDetailJadwalModal = (props: PropTypes) => {
   const { isOpen, selectedId, onOpenChange, refetchDetailJadwal } = props;
   const onCloseRef = useRef<() => void>();
 
   const {
-    controlTambahKeterangan,
-    handleSubmitTambahKeterangan,
-    errorsTambahKeterangan,
+    controlEditKeterangan,
+    handleSubmitEditKeterangan,
+    errorsEditKeterangan,
 
     isLoadingDetailScheduleById,
-    dataTambahKeterangan,
+    dataEditKeterangan,
 
     instrukturOptions,
     asesorOptions,
@@ -53,24 +53,24 @@ const TambahKeteranganModal = (props: PropTypes) => {
     isLastDay,
 
     handleOnClose,
-    handleTambahKeterangan,
-    isPendingTambahKeterangan,
-    isSuccessTambahKeterangan,
-    resetTambahKeteranganMutation,
-  } = useTambahKeteranganModal(selectedId, isOpen);
+    handleEditKeterangan,
+    isPendingEditKeterangan,
+    isSuccessEditKeterangan,
+    resetEditKeteranganMutation,
+  } = useEditDetailJadwalModal(selectedId, isOpen);
 
-  const disabledSubmit = isPendingTambahKeterangan;
+  const disabledSubmit = isPendingEditKeterangan;
 
   useEffect(() => {
-    if (isSuccessTambahKeterangan && onCloseRef.current) {
+    if (isSuccessEditKeterangan && onCloseRef.current) {
       handleOnClose(onCloseRef.current);
-      resetTambahKeteranganMutation();
+      resetEditKeteranganMutation();
       refetchDetailJadwal();
     }
   }, [
-    isSuccessTambahKeterangan,
+    isSuccessEditKeterangan,
     refetchDetailJadwal,
-    resetTambahKeteranganMutation,
+    resetEditKeteranganMutation,
   ]);
 
   return (
@@ -85,12 +85,10 @@ const TambahKeteranganModal = (props: PropTypes) => {
           onCloseRef.current = onClose;
 
           return (
-            <form
-              onSubmit={handleSubmitTambahKeterangan(handleTambahKeterangan)}
-            >
+            <form onSubmit={handleSubmitEditKeterangan(handleEditKeterangan)}>
               <ModalHeader>
                 <h3 className="text-medium text-brand font-medium">
-                  Tambah Keterangan Detail Jadwal
+                  Edit Keterangan Detail Jadwal
                 </h3>
               </ModalHeader>
 
@@ -104,7 +102,7 @@ const TambahKeteranganModal = (props: PropTypes) => {
                     <Input
                       isDisabled
                       label="Nama Training"
-                      value={dataTambahKeterangan.namaTraining}
+                      value={dataEditKeterangan.namaTraining}
                       variant="bordered"
                     />
                   </div>
@@ -119,7 +117,7 @@ const TambahKeteranganModal = (props: PropTypes) => {
                     <Input
                       isDisabled
                       label="Hari"
-                      value={dataTambahKeterangan.hari}
+                      value={dataEditKeterangan.hari}
                       variant="bordered"
                     />
                   </div>
@@ -134,7 +132,7 @@ const TambahKeteranganModal = (props: PropTypes) => {
                     <Input
                       isDisabled
                       label="Tanggal"
-                      value={dataTambahKeterangan.tanggal}
+                      value={dataEditKeterangan.tanggal}
                       variant="bordered"
                     />
                   </div>
@@ -165,21 +163,21 @@ const TambahKeteranganModal = (props: PropTypes) => {
                   isLoaded={!isLoadingDetailScheduleById}
                 >
                   <Controller
-                    control={controlTambahKeterangan}
+                    control={controlEditKeterangan}
                     name="instrukturId"
                     render={({ field }) => (
                       <Select
                         {...field}
                         className="rounded"
                         errorMessage={
-                          typeof errorsTambahKeterangan.instrukturId
-                            ?.message === "string"
-                            ? errorsTambahKeterangan.instrukturId.message
+                          typeof errorsEditKeterangan.instrukturId?.message ===
+                          "string"
+                            ? errorsEditKeterangan.instrukturId.message
                             : undefined
                         }
                         isDisabled={isLastDay}
                         isInvalid={
-                          errorsTambahKeterangan.instrukturId !== undefined
+                          errorsEditKeterangan.instrukturId !== undefined
                         }
                         label="Nama Instruktur"
                         placeholder="Pilih instruktur"
@@ -214,22 +212,20 @@ const TambahKeteranganModal = (props: PropTypes) => {
                   isLoaded={!isLoadingDetailScheduleById}
                 >
                   <Controller
-                    control={controlTambahKeterangan}
+                    control={controlEditKeterangan}
                     name="asesorId"
                     render={({ field }) => (
                       <Select
                         {...field}
                         className="rounded"
                         errorMessage={
-                          typeof errorsTambahKeterangan.asesorId?.message ===
+                          typeof errorsEditKeterangan.asesorId?.message ===
                           "string"
-                            ? errorsTambahKeterangan.asesorId.message
+                            ? errorsEditKeterangan.asesorId.message
                             : undefined
                         }
                         isDisabled={!isLastDay}
-                        isInvalid={
-                          errorsTambahKeterangan.asesorId !== undefined
-                        }
+                        isInvalid={errorsEditKeterangan.asesorId !== undefined}
                         label="Nama Asesor"
                         placeholder="Pilih asesor"
                         selectedKeys={field.value ? [field.value] : []}
@@ -275,10 +271,10 @@ const TambahKeteranganModal = (props: PropTypes) => {
                       disabled={disabledSubmit}
                       type="submit"
                     >
-                      {isPendingTambahKeterangan ? (
+                      {isPendingEditKeterangan ? (
                         <Spinner color="white" size="sm" />
                       ) : (
-                        "Simpan Keterangan"
+                        "Simpan Perubahan"
                       )}
                     </Button>
                   </div>
@@ -292,4 +288,4 @@ const TambahKeteranganModal = (props: PropTypes) => {
   );
 };
 
-export default TambahKeteranganModal;
+export default EditDetailJadwalModal;

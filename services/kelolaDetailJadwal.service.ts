@@ -8,8 +8,10 @@ export const kelolaDetailJadwalServices = {
     instance.get(
       `${endpoint.DETAIL_JADWAL}/${id}/all-detail-schedules?${params}`,
     ),
-  createDetailJadwal: (id: string, payload: Omit<IDetailJadwal, "id">) =>
-    instance.put(`${endpoint.DETAIL_JADWAL}/${id}`, payload),
+  createDetailJadwal: (
+    id: string,
+    payload: Partial<Omit<IDetailJadwal, "id">>,
+  ) => instance.put(`${endpoint.DETAIL_JADWAL}/${id}`, payload),
   getDetailScheduleById: (id: string) =>
     instance.get(`${endpoint.DETAIL_JADWAL}/${id}`),
   updateDetailJadwal: (
