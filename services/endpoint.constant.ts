@@ -5,4 +5,5 @@ export const endpoint = {
   MEDIA: "/media",
   JADWAL: "/schedule",
   DETAIL_JADWAL: "/detail-schedule",
+  NOTIFY: "notify",
 };

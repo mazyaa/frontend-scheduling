@@ -13,6 +13,7 @@ import { Input } from "@heroui/input";
 import { Button } from "@heroui/button";
 import { Spinner } from "@heroui/spinner";
 import { Select, SelectItem } from "@heroui/select";
+import { FiInfo } from "react-icons/fi";
 
 import useTambahInstrukturAsesorModal from "./useTambahInstrukturAsesorModal";
 
@@ -23,6 +24,15 @@ interface PropTypes {
   onOpenChange: () => void; // for tracking open state of modal, because when user click cancel button, the state of isOpen will be set to false, but when user click add button, the state of isOpen will be set to true, so we need to track the state of modal open or close
   refetchInstrukturAsesor: () => void;
 }
+
+const Information = ({ message }: { message: string }) => {
+  return (
+    <div className="flex bg-amber-100 p-1.5 rounded-sm items-center gap-1 text-blue-600 text-xs w-fit cursor-help">
+      <FiInfo size={14} />
+      <span>{message}</span>
+    </div>
+  );
+};
 
 const TambahInstrukturAsesorModal = (props: PropTypes) => {
   const { isOpen, onOpenChange, refetchInstrukturAsesor } = props;
@@ -68,7 +78,7 @@ const TambahInstrukturAsesorModal = (props: PropTypes) => {
                 </h3>
               </ModalHeader>
 
-              <ModalBody className="flex flex-col gap-5">
+              <ModalBody className="flex flex-col gap-4">
                 <Controller
                   control={control}
                   name="name"
@@ -100,6 +110,7 @@ const TambahInstrukturAsesorModal = (props: PropTypes) => {
                   )}
                 />
 
+                <Information message="No WhatsApp Harus diawali dengan 62" />
                 <Controller
                   control={control}
                   name="noWa"
