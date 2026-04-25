@@ -12,8 +12,10 @@ import { CiMenuKebab } from "react-icons/ci";
 import { useSession } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import { useDisclosure } from "@heroui/modal";
+import { Spinner } from "@heroui/spinner";
 
 import useDetailJadwal from "./useDetailJadwal";
+import useNotifikasi from "./useNotifikasi";
 import LISTS_DETAIL_KELOLA_JADWAL from "./detailJadwal.constants";
 import TambahKeteranganModal from "./TambahKeteranganModal";
 import EditDetailJadwalModal from "./EditDetailJadwalModal";
@@ -38,6 +40,8 @@ const DetailJadwal = () => {
     selectedId,
     setSelectedId,
   } = useDetailJadwal();
+
+  const { isPendingKirimNotifikasi, handleKirimNotifikasi } = useNotifikasi();
 
   const { setUrl } = useChangeUrl();
 
@@ -81,8 +85,17 @@ const DetailJadwal = () => {
           return (
             <Dropdown>
               <DropdownTrigger>
-                <Button isIconOnly size="sm" variant="light">
-                  <CiMenuKebab className="text-default-700" />
+                <Button
+                  isIconOnly
+                  isDisabled={isPendingKirimNotifikasi}
+                  size="sm"
+                  variant="light"
+                >
+                  {isPendingKirimNotifikasi ? (
+                    <Spinner className="h-4 w-4" color="default" size="sm" />
+                  ) : (
+                    <CiMenuKebab className="text-default-700" />
+                  )}
                 </Button>
               </DropdownTrigger>
 
@@ -108,8 +121,27 @@ const DetailJadwal = () => {
                 >
                   Edit Detail Jadwal
                 </DropdownItem>
-                <DropdownItem key="kirim-notifikasi-button" onPress={() => {}}>
-                  <span className="text-green-600">Kirim Notifikasi WA</span>
+                <DropdownItem
+                  key="kirim-notifikasi-button"
+                  isDisabled={isPendingKirimNotifikasi}
+                  onPress={() => {
+                    handleKirimNotifikasi(String(itemDetailJadwal.id));
+                  }}
+                >
+                  <span className="text-green-600">
+                    {isPendingKirimNotifikasi ? (
+                      <div className="flex items-center gap-2">
+                        <Spinner
+                          className="h-4 w-4"
+                          color="default"
+                          size="sm"
+                        />
+                        <span>Mengirim Notifikasi...</span>
+                      </div>
+                    ) : (
+                      "Kirim Notifikasi WA"
+                    )}
+                  </span>
                 </DropdownItem>
                 <DropdownItem key="kirim-kredensial-buttton" onPress={() => {}}>
                   <span className="text-brand">Kirim kredensial</span>
@@ -121,7 +153,13 @@ const DetailJadwal = () => {
           return cellValue as React.ReactNode;
       }
     },
-    [setSelectedId, tambahKeteranganModal, editDetailJadwalModal],
+    [
+      setSelectedId,
+      tambahKeteranganModal,
+      editDetailJadwalModal,
+      isPendingKirimNotifikasi,
+      handleKirimNotifikasi,
+    ],
   );
 
   return (
