@@ -19,6 +19,7 @@ import useNotifikasi from "./useNotifikasi";
 import LISTS_DETAIL_KELOLA_JADWAL from "./detailJadwal.constants";
 import TambahKeteranganModal from "./TambahKeteranganModal";
 import EditDetailJadwalModal from "./EditDetailJadwalModal";
+import useGenerateSesiOtomatis from "./useGenerateSesiOtomatis";
 
 import { TablePageSkeleton } from "@/components/ui/Skeletons";
 import DataTable from "@/components/ui/DataTable/DataTable";
@@ -42,6 +43,8 @@ const DetailJadwal = () => {
   } = useDetailJadwal();
 
   const { isPendingKirimNotifikasi, handleKirimNotifikasi } = useNotifikasi();
+  const { handleGenerateSesiOtomatis, isPendingGenerateSesi } =
+    useGenerateSesiOtomatis();
 
   const { setUrl } = useChangeUrl();
 
@@ -109,8 +112,44 @@ const DetailJadwal = () => {
                 >
                   Tambah Keterangan
                 </DropdownItem>
-                <DropdownItem key="Tambah-sesi-button" onPress={() => {}}>
-                  Generate Sesi Otomatis
+                <DropdownItem
+                  key="Tambah-sesi-button"
+                  className={
+                    !itemDetailJadwal.instruktur && !itemDetailJadwal.asesor
+                      ? "text-gray-400"
+                      : ""
+                  }
+                  isDisabled={
+                    (!itemDetailJadwal.instruktur &&
+                      !itemDetailJadwal.asesor) ||
+                    isPendingGenerateSesi
+                  }
+                  onPress={() => {
+                    setSelectedId(String(itemDetailJadwal.id));
+                    handleGenerateSesiOtomatis(String(itemDetailJadwal.id));
+                  }}
+                >
+                  <span
+                    className={
+                      !itemDetailJadwal.instruktur && !itemDetailJadwal.asesor
+                        ? "text-gray-400"
+                        : ""
+                    }
+                  >
+                    {isPendingGenerateSesi &&
+                    selectedId === String(itemDetailJadwal.id) ? (
+                      <div className="flex items-center gap-2">
+                        <Spinner
+                          className="h-4 w-4"
+                          color="default"
+                          size="sm"
+                        />
+                        <span>Generating...</span>
+                      </div>
+                    ) : (
+                      "Generate Sesi Otomatis"
+                    )}
+                  </span>
                 </DropdownItem>
                 <DropdownItem
                   key="edit-detail-jadwal"
@@ -159,6 +198,9 @@ const DetailJadwal = () => {
       editDetailJadwalModal,
       isPendingKirimNotifikasi,
       handleKirimNotifikasi,
+      handleGenerateSesiOtomatis,
+      isPendingGenerateSesi,
+      selectedId,
     ],
   );
 

@@ -6,4 +6,5 @@ export const endpoint = {
   JADWAL: "/schedule",
   DETAIL_JADWAL: "/detail-schedule",
   NOTIFY: "notify",
+  SESSIONSCHEDULE: "/session-detail-schedule",
 };
