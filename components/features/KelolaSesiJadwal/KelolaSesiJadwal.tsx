@@ -112,6 +112,7 @@ const KelolaSesiJadwal = () => {
           placeholderTopContent="Cari aktivitas..."
           renderCell={renderCell}
           totalPages={dataSesiJadwal ? dataSesiJadwal.pagination.totalPages : 1}
+          onClickButtonTopContent={tambahSesiModal.onOpen}
         />
       )}
 
