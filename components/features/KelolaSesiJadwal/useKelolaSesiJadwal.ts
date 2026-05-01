@@ -3,7 +3,7 @@
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 
 import useChangeUrl from "@/hooks/useChangeUrl";
 import { kelolaSesiJadwalServices } from "@/services/kelolaSesiJadwal";
@@ -52,6 +52,7 @@ const useKelolaSesiJadwal = () => {
     ],
     queryFn: getAllSessionSchedule,
     enabled: !!detailJadwalId && !!session,
+    placeholderData: keepPreviousData, // for keeping previous data while fetching new data
   });
 
   return {

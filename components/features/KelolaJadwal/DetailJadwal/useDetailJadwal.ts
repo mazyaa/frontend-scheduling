@@ -3,7 +3,7 @@
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 
 import useChangeUrl from "@/hooks/useChangeUrl";
 import { kelolaDetailJadwalServices } from "@/services/kelolaDetailJadwal.service";
@@ -51,6 +51,7 @@ const useDetailJadwal = () => {
     ],
     queryFn: getAllDetailSchedule,
     enabled: !!id && !!currentPage && !!currentLimit && !!token,
+    placeholderData: keepPreviousData,
   });
 
   return {

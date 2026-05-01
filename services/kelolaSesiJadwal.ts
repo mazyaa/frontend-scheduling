@@ -5,7 +5,7 @@ import instance from "@/lib/axios/instance";
 
 export const kelolaSesiJadwalServices = {
   createSingleSessionSchedule: (payload: Omit<IKelolaSesiJadwal, "id">) =>
-    instance.post(`${endpoint.SESSIONSCHEDULE}`, payload),
+    instance.post(`${endpoint.SESSIONSCHEDULE}/single`, payload),
   createMultipleSessionSchedule: (id: string) =>
     instance.post(`${endpoint.SESSIONSCHEDULE}/${id}/batch`),
   getSessionScheduleByDetailJadwalId: (id: string) =>

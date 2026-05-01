@@ -10,7 +10,7 @@ import {
 import { Button } from "@heroui/button";
 import { CiMenuKebab } from "react-icons/ci";
 import { useSession } from "next-auth/react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter, useParams } from "next/navigation";
 import { useDisclosure } from "@heroui/modal";
 import { Spinner } from "@heroui/spinner";
 
@@ -26,7 +26,9 @@ import DataTable from "@/components/ui/DataTable/DataTable";
 import useChangeUrl from "@/hooks/useChangeUrl";
 
 const DetailJadwal = () => {
+  const router = useRouter();
   const searchParams = useSearchParams();
+  const { id: jadwalId } = useParams() as { id: string };
   const { status } = useSession();
   const isLoadingSession = status === "loading";
   const tambahKeteranganModal = useDisclosure();
@@ -161,6 +163,16 @@ const DetailJadwal = () => {
                   Edit Detail Jadwal
                 </DropdownItem>
                 <DropdownItem
+                  key="lihat-detail-sesi"
+                  onPress={() => {
+                    const url = `/admin/kelola-jadwal-training/${jadwalId}/sesi/${itemDetailJadwal.id}?limit=8&page=1`;
+
+                    router.push(url);
+                  }}
+                >
+                  Lihat Detail Sesi
+                </DropdownItem>
+                <DropdownItem
                   key="kirim-notifikasi-button"
                   isDisabled={isPendingKirimNotifikasi}
                   onPress={() => {
@@ -201,6 +213,8 @@ const DetailJadwal = () => {
       handleGenerateSesiOtomatis,
       isPendingGenerateSesi,
       selectedId,
+      jadwalId,
+      router,
     ],
   );
 
