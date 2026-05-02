@@ -154,16 +154,15 @@ const DetailJadwal = () => {
                   </span>
                 </DropdownItem>
                 <DropdownItem
-                  key="edit-detail-jadwal"
-                  onPress={() => {
-                    setSelectedId(String(itemDetailJadwal.id));
-                    editDetailJadwalModal.onOpen();
-                  }}
-                >
-                  Edit Detail Jadwal
-                </DropdownItem>
-                <DropdownItem
                   key="lihat-detail-sesi"
+                  className={
+                    !itemDetailJadwal.instruktur && !itemDetailJadwal.asesor
+                      ? "text-gray-400"
+                      : ""
+                  }
+                  isDisabled={
+                    !itemDetailJadwal.instruktur && !itemDetailJadwal.asesor
+                  }
                   onPress={() => {
                     const url = `/admin/kelola-jadwal-training/${jadwalId}/sesi/${itemDetailJadwal.id}?limit=8&page=1`;
 
@@ -171,6 +170,15 @@ const DetailJadwal = () => {
                   }}
                 >
                   Lihat Detail Sesi
+                </DropdownItem>
+                <DropdownItem
+                  key="edit-detail-jadwal"
+                  onPress={() => {
+                    setSelectedId(String(itemDetailJadwal.id));
+                    editDetailJadwalModal.onOpen();
+                  }}
+                >
+                  Edit Detail Jadwal
                 </DropdownItem>
                 <DropdownItem
                   key="kirim-notifikasi-button"
