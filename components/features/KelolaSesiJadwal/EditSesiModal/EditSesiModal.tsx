@@ -9,6 +9,7 @@ import {
 } from "@heroui/modal";
 import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
+import { Select, SelectItem } from "@heroui/select";
 import { useParams } from "next/navigation";
 
 import useEditSesi from "./useEditSesi";
@@ -43,7 +44,13 @@ const EditSesiModal = ({
     },
   });
 
-  const { handleEditSesi, isPending, isLoadingDetail } = useEditSesi({
+  const {
+    handleEditSesi,
+    isPending,
+    isLoadingDetail,
+    instrukturName,
+    asesorName,
+  } = useEditSesi({
     selectedId,
     isOpen,
     refetchSesiJadwal,
@@ -61,12 +68,14 @@ const EditSesiModal = ({
       <ModalContent>
         {(onClose) => (
           <form onSubmit={handleSubmit(onSubmit)}>
-            <ModalHeader className="flex flex-col gap-1">
+            <ModalHeader className="flex text-brand flex-col gap-1">
               Edit Sesi Jadwal
             </ModalHeader>
             <ModalBody>
               {isLoadingDetail ? (
-                <div className="flex justify-center py-4">Memuat data...</div>
+                <div className="flex justify-center text-brand py-4">
+                  Memuat data...
+                </div>
               ) : (
                 <>
                   <Controller
@@ -117,11 +126,38 @@ const EditSesiModal = ({
                     control={control}
                     name="pic"
                     render={({ field }) => (
-                      <Input
+                      <Select
                         {...field}
+                        isDisabled={isLoadingDetail}
+                        isLoading={isLoadingDetail}
                         label="PIC"
-                        placeholder="Masukkan PIC (Opsional)"
-                      />
+                        placeholder="Pilih PIC"
+                        selectedKeys={field.value ? [field.value] : []}
+                      >
+                        {[
+                          { value: "MC", label: "MC" },
+                          ...(instrukturName
+                            ? [
+                                {
+                                  value: instrukturName,
+                                  label: instrukturName,
+                                },
+                              ]
+                            : []),
+                          ...(asesorName
+                            ? [
+                                {
+                                  value: asesorName,
+                                  label: asesorName,
+                                },
+                              ]
+                            : []),
+                        ].map((option) => (
+                          <SelectItem key={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </Select>
                     )}
                   />
                 </>
@@ -137,7 +173,7 @@ const EditSesiModal = ({
                 Tutup
               </Button>
               <Button
-                color="primary"
+                className="text-white bg-brand"
                 isDisabled={isLoadingDetail}
                 isLoading={isPending}
                 type="submit"

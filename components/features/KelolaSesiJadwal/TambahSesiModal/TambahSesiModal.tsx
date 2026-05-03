@@ -9,6 +9,7 @@ import {
 } from "@heroui/modal";
 import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
+import { Select, SelectItem } from "@heroui/select";
 import { useParams } from "next/navigation";
 
 import useTambahSesi from "./useTambahSesi";
@@ -41,7 +42,13 @@ const TambahSesiModal = ({
     },
   });
 
-  const { handleTambahSesi, isPending } = useTambahSesi({
+  const {
+    handleTambahSesi,
+    isPending,
+    dataDetailSesi,
+    isLoadingSesiJadwal,
+    isRefetchingSesiJadwal,
+  } = useTambahSesi({
     refetchSesiJadwal,
     onOpenChange,
     reset,
@@ -56,7 +63,7 @@ const TambahSesiModal = ({
       <ModalContent>
         {(onClose) => (
           <form onSubmit={handleSubmit(onSubmit)}>
-            <ModalHeader className="flex flex-col gap-1">
+            <ModalHeader className="flex text-brand flex-col gap-1">
               Tambah Sesi Jadwal
             </ModalHeader>
             <ModalBody>
@@ -108,11 +115,45 @@ const TambahSesiModal = ({
                 control={control}
                 name="pic"
                 render={({ field }) => (
-                  <Input
+                  <Select
                     {...field}
+                    isDisabled={isLoadingSesiJadwal || isRefetchingSesiJadwal}
+                    isLoading={isLoadingSesiJadwal || isRefetchingSesiJadwal}
                     label="PIC"
-                    placeholder="Masukkan PIC (Opsional)"
-                  />
+                    placeholder="Pilih PIC"
+                  >
+                    {[
+                      { value: "MC", label: "MC" },
+                      ...(dataDetailSesi?.[0]?.detailJadwalTraining?.instruktur
+                        ?.name
+                        ? [
+                            {
+                              value:
+                                dataDetailSesi[0].detailJadwalTraining
+                                  .instruktur.name,
+                              label:
+                                dataDetailSesi[0].detailJadwalTraining
+                                  .instruktur.name,
+                            },
+                          ]
+                        : []),
+                      ...(dataDetailSesi?.[0]?.detailJadwalTraining?.asesor
+                        ?.name
+                        ? [
+                            {
+                              value:
+                                dataDetailSesi[0].detailJadwalTraining.asesor
+                                  .name,
+                              label:
+                                dataDetailSesi[0].detailJadwalTraining.asesor
+                                  .name,
+                            },
+                          ]
+                        : []),
+                    ].map((option) => (
+                      <SelectItem key={option.value}>{option.label}</SelectItem>
+                    ))}
+                  </Select>
                 )}
               />
             </ModalBody>
@@ -125,7 +166,11 @@ const TambahSesiModal = ({
               >
                 Tutup
               </Button>
-              <Button color="primary" isLoading={isPending} type="submit">
+              <Button
+                className="text-white bg-brand"
+                isLoading={isPending}
+                type="submit"
+              >
                 Simpan
               </Button>
             </ModalFooter>
