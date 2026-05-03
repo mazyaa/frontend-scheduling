@@ -34,13 +34,12 @@ const DeleteSesiModal = ({
       <ModalContent>
         {(onClose) => (
           <>
-            <ModalHeader className="flex flex-col gap-1">
+            <ModalHeader className="flex text-brand flex-col gap-1">
               Hapus Sesi Jadwal
             </ModalHeader>
             <ModalBody>
-              <p>
-                Apakah Anda yakin ingin menghapus sesi jadwal ini? Tindakan ini
-                tidak dapat dibatalkan.
+              <p className="text-brand text-sm">
+                Apakah Anda yakin ingin menghapus sesi jadwal ini?
               </p>
             </ModalBody>
             <ModalFooter>

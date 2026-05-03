@@ -2,6 +2,7 @@ import { useContext, useEffect } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { UseFormReset } from "react-hook-form";
 
+import useKelolaSesiJadwal from "../useKelolaSesiJadwal";
 import { kelolaSesiJadwalServices } from "@/services/kelolaSesiJadwal";
 import { ToasterContext } from "@/context/ToasterContext";
 import errorHandling from "@/utils/errrorHandling";
@@ -25,6 +26,7 @@ const useEditSesi = ({
   detailJadwalId,
 }: Props) => {
   const { setToaster } = useContext(ToasterContext);
+  const { dataSesiJadwal } = useKelolaSesiJadwal();
 
   const { data: detailSesi, isLoading: isLoadingDetail } = useQuery({
     queryKey: ["DetailSesiJadwal", selectedId],
@@ -81,7 +83,18 @@ const useEditSesi = ({
     },
   });
 
-  return { handleEditSesi, isPending, isLoadingDetail };
+  return {
+    handleEditSesi,
+    isPending,
+    isLoadingDetail,
+    dataDetailSesi: detailSesi?.data,
+    instrukturName:
+      detailSesi?.data?.detailJadwalTraining?.instruktur?.name ||
+      dataSesiJadwal?.data?.[0]?.detailJadwalTraining?.instruktur?.name,
+    asesorName:
+      detailSesi?.data?.detailJadwalTraining?.asesor?.name ||
+      dataSesiJadwal?.data?.[0]?.detailJadwalTraining?.asesor?.name,
+  };
 };
 
 export default useEditSesi;

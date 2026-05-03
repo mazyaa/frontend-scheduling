@@ -2,6 +2,8 @@ import { useContext } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { UseFormReset } from "react-hook-form";
 
+import useKelolaSesiJadwal from "../useKelolaSesiJadwal";
+
 import { kelolaSesiJadwalServices } from "@/services/kelolaSesiJadwal";
 import { ToasterContext } from "@/context/ToasterContext";
 import errorHandling from "@/utils/errrorHandling";
@@ -14,6 +16,8 @@ interface Props {
 }
 
 const useTambahSesi = ({ refetchSesiJadwal, onOpenChange, reset }: Props) => {
+  const { dataSesiJadwal, isLoadingSesiJadwal, isRefetchingSesiJadwal } =
+    useKelolaSesiJadwal();
   const { setToaster } = useContext(ToasterContext);
 
   const { mutate: handleTambahSesi, isPending } = useMutation({
@@ -44,7 +48,13 @@ const useTambahSesi = ({ refetchSesiJadwal, onOpenChange, reset }: Props) => {
     },
   });
 
-  return { handleTambahSesi, isPending };
+  return {
+    handleTambahSesi,
+    isPending,
+    dataDetailSesi: dataSesiJadwal?.data,
+    isLoadingSesiJadwal,
+    isRefetchingSesiJadwal,
+  };
 };
 
 export default useTambahSesi;
