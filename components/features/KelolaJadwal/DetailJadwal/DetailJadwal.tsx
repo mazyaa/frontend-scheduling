@@ -204,8 +204,39 @@ const DetailJadwal = () => {
                     )}
                   </span>
                 </DropdownItem>
-                <DropdownItem key="kirim-kredensial-buttton" onPress={() => {}}>
-                  <span className="text-brand">Kirim kredensial</span>
+                <DropdownItem
+                  key="kirim-kredensial-buttton"
+                  isDisabled={
+                    (!itemDetailJadwal.instruktur &&
+                      !itemDetailJadwal.asesor) ||
+                    isPendingGenerateSesi
+                  }
+                  onPress={() => {
+                    setSelectedId(String(itemDetailJadwal.id));
+                    handleGenerateSesiOtomatis(String(itemDetailJadwal.id));
+                  }}
+                >
+                  <span
+                    className={
+                      !itemDetailJadwal.instruktur && !itemDetailJadwal.asesor
+                        ? "text-gray-400"
+                        : ""
+                    }
+                  >
+                    {isPendingGenerateSesi &&
+                    selectedId === String(itemDetailJadwal.id) ? (
+                      <div className="flex items-center gap-2">
+                        <Spinner
+                          className="h-4 w-4"
+                          color="default"
+                          size="sm"
+                        />
+                        <span>Generating...</span>
+                      </div>
+                    ) : (
+                      "Generate Sesi Otomatis"
+                    )}
+                  </span>
                 </DropdownItem>
               </DropdownMenu>
             </Dropdown>
