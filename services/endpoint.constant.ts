@@ -8,4 +8,5 @@ export const endpoint = {
   NOTIFY: "notify",
   SESSIONSCHEDULE: "/session-detail-schedule",
   CREDENTIAL: "/credential",
+  SETPASSWORD: "/set-password",
 };
