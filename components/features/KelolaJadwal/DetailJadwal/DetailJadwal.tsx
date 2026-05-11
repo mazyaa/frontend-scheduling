@@ -22,6 +22,7 @@ import LISTS_DETAIL_KELOLA_JADWAL from "./detailJadwal.constants";
 import TambahKeteranganModal from "./TambahKeteranganModal";
 import EditDetailJadwalModal from "./EditDetailJadwalModal";
 import useGenerateSesiOtomatis from "./useGenerateSesiOtomatis";
+import useKirimKredensial from "./useKirimKredensial";
 
 import { TablePageSkeleton } from "@/components/ui/Skeletons";
 import DataTable from "@/components/ui/DataTable/DataTable";
@@ -49,6 +50,8 @@ const DetailJadwal = () => {
   const { isPendingKirimNotifikasi, handleKirimNotifikasi } = useNotifikasi();
   const { handleGenerateSesiOtomatis, isPendingGenerateSesi } =
     useGenerateSesiOtomatis();
+  const { isPendingKirimKredensial, handleKirimKredensial } =
+    useKirimKredensial();
 
   const { setUrl } = useChangeUrl();
 
@@ -207,34 +210,32 @@ const DetailJadwal = () => {
                 <DropdownItem
                   key="kirim-kredensial-buttton"
                   isDisabled={
-                    (!itemDetailJadwal.instruktur &&
-                      !itemDetailJadwal.asesor) ||
-                    isPendingGenerateSesi
+                    (!itemDetailJadwal.instrukturId &&
+                      !itemDetailJadwal.asesorId) ||
+                    isPendingKirimKredensial
                   }
                   onPress={() => {
-                    setSelectedId(String(itemDetailJadwal.id));
-                    handleGenerateSesiOtomatis(String(itemDetailJadwal.id));
+                    const targetId =
+                      itemDetailJadwal.instrukturId ||
+                      itemDetailJadwal.asesorId;
+
+                    if (targetId) {
+                      handleKirimKredensial(String(targetId));
+                    }
                   }}
                 >
-                  <span
-                    className={
-                      !itemDetailJadwal.instruktur && !itemDetailJadwal.asesor
-                        ? "text-gray-400"
-                        : ""
-                    }
-                  >
-                    {isPendingGenerateSesi &&
-                    selectedId === String(itemDetailJadwal.id) ? (
+                  <span className="text-blue-600">
+                    {isPendingKirimKredensial ? (
                       <div className="flex items-center gap-2">
                         <Spinner
                           className="h-4 w-4"
                           color="default"
                           size="sm"
                         />
-                        <span>Generating...</span>
+                        <span>Mengirim Kredensial...</span>
                       </div>
                     ) : (
-                      "Generate Sesi Otomatis"
+                      "Kirim Kredensial"
                     )}
                   </span>
                 </DropdownItem>
@@ -253,6 +254,8 @@ const DetailJadwal = () => {
       handleKirimNotifikasi,
       handleGenerateSesiOtomatis,
       isPendingGenerateSesi,
+      isPendingKirimKredensial,
+      handleKirimKredensial,
       selectedId,
       jadwalId,
       router,
