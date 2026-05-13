@@ -3,7 +3,7 @@ import React from "react";
 import KelolaSesiJadwal from "@/components/features/KelolaSesiJadwal/KelolaSesiJadwal";
 
 export const metadata = {
-  title: "Kelola Sesi Jadwal Training – PROSKIP",
+  title: "Kelola Sesi Jadwal Training",
   description: "Halaman untuk mengelola sesi jadwal training.",
 };
 
