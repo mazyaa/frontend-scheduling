@@ -123,6 +123,7 @@ const TambahSesiModal = ({
                     placeholder="Pilih PIC"
                   >
                     {[
+                      { value: "", label: "-" },
                       { value: "MC", label: "MC" },
                       ...(dataDetailSesi?.[0]?.detailJadwalTraining?.instruktur
                         ?.name

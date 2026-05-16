@@ -22,6 +22,7 @@ interface Proptypes {
   emptyContent: string;
   isLoading?: boolean;
   onClickButtonTopContent?: () => void;
+  extraTopContent?: React.ReactNode;
   placeholderTopContent?: string;
   renderCell: (
     item: Record<string, unknown>,
@@ -37,6 +38,7 @@ const CardTable = (props: Proptypes) => {
     emptyContent,
     isLoading,
     onClickButtonTopContent,
+    extraTopContent,
     placeholderTopContent,
     renderCell,
     totalPages,
@@ -64,14 +66,17 @@ const CardTable = (props: Proptypes) => {
           onClear={handleClearSearch}
         />
 
-        {buttonTopContentLabel && (
-          <Button
-            className="bg-brand text-white"
-            onPress={onClickButtonTopContent}
-          >
-            {buttonTopContentLabel}
-          </Button>
-        )}
+        <div className="flex flex-row items-center gap-2">
+          {extraTopContent}
+          {buttonTopContentLabel && (
+            <Button
+              className="bg-brand text-white"
+              onPress={onClickButtonTopContent}
+            >
+              {buttonTopContentLabel}
+            </Button>
+          )}
+        </div>
       </div>
     );
   }, [

@@ -1,5 +1,7 @@
+import KelolaPeserta from "@/components/features/KelolaPeserta";
+
 const KelolaPesertaPage = () => {
-  return null;
+  return <KelolaPeserta />;
 };
 
 export default KelolaPesertaPage;

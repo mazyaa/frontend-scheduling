@@ -59,8 +59,14 @@ const EditSesiModal = ({
     detailJadwalId,
   });
 
-  const onSubmit = (data: Partial<Omit<IKelolaSesiJadwal, "id">>) => {
-    handleEditSesi({ ...data, detailJadwalTrainingId: detailJadwalId });
+  const onSubmit = (data: Omit<IKelolaSesiJadwal, "id">) => {
+    const picValue = !data.pic || data.pic === "null" ? null : data.pic;
+
+    handleEditSesi({
+      ...data,
+      pic: picValue ?? "",
+      detailJadwalTrainingId: detailJadwalId,
+    });
   };
 
   return (
@@ -132,9 +138,9 @@ const EditSesiModal = ({
                         isLoading={isLoadingDetail}
                         label="PIC"
                         placeholder="Pilih PIC"
-                        selectedKeys={field.value ? [field.value] : []}
                       >
                         {[
+                          { value: "", label: "-" },
                           { value: "MC", label: "MC" },
                           ...(instrukturName
                             ? [
