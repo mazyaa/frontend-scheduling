@@ -19,6 +19,7 @@ interface PropTypes {
   onUpload: (files: FileList) => void;
   onDelete: () => void;
   preview?: string;
+  accept?: string;
 }
 
 const InputFile = (props: PropTypes) => {
@@ -34,6 +35,7 @@ const InputFile = (props: PropTypes) => {
     onDelete,
     isInvalid,
     preview,
+    accept,
   } = props;
   const inputRef = useRef<HTMLInputElement | null>(null); // for accesing the input element like getElementById in vanilla js
   const drop = useRef<HTMLLabelElement>(null); // for accesing the label element (drop zone area) like getElementById in vanilla js
@@ -96,26 +98,33 @@ const InputFile = (props: PropTypes) => {
         )}
         htmlFor={`dropzone-file-${dropZoneId}`}
       >
-        {preview &&
-          preview.startsWith("http") && ( // render this component if preview image is available and is a valid URL
-            <div className="relative flex flex-col items-center justify-center p-5">
-              <div className="mb-2 w-1/2">
+        {preview && (
+          <div className="relative flex w-full flex-col items-center justify-center p-5">
+            <div className="mb-2 flex w-1/2 flex-col items-center justify-center">
+              {preview.startsWith("http") ||
+              preview.startsWith("data:") ||
+              preview.startsWith("blob:") ? (
                 <Image fill alt="image" className="!relative" src={preview} />
-                <Button
-                  isIconOnly
-                  className="absolute right-2 top-2 h-9 w-9 items-center justify-center rounded bg-danger-100"
-                  disabled={isDeleting}
-                  onPress={onDelete}
-                >
-                  {isDeleting ? (
-                    <Spinner color="danger" size="sm" />
-                  ) : (
-                    <CiTrash className="h-5 w-5 text-danger-500" />
-                  )}
-                </Button>
-              </div>
+              ) : (
+                <div className="flex w-full items-center justify-center rounded-lg bg-gray-200 p-4 text-center text-sm font-medium text-gray-700 break-all">
+                  {preview}
+                </div>
+              )}
+              <Button
+                isIconOnly
+                className="absolute right-2 top-2 h-9 w-9 items-center justify-center rounded bg-danger-100"
+                disabled={isDeleting}
+                onPress={onDelete}
+              >
+                {isDeleting ? (
+                  <Spinner color="danger" size="sm" />
+                ) : (
+                  <CiTrash className="h-5 w-5 text-danger-500" />
+                )}
+              </Button>
             </div>
-          )}
+          </div>
+        )}
 
         {!preview &&
           !isUploading && ( // render this component if preview image is not available and isUploading is false
@@ -137,9 +146,9 @@ const InputFile = (props: PropTypes) => {
 
         <input
           ref={inputRef} // set reference to the input element (use ref like getElementById in vanilla js) so inputRef.current === the input element
-          accept="image/*"
+          accept={accept || "image/*"}
           className="hidden"
-          disabled={preview !== ""}
+          disabled={preview !== undefined && preview !== ""}
           id={`dropzone-file-${dropZoneId}`}
           name={name}
           type="file"

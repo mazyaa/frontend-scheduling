@@ -9,4 +9,6 @@ export const endpoint = {
   SESSIONSCHEDULE: "/session-detail-schedule",
   CREDENTIAL: "/credential",
   SETPASSWORD: "/set-password",
+  PARTICIPANT_IMPORT: "/participant-import",
+  PARTICIPANT: "/participant",
 };
