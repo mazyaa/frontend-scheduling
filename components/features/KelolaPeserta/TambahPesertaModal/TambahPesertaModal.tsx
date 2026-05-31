@@ -13,8 +13,11 @@ import { Input } from "@heroui/input";
 import { Button } from "@heroui/button";
 import { Spinner } from "@heroui/spinner";
 import { Select, SelectItem } from "@heroui/select";
+import { CiCircleInfo } from "react-icons/ci";
 
 import useTambahPesertaModal from "./useTambahPesertaModal";
+
+import InputFile from "@/components/ui/InputFile";
 
 interface PropTypes {
   isOpen: boolean;
@@ -36,6 +39,17 @@ const TambahPesertaModal = (props: PropTypes) => {
     scheduleData,
     isLoadingSchedules,
     reset,
+    handleUploadFile,
+    handleDeleteFile,
+    isPendingMutateUploadFile,
+    isPendingMutateDeleteFile,
+    watchFileCv,
+    watchFileIjazah,
+    watchFileSuratRekomendasi,
+    watchFileKtp,
+    watchFileFoto,
+    watchFileBuktiBayar,
+    watchFileBuktiFollow,
   } = useTambahPesertaModal();
 
   useEffect(() => {
@@ -71,10 +85,10 @@ const TambahPesertaModal = (props: PropTypes) => {
             <>
               <ModalHeader>
                 <div className="flex flex-col gap-1">
-                  <h2 className="text-lg font-semibold text-slate-800">
+                  <h2 className="text-lg font-semibold text-brand">
                     Tambah Peserta
                   </h2>
-                  <p className="text-sm font-normal text-slate-500">
+                  <p className="text-sm font-normal text-brand">
                     Isi form di bawah ini untuk menambahkan peserta baru
                   </p>
                 </div>
@@ -146,7 +160,7 @@ const TambahPesertaModal = (props: PropTypes) => {
                         isInvalid={!!errors.instansi}
                         label="Instansi"
                         labelPlacement="outside"
-                        placeholder="Instansi Peserta (opsional)"
+                        placeholder="Instansi Peserta"
                         type="text"
                         value={field.value || ""}
                         variant="bordered"
@@ -176,11 +190,263 @@ const TambahPesertaModal = (props: PropTypes) => {
                         {Array.isArray(scheduleData)
                           ? scheduleData.map((sked: any) => (
                               <SelectItem key={sked.id}>
-                                {`${sked.name} - ${sked.status}`}
+                                {`${sked.training.namaTraining} - ${new Date(
+                                  sked.startDate,
+                                ).toLocaleDateString("id-ID", {
+                                  day: "2-digit",
+                                  month: "short",
+                                  year: "numeric",
+                                })}`}
                               </SelectItem>
                             ))
                           : []}
                       </Select>
+                    )}
+                  />
+
+                  {/* File Inputs */}
+                  <Controller
+                    control={control}
+                    name="fileCv"
+                    render={({ field: { onChange, ...field } }) => (
+                      <InputFile
+                        {...field}
+                        isDropable
+                        errorMessage={errors.fileCv?.message}
+                        isDeleting={isPendingMutateDeleteFile}
+                        isInvalid={!!errors.fileCv}
+                        isUploading={isPendingMutateUploadFile}
+                        label={
+                          <div className="flex flex-col gap-0.5 mb-1">
+                            <div className="flex items-center gap-1 text-[11px] text-gray-500">
+                              <CiCircleInfo className="w-3 h-3" />
+                              <span>
+                                File harus berupa gambar (JPG, PNG, dll)
+                              </span>
+                            </div>
+                            <p className="font-bold text-sm my-2">File CV</p>
+                          </div>
+                        }
+                        preview={
+                          typeof watchFileCv === "string" ? watchFileCv : ""
+                        }
+                        onDelete={() => handleDeleteFile(watchFileCv, onChange)}
+                        onUpload={(files) => handleUploadFile(files, onChange)}
+                      />
+                    )}
+                  />
+
+                  <Controller
+                    control={control}
+                    name="fileIjazah"
+                    render={({ field: { onChange, ...field } }) => (
+                      <InputFile
+                        {...field}
+                        isDropable
+                        errorMessage={errors.fileIjazah?.message}
+                        isDeleting={isPendingMutateDeleteFile}
+                        isInvalid={!!errors.fileIjazah}
+                        isUploading={isPendingMutateUploadFile}
+                        label={
+                          <div className="flex flex-col gap-0.5 mb-1">
+                            <div className="flex items-center gap-1 text-[11px] text-gray-500">
+                              <CiCircleInfo className="w-3 h-3" />
+                              <span>
+                                File harus berupa gambar (JPG, PNG, dll)
+                              </span>
+                            </div>
+                            <p className="font-bold text-sm my-2">
+                              File Ijazah
+                            </p>
+                          </div>
+                        }
+                        preview={
+                          typeof watchFileIjazah === "string"
+                            ? watchFileIjazah
+                            : ""
+                        }
+                        onDelete={() =>
+                          handleDeleteFile(watchFileIjazah, onChange)
+                        }
+                        onUpload={(files) => handleUploadFile(files, onChange)}
+                      />
+                    )}
+                  />
+
+                  <Controller
+                    control={control}
+                    name="fileSuratRekomendasi"
+                    render={({ field: { onChange, ...field } }) => (
+                      <InputFile
+                        {...field}
+                        isDropable
+                        errorMessage={errors.fileSuratRekomendasi?.message}
+                        isDeleting={isPendingMutateDeleteFile}
+                        isInvalid={!!errors.fileSuratRekomendasi}
+                        isUploading={isPendingMutateUploadFile}
+                        label={
+                          <div className="flex flex-col gap-0.5 mb-1">
+                            <div className="flex items-center gap-1 text-[11px] text-gray-500">
+                              <CiCircleInfo className="w-3 h-3" />
+                              <span>
+                                File harus berupa gambar (JPG, PNG, dll)
+                              </span>
+                            </div>
+                            <p className="font-bold text-sm my-2">
+                              File Surat Rekomendasi
+                            </p>
+                          </div>
+                        }
+                        preview={
+                          typeof watchFileSuratRekomendasi === "string"
+                            ? watchFileSuratRekomendasi
+                            : ""
+                        }
+                        onDelete={() =>
+                          handleDeleteFile(watchFileSuratRekomendasi, onChange)
+                        }
+                        onUpload={(files) => handleUploadFile(files, onChange)}
+                      />
+                    )}
+                  />
+
+                  <Controller
+                    control={control}
+                    name="fileKtp"
+                    render={({ field: { onChange, ...field } }) => (
+                      <InputFile
+                        {...field}
+                        isDropable
+                        errorMessage={errors.fileKtp?.message}
+                        isDeleting={isPendingMutateDeleteFile}
+                        isInvalid={!!errors.fileKtp}
+                        isUploading={isPendingMutateUploadFile}
+                        label={
+                          <div className="flex flex-col gap-0.5 mb-1">
+                            <div className="flex items-center gap-1 text-[11px] text-gray-500">
+                              <CiCircleInfo className="w-3 h-3" />
+                              <span>
+                                File harus berupa gambar (JPG, PNG, dll)
+                              </span>
+                            </div>
+                            <p className="font-bold text-sm my-2">File KTP</p>
+                          </div>
+                        }
+                        preview={
+                          typeof watchFileKtp === "string" ? watchFileKtp : ""
+                        }
+                        onDelete={() =>
+                          handleDeleteFile(watchFileKtp, onChange)
+                        }
+                        onUpload={(files) => handleUploadFile(files, onChange)}
+                      />
+                    )}
+                  />
+
+                  <Controller
+                    control={control}
+                    name="fileFoto"
+                    render={({ field: { onChange, ...field } }) => (
+                      <InputFile
+                        {...field}
+                        isDropable
+                        errorMessage={errors.fileFoto?.message}
+                        isDeleting={isPendingMutateDeleteFile}
+                        isInvalid={!!errors.fileFoto}
+                        isUploading={isPendingMutateUploadFile}
+                        label={
+                          <div className="flex flex-col gap-0.5 mb-1">
+                            <div className="flex items-center gap-1 text-[11px] text-gray-500">
+                              <CiCircleInfo className="w-3 h-3" />
+                              <span>
+                                File harus berupa gambar (JPG, PNG, dll)
+                              </span>
+                            </div>
+                            <p className="font-bold text-sm my-2">File Foto</p>
+                          </div>
+                        }
+                        preview={
+                          typeof watchFileFoto === "string" ? watchFileFoto : ""
+                        }
+                        onDelete={() =>
+                          handleDeleteFile(watchFileFoto, onChange)
+                        }
+                        onUpload={(files) => handleUploadFile(files, onChange)}
+                      />
+                    )}
+                  />
+
+                  <Controller
+                    control={control}
+                    name="fileBuktiBayar"
+                    render={({ field: { onChange, ...field } }) => (
+                      <InputFile
+                        {...field}
+                        isDropable
+                        errorMessage={errors.fileBuktiBayar?.message}
+                        isDeleting={isPendingMutateDeleteFile}
+                        isInvalid={!!errors.fileBuktiBayar}
+                        isUploading={isPendingMutateUploadFile}
+                        label={
+                          <div className="flex flex-col gap-0.5 mb-1">
+                            <div className="flex items-center gap-1 text-[11px] text-gray-500">
+                              <CiCircleInfo className="w-3 h-3" />
+                              <span>
+                                File harus berupa gambar (JPG, PNG, dll)
+                              </span>
+                            </div>
+                            <p className="font-bold text-sm my-2">
+                              File Bukti Bayar
+                            </p>
+                          </div>
+                        }
+                        preview={
+                          typeof watchFileBuktiBayar === "string"
+                            ? watchFileBuktiBayar
+                            : ""
+                        }
+                        onDelete={() =>
+                          handleDeleteFile(watchFileBuktiBayar, onChange)
+                        }
+                        onUpload={(files) => handleUploadFile(files, onChange)}
+                      />
+                    )}
+                  />
+
+                  <Controller
+                    control={control}
+                    name="fileBuktiFollow"
+                    render={({ field: { onChange, ...field } }) => (
+                      <InputFile
+                        {...field}
+                        isDropable
+                        errorMessage={errors.fileBuktiFollow?.message}
+                        isDeleting={isPendingMutateDeleteFile}
+                        isInvalid={!!errors.fileBuktiFollow}
+                        isUploading={isPendingMutateUploadFile}
+                        label={
+                          <div className="flex flex-col gap-0.5 mb-1">
+                            <div className="flex items-center gap-1 text-[11px] text-gray-500">
+                              <CiCircleInfo className="w-3 h-3" />
+                              <span>
+                                File harus berupa gambar (JPG, PNG, dll)
+                              </span>
+                            </div>
+                            <p className="font-bold text-sm my-2">
+                              File Bukti Follow
+                            </p>
+                          </div>
+                        }
+                        preview={
+                          typeof watchFileBuktiFollow === "string"
+                            ? watchFileBuktiFollow
+                            : ""
+                        }
+                        onDelete={() =>
+                          handleDeleteFile(watchFileBuktiFollow, onChange)
+                        }
+                        onUpload={(files) => handleUploadFile(files, onChange)}
+                      />
                     )}
                   />
                 </form>
@@ -196,8 +462,7 @@ const TambahPesertaModal = (props: PropTypes) => {
                   Batal
                 </Button>
                 <Button
-                  className="w-32"
-                  color="primary"
+                  className="bg-brand text-white hover:bg-brand/90"
                   isDisabled={isPendingMutateAddPeserta}
                   onPress={() =>
                     handleSubmitForm((data) => handleAddPeserta(data as any))()
@@ -206,7 +471,7 @@ const TambahPesertaModal = (props: PropTypes) => {
                   {isPendingMutateAddPeserta ? (
                     <Spinner color="white" size="sm" />
                   ) : (
-                    "Tambah"
+                    "Tambah Peserta"
                   )}
                 </Button>
               </ModalFooter>

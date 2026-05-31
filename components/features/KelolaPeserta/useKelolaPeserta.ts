@@ -30,7 +30,7 @@ const useKelolaPeserta = () => {
     const data = Array.isArray(rawData)
       ? rawData.map((d: any) => ({
           ...d,
-          image: d.image || "/Images/general/user.png", // inject default image
+          image: d.profilPeserta?.fileFoto || d.image || "/Images/general/user.png", // inject default image
         }))
       : [];
 

@@ -65,12 +65,14 @@ const KelolaSesiJadwal = () => {
           let bgClass = "";
 
           if (itemSesi.pic?.toLowerCase().includes("instruktur")) {
-            picName =
-              itemSesi.detailJadwalTraining?.instruktur?.name || picName;
+            picName = itemSesi.detailJadwalTraining?.instruktur?.name;
             bgClass = "bg-blue-500 text-white px-2 py-1 rounded-md";
           } else if (itemSesi.pic?.toLowerCase().includes("asesor")) {
-            picName = itemSesi.detailJadwalTraining?.asesor?.name || picName;
+            picName = itemSesi.detailJadwalTraining?.asesor?.name;
             bgClass = "bg-green-500 text-white px-2 py-1 rounded-md";
+          } else {
+            picName = itemSesi.pic || "-";
+            bgClass = "bg-gray-500 text-white px-2 py-1 rounded-md";
           }
 
           return (

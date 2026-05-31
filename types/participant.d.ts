@@ -1,10 +1,6 @@
-export interface IParticipant {
+export interface IProfilPeserta {
   id: string;
-  name: string;
-  email: string;
-  noWa: string;
-  password?: string | null;
-  keahlian?: string | null;
+  userId: string;
   instansi?: string | null;
   fileCv?: string | null;
   fileIjazah?: string | null;
@@ -13,7 +9,21 @@ export interface IParticipant {
   fileFoto?: string | null;
   fileBuktiBayar?: string | null;
   fileBuktiFollow?: string | null;
+  createdAt?: string | Date;
+  updatedAt?: string | Date;
+}
+
+export interface IParticipant {
+  id: string;
+  name: string;
+  image?: string | null;
+  email: string;
+  noWa: string;
+  role?: string;
+  keahlian?: string | null;
+  password?: string | null;
   jadwalTrainingId?: string;
+  profilPeserta?: IProfilPeserta;
   createdAt?: Date | string;
   updatedAt?: Date | string;
 }

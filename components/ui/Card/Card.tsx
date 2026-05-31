@@ -236,8 +236,20 @@ const CardTable = (props: Proptypes) => {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
           {data.map((item) => {
-            const rawImageSrc =
+            let rawImageSrc =
               typeof item.image === "string" ? item.image.trim() : "";
+
+            // Convert google drive open?id= or file/d/... to direct view link
+            if (rawImageSrc.includes("drive.google.com")) {
+              const matchId =
+                rawImageSrc.match(/id=([^&]+)/) ||
+                rawImageSrc.match(/\/d\/([^/]+)/); // match both id= and /d/ patterns
+
+              if (matchId && matchId[1]) {
+                rawImageSrc = `https://lh3.googleusercontent.com/d/${matchId[1]}=w1000`;
+              }
+            }
+
             const imageSrc =
               rawImageSrc &&
               (/^(https?:\/\/)/.test(rawImageSrc) ||
@@ -245,7 +257,7 @@ const CardTable = (props: Proptypes) => {
                 rawImageSrc.startsWith("data:image/") ||
                 rawImageSrc.startsWith("blob:"))
                 ? rawImageSrc
-                : "/images/default.png";
+                : "/Images/general/user.png";
 
             return (
               <Card
@@ -254,13 +266,18 @@ const CardTable = (props: Proptypes) => {
               >
                 {/* Image */}
                 <CardHeader className="p-0 relative">
-                  <div className="relative w-full h-100 overflow-hidden">
+                  <div className="relative w-full h-100 overflow-hidden bg-slate-100 flex items-center justify-center">
                     <Image
                       fill
                       alt="image"
                       className="p-2 object-cover object-top rounded-2xl hover:scale-105 transition duration-500"
                       sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
                       src={imageSrc}
+                      unoptimized={imageSrc.includes("google")}
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src =
+                          "/Images/general/user.png";
+                      }}
                     />
                   </div>
                 </CardHeader>

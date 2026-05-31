@@ -106,8 +106,14 @@ const InputFile = (props: PropTypes) => {
               preview.startsWith("blob:") ? (
                 <Image fill alt="image" className="!relative" src={preview} />
               ) : (
-                <div className="flex w-full items-center justify-center rounded-lg bg-gray-200 p-4 text-center text-sm font-medium text-gray-700 break-all">
-                  {preview}
+                <div className="flex flex-col w-full items-center justify-center rounded-lg bg-gray-200 p-4 text-center text-sm font-medium text-gray-700 break-all">
+                  <span className="mb-2">{preview}</span>
+                  <Image 
+                    alt="Doc Icon" 
+                    height={30} 
+                    src="/Images/general/docIcon.png" 
+                    width={30} 
+                  />
                 </div>
               )}
               <Button

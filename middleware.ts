@@ -56,8 +56,26 @@ export const middleware = async (request: NextRequest) => {
   if (pathname === "/direktur") {
     return NextResponse.redirect(new URL("/direktur/dashboard", request.url));
   }
+
+  if (pathname.startsWith("/peserta")) {
+    if (!token || token.role !== "peserta") {
+      const url = new URL("/login", request.url);
+      url.searchParams.set("callbackUrl", request.url);
+      url.searchParams.set("error", "unauthorized");
+      return NextResponse.redirect(url);
+    }
+  }
+
+  if (pathname.startsWith("/kelola-materi")) {
+    if (!token || token.role !== "instruktur") {
+      const url = new URL("/login", request.url);
+      url.searchParams.set("callbackUrl", request.url);
+      url.searchParams.set("error", "unauthorized");
+      return NextResponse.redirect(url);
+    }
+  }
 };
 
 export const config = {
-  matcher: ["/admin/:path*", "/direktur/:path*", "/login"],
+  matcher: ["/admin/:path*", "/direktur/:path*", "/peserta/:path*", "/kelola-materi/:path*", "/login"],
 };

@@ -11,4 +11,5 @@ export const endpoint = {
   SETPASSWORD: "/set-password",
   PARTICIPANT_IMPORT: "/participant-import",
   PARTICIPANT: "/participant",
+  MATERI: "/materi",
 };

@@ -24,6 +24,30 @@ const DetailRow = ({
   </div>
 );
 
+const DocumentLink = ({
+  label,
+  url,
+}: {
+  label: string;
+  url?: string | null;
+}) => (
+  <div className="flex flex-col gap-1">
+    <span className="text-xs text-slate-500">{label}</span>
+    {url ? (
+      <a
+        className="text-sm font-medium text-brand hover:underline truncate"
+        href={url}
+        rel="noreferrer"
+        target="_blank"
+      >
+        Lihat Dokumen
+      </a>
+    ) : (
+      <span className="text-sm font-medium text-slate-800">Tidak ada</span>
+    )}
+  </div>
+);
+
 const DetailPesertaModal = ({
   isOpen,
   onOpenChange,
@@ -55,8 +79,10 @@ const DetailPesertaModal = ({
                 <DetailRow label="Nama" value={selectedData?.name} />
                 <DetailRow label="Email" value={selectedData?.email} />
                 <DetailRow label="No WhatsApp" value={selectedData?.noWa} />
-                <DetailRow label="Instansi" value={selectedData?.instansi} />
-                <DetailRow label="Keahlian" value={selectedData?.keahlian} />
+                <DetailRow
+                  label="Instansi"
+                  value={selectedData?.profilPeserta?.instansi}
+                />
 
                 {/* Additional fields that might be useful */}
                 <DetailRow
@@ -78,25 +104,33 @@ const DetailPesertaModal = ({
                   Dokumen
                 </h3>
                 <div className="grid grid-cols-2 gap-4">
-                  <DetailRow
+                  <DocumentLink
                     label="File CV"
-                    value={selectedData?.fileCv ? "Tersedia" : "Tidak ada"}
+                    url={selectedData?.profilPeserta?.fileCv}
                   />
-                  <DetailRow
+                  <DocumentLink
                     label="File Ijazah"
-                    value={selectedData?.fileIjazah ? "Tersedia" : "Tidak ada"}
+                    url={selectedData?.profilPeserta?.fileIjazah}
                   />
-                  <DetailRow
+                  <DocumentLink
                     label="Surat Rekomendasi"
-                    value={
-                      selectedData?.fileSuratRekomendasi
-                        ? "Tersedia"
-                        : "Tidak ada"
-                    }
+                    url={selectedData?.profilPeserta?.fileSuratRekomendasi}
                   />
-                  <DetailRow
+                  <DocumentLink
                     label="KTP"
-                    value={selectedData?.fileKtp ? "Tersedia" : "Tidak ada"}
+                    url={selectedData?.profilPeserta?.fileKtp}
+                  />
+                  <DocumentLink
+                    label="Foto"
+                    url={selectedData?.profilPeserta?.fileFoto}
+                  />
+                  <DocumentLink
+                    label="Bukti Bayar"
+                    url={selectedData?.profilPeserta?.fileBuktiBayar}
+                  />
+                  <DocumentLink
+                    label="Bukti Follow"
+                    url={selectedData?.profilPeserta?.fileBuktiFollow}
                   />
                 </div>
               </div>
