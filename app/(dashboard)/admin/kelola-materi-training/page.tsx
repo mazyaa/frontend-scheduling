@@ -1,5 +1,11 @@
+import KelolaMateri from "@/components/features/KelolaMateri/KelolaMateri";
+
 const KelolaMateriTrainingPage = () => {
-  return null;
+  return (
+    <div>
+      <KelolaMateri />
+    </div>
+  );
 };
 
 export default KelolaMateriTrainingPage;

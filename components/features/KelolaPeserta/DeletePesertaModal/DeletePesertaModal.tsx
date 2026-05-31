@@ -58,16 +58,16 @@ const DeletePesertaModal = (props: PropTypes) => {
             <>
               <ModalHeader>
                 <div className="flex flex-col gap-1">
-                  <h2 className="text-lg font-semibold text-slate-800">
+                  <h2 className="text-lg font-semibold text-brand">
                     Hapus Peserta
                   </h2>
                 </div>
               </ModalHeader>
 
               <ModalBody>
-                <p className="text-sm font-normal text-slate-500">
+                <p className="text-sm font-normal text-brand">
                   Apakah Anda yakin ingin menghapus peserta{" "}
-                  <span className="font-semibold text-slate-800">
+                  <span className="font-semibold text-slate-900">
                     {selectedData?.name}
                   </span>
                   ? Data yang sudah dihapus tidak dapat dikembalikan.

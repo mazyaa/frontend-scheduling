@@ -7,9 +7,11 @@ import { useSession } from "next-auth/react";
 import { useDisclosure } from "@heroui/modal";
 import { cn } from "@heroui/theme";
 import { FiEdit2, FiEye, FiTrash2, FiUploadCloud } from "react-icons/fi";
+import { IoIosSend } from "react-icons/io";
 
 import { LIST_KELOLA_PESERTA } from "./kelolaPeserta.constants";
 import useKelolaPeserta from "./useKelolaPeserta";
+import useKirimKredensial from "./useKirimKredensial";
 import ImportPesertaModal from "./ImportPesertaModal";
 import TambahPesertaModal from "./TambahPesertaModal";
 import EditPesertaModal from "./EditPesertaModal";
@@ -36,6 +38,8 @@ const KelolaPeserta = () => {
     setSelectedData,
   } = useKelolaPeserta();
 
+  const { handleKirimKredensial } = useKirimKredensial();
+
   const { setUrl } = useChangeUrl();
 
   const importPesertaModal = useDisclosure();
@@ -55,7 +59,7 @@ const KelolaPeserta = () => {
       switch (columnKey) {
         case "aksi":
           return (
-            <div className="flex items-center flex-row justify-around w-full gap-2">
+            <div className="grid lg:grid-cols-2 grid-cols-1 gap-5 w-full max-w-[300px] mx-auto">
               <Button
                 className={cn(
                   "h-8 px-3 rounded-lg font-medium text-xs",
@@ -76,6 +80,29 @@ const KelolaPeserta = () => {
               >
                 <FiEye size={13} />
                 Detail
+              </Button>
+
+              <Button
+                className={cn(
+                  "h-8 px-3 rounded-lg font-medium text-xs",
+                  "flex items-center gap-1.5",
+                  "bg-orange-50 hover:bg-orange-100",
+                  "text-orange-600 hover:text-orange-700",
+                  "border border-orange-100 hover:border-orange-200",
+                  "transition-all duration-200",
+                  "hover:scale-105 active:scale-95",
+                  "shadow-sm hover:shadow-md",
+                )}
+                size="sm"
+                variant="flat"
+                onPress={() => {
+                  if (itemPeserta.id) {
+                    handleKirimKredensial(itemPeserta.id as string);
+                  }
+                }}
+              >
+                <IoIosSend size={13} />
+                Kirim Kredensial
               </Button>
 
               <Button
@@ -133,6 +160,7 @@ const KelolaPeserta = () => {
       detailPesertaModal,
       editPesertaModal,
       deletePesertaModal,
+      handleKirimKredensial,
     ],
   );
 
