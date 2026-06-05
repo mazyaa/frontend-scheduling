@@ -12,4 +12,12 @@ export const endpoint = {
   PARTICIPANT_IMPORT: "/participant-import",
   PARTICIPANT: "/participant",
   MATERI: "/materi",
+  ASSESMENT: "/assesment",
+  E_SERTIFIKAT: "/e-sertifikat",
+  LAPORAN: "/laporan",
+  DASHBOARD: "/dashboard",
+  PROFILE: "/profile",
+  SERTIFIKAT_VERIFY: "/sertifikat",
+  MY_TRAINING: "/my-training",
+  PENILAIAN: "/penilaian",
 };

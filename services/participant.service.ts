@@ -8,6 +8,8 @@ export const participantServices = {
     instance.get(`${endpoint.PARTICIPANT}?${params}`),
   getParticipantById: (id: string) =>
     instance.get(`${endpoint.PARTICIPANT}/${id}`),
+  getParticipantBySchedule: (id: string, params?: string) =>
+    instance.get(`${endpoint.PARTICIPANT}/schedule/${id}?${params || ""}`),
   createParticipant: (payload: Omit<IParticipant, "id">) =>
     instance.post(`${endpoint.PARTICIPANT}`, payload),
   updateParticipant: (id: string, payload: Partial<Omit<IParticipant, "id">>) =>

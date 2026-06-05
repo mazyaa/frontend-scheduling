@@ -21,6 +21,7 @@ import { LIMIT_LISTS } from "@/constants/list.constats";
 interface PropTypes {
   buttonTopContentLabel?: string;
   columns: Record<string, unknown>[];
+  customTopContent?: React.ReactNode;
   data: Record<string, unknown>[];
   emptyContent: string;
   isLoading?: boolean;
@@ -37,6 +38,7 @@ const DataTable = (props: PropTypes) => {
   const {
     buttonTopContentLabel,
     columns,
+    customTopContent,
     data,
     emptyContent,
     isLoading,
@@ -58,28 +60,33 @@ const DataTable = (props: PropTypes) => {
   const topContent = useMemo(() => {
     return (
       <div className="justify-between flex flex-col-reverse items-start gap-y-4 lg:flex-row lg:items-center lg:justify-between">
-        {/* top content input & button*/}
-        <Input
-          isClearable // Enable the clear button
-          className="max-w-64 lg:max-w-80"
-          placeholder={placeholderTopContent}
-          startContent={<CiSearch />}
-          onChange={handleChangeSearch}
-          onClear={handleClearSearch}
-        />
+        <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+          <Input
+            isClearable // Enable the clear button
+            className="max-w-64 lg:max-w-80"
+            placeholder={placeholderTopContent}
+            startContent={<CiSearch />}
+            onChange={handleChangeSearch}
+            onClear={handleClearSearch}
+          />
+        </div>
 
-        {buttonTopContentLabel && (
-          <Button
-            className="bg-brand text-white"
-            onPress={onClickButtonTopContent}
-          >
-            {buttonTopContentLabel}
-          </Button>
-        )}
+        <div className="flex flex-col sm:flex-row gap-2 items-center w-full sm:w-auto">
+          {customTopContent}
+          {buttonTopContentLabel && (
+            <Button
+              className="bg-brand text-white"
+              onPress={onClickButtonTopContent}
+            >
+              {buttonTopContentLabel}
+            </Button>
+          )}
+        </div>
       </div>
     );
   }, [
     buttonTopContentLabel,
+    customTopContent,
     handleChangeSearch,
     handleClearSearch,
     onClickButtonTopContent,
@@ -158,15 +165,23 @@ const DataTable = (props: PropTypes) => {
         }
       >
         {/* Table Row */}
-        {(item) => (
-          <TableRow key={item.id as Key}>
-            {(columnKey) => (
-              <TableCell className="text-center">
-                {renderCell(item, columnKey)}
-              </TableCell>
-            )}
-          </TableRow>
-        )}
+        {(item, index) => {
+          const itemId = (item as any)?.id;
+          const itemKey = itemId || `row-${index}`;
+
+          return (
+            <TableRow key={itemKey}>
+              {(columnKey) => (
+                <TableCell
+                  key={`cell-${itemKey}-${columnKey}`}
+                  className="text-center"
+                >
+                  {renderCell(item, columnKey)}
+                </TableCell>
+              )}
+            </TableRow>
+          );
+        }}
       </TableBody>
     </Table>
   );

@@ -39,7 +39,7 @@ const Navbar = () => {
             : "0 4px 20px rgba(0,0,0,0.04)",
           height: scrolled ? "64px" : "72px",
         }}
-        className="sticky top-0 w-full backdrop-blur-md z-50"
+        className="sticky top-0 w-full backdrop-blur-md z-[99999]"
         initial={false}
         transition={{ duration: 0.3, ease: "easeOut" }}
       >

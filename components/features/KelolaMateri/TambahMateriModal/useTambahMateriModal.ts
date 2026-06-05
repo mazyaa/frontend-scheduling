@@ -13,7 +13,9 @@ import { ToasterContext } from "@/context/ToasterContext";
 
 const schema = yup.object().shape({
   jadwalTrainingId: yup.string().required("Jadwal Training wajib dipilih"),
-  detailJadwalTrainingId: yup.string().required("Detail Hari Training wajib dipilih"),
+  detailJadwalTrainingId: yup
+    .string()
+    .required("Detail Hari Training wajib dipilih"),
   judul: yup.string().required("Judul wajib diisi"),
 });
 
@@ -41,25 +43,35 @@ const useTambahMateriModal = () => {
 
   const selectedJadwalTrainingId = watch("jadwalTrainingId");
 
-  const { data: dataJadwalTraining, isLoading: isLoadingJadwalTraining } = useQuery({
-    queryKey: ["JadwalTrainingOptions"],
-    queryFn: async () => {
-      const response = await kelolaJadwalServices.getAllSchedules("limit=100");
-      return response.data.data;
-    },
-  });
+  const { data: dataJadwalTraining, isLoading: isLoadingJadwalTraining } =
+    useQuery({
+      queryKey: ["JadwalTrainingOptions"],
+      queryFn: async () => {
+        const response =
+          await kelolaJadwalServices.getAllSchedules("limit=100");
 
-  const { data: dataDetailJadwal, isLoading: isLoadingDetailJadwal } = useQuery({
-    queryKey: ["DetailJadwalOptions", selectedJadwalTrainingId],
-    queryFn: async () => {
-      const response = await kelolaDetailJadwalServices.getAllDetailJadwal(selectedJadwalTrainingId, "limit=100");
-      return response.data.data;
+        return response.data.data;
+      },
+    });
+
+  const { data: dataDetailJadwal, isLoading: isLoadingDetailJadwal } = useQuery(
+    {
+      queryKey: ["DetailJadwalOptions", selectedJadwalTrainingId],
+      queryFn: async () => {
+        const response = await kelolaDetailJadwalServices.getAllDetailJadwal(
+          selectedJadwalTrainingId,
+          "limit=100",
+        );
+
+        return response.data.data;
+      },
+      enabled: !!selectedJadwalTrainingId,
     },
-    enabled: !!selectedJadwalTrainingId,
-  });
+  );
 
   const uploadFile = async (payload: IFormTambahMateri) => {
     const formData = new FormData();
+
     formData.append("detailJadwalTrainingId", payload.detailJadwalTrainingId);
     formData.append("judul", payload.judul);
     if (fileToUpload) {

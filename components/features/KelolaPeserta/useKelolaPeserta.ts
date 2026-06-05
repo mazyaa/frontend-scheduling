@@ -2,11 +2,12 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useSession } from "next-auth/react";
 
 import useChangeUrl from "@/hooks/useChangeUrl";
 import { participantServices } from "@/services/participant.service";
+import { kelolaJadwalServices } from "@/services/kelolaJadwal.service";
 import { IParticipant } from "@/types/participant";
 
 const useKelolaPeserta = () => {
@@ -15,6 +16,8 @@ const useKelolaPeserta = () => {
   const token = session?.accessToken;
   const [selectedId, setSelectedId] = useState<string>("");
   const [selectedData, setSelectedData] = useState<IParticipant | null>(null);
+  const [selectedJadwalTrainingId, setSelectedJadwalTrainingId] =
+    useState<string>("");
   const { currentLimit, currentPage, currentSearch } = useChangeUrl();
 
   const getPeserta = async () => {
@@ -30,7 +33,8 @@ const useKelolaPeserta = () => {
     const data = Array.isArray(rawData)
       ? rawData.map((d: any) => ({
           ...d,
-          image: d.profilPeserta?.fileFoto || d.image || "/Images/general/user.png", // inject default image
+          image:
+            d.profilPeserta?.fileFoto || d.image || "/Images/general/user.png",
         }))
       : [];
 
@@ -55,6 +59,56 @@ const useKelolaPeserta = () => {
       !!token,
   });
 
+  const { data: dataFilterJadwal, isLoading: isLoadingFilterJadwal } = useQuery(
+    {
+      queryKey: ["JadwalTrainingFilter"],
+      queryFn: async () => {
+        const response =
+          await kelolaJadwalServices.getAllSchedules("limit=100&page=1");
+
+        return response.data.data;
+      },
+      enabled: pathname === "/admin/kelola-peserta" && !!token,
+    },
+  );
+
+  const enrichedParticipants = useMemo(() => {
+    const participants = dataKelolaPeserta?.data || [];
+    const schedules = dataFilterJadwal || [];
+
+    const scheduleMap: Record<string, any> = {};
+
+    schedules.forEach((s: any) => {
+      scheduleMap[s.id] = s;
+    });
+
+    return participants.map((p: IParticipant) => {
+      const trainings = p.pesertaTraining || [];
+
+      trainings.forEach((pt) => {
+        const schedule = scheduleMap[pt.jadwalTrainingId];
+
+        if (!pt.jadwalTraining.training && schedule?.training) {
+          pt.jadwalTraining.training = schedule.training;
+        }
+      });
+
+      return p;
+    });
+  }, [dataKelolaPeserta?.data, dataFilterJadwal]);
+
+  const filteredParticipants = useMemo(() => {
+    if (!selectedJadwalTrainingId) return enrichedParticipants;
+
+    return enrichedParticipants.filter((p: IParticipant) => {
+      const trainings = p.pesertaTraining || [];
+
+      return trainings.some(
+        (pt) => pt.jadwalTrainingId === selectedJadwalTrainingId,
+      );
+    });
+  }, [enrichedParticipants, selectedJadwalTrainingId]);
+
   return {
     dataKelolaPeserta,
     isLoadingKelolaPeserta,
@@ -64,6 +118,11 @@ const useKelolaPeserta = () => {
     setSelectedId,
     selectedData,
     setSelectedData,
+    selectedJadwalTrainingId,
+    setSelectedJadwalTrainingId,
+    dataFilterJadwal,
+    isLoadingFilterJadwal,
+    filteredParticipants,
   };
 };
 

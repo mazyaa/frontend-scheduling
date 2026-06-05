@@ -12,6 +12,10 @@ export const LIST_KELOLA_PESERTA = [
     label: "NO. WHATSAPP",
   },
   {
+    uid: "training",
+    label: "TRAINING DIIKUTI",
+  },
+  {
     uid: "aksi",
     label: "AKSI",
   },

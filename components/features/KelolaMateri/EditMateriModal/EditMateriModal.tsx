@@ -13,7 +13,6 @@ import { Spinner } from "@heroui/spinner";
 import { Controller } from "react-hook-form";
 import { Select, SelectItem } from "@heroui/select";
 import { Input } from "@heroui/input";
-
 import { IoInformationCircleOutline } from "react-icons/io5";
 
 import useEditMateriModal from "./useEditMateriModal";
@@ -29,7 +28,8 @@ interface PropTypes {
 }
 
 const EditMateriModal = (props: PropTypes) => {
-  const { isOpen, onOpenChange, refetchKelolaMateri, selectedId, currentData } = props;
+  const { isOpen, onOpenChange, refetchKelolaMateri, selectedId, currentData } =
+    props;
   const onCloseRef = useRef<() => void>();
 
   const {
@@ -46,9 +46,10 @@ const EditMateriModal = (props: PropTypes) => {
     fileToUpload,
     setFileToUpload,
     setValue,
+    isLoadingMateriDetail,
   } = useEditMateriModal(selectedId, currentData);
 
-  const disabledSubmit = isPendingMutateEditMateri;
+  const disabledSubmit = isPendingMutateEditMateri || isLoadingMateriDetail;
 
   useEffect(() => {
     if (isSuccessMutateEditMateri && onCloseRef.current) {
@@ -91,6 +92,7 @@ const EditMateriModal = (props: PropTypes) => {
                       variant="bordered"
                       onSelectionChange={(keys) => {
                         const selectedKey = Array.from(keys)[0] as string;
+
                         field.onChange(selectedKey);
                         setValue("detailJadwalTrainingId", "");
                       }}
@@ -102,6 +104,7 @@ const EditMateriModal = (props: PropTypes) => {
                       ) : (
                         (dataJadwalTraining || []).map((jadwal: any) => {
                           const labelText = `${jadwal.training?.namaTraining || "Tanpa Nama"} - BATCH-${jadwal.batch}`;
+
                           return (
                             <SelectItem key={jadwal.id} textValue={labelText}>
                               {labelText}
@@ -120,14 +123,15 @@ const EditMateriModal = (props: PropTypes) => {
                     <Select
                       {...field}
                       className="rounded"
-                      isDisabled={!control._formValues.jadwalTrainingId}
                       errorMessage={errors.detailJadwalTrainingId?.message}
+                      isDisabled={!control._formValues.jadwalTrainingId}
                       isInvalid={errors.detailJadwalTrainingId !== undefined}
                       label="Detail Hari Training"
                       selectedKeys={field.value ? [field.value] : []}
                       variant="bordered"
                       onSelectionChange={(keys) => {
                         const selectedKey = Array.from(keys)[0] as string;
+
                         field.onChange(selectedKey);
                       }}
                     >
@@ -138,6 +142,7 @@ const EditMateriModal = (props: PropTypes) => {
                       ) : (
                         (dataDetailJadwal || []).map((detail: any) => {
                           const labelText = `Hari ke - ${detail.hariKe}`;
+
                           return (
                             <SelectItem key={detail.id} textValue={labelText}>
                               {labelText}
@@ -166,13 +171,24 @@ const EditMateriModal = (props: PropTypes) => {
 
                 <div>
                   <div className="flex items-start gap-2 mb-3 p-3 bg-blue-50 text-blue-700 text-xs rounded-lg border border-blue-100">
-                    <IoInformationCircleOutline size={16} className="mt-0.5 shrink-0" />
-                    <p>Maksimal ukuran file adalah <strong>2 MB</strong>. Format yang diizinkan: <strong>PDF, DOC, DOCX, PPT, PPTX</strong>.</p>
+                    <IoInformationCircleOutline
+                      className="mt-0.5 shrink-0"
+                      size={16}
+                    />
+                    <p>
+                      Maksimal ukuran file adalah <strong>5 MB</strong>. Format
+                      yang diizinkan: <strong>PDF, DOC, DOCX, PPT, PPTX</strong>
+                      .
+                    </p>
                   </div>
                   <InputFile
-                    accept=".pdf,.doc,.docx,.ppt,.pptx"
                     isDropable
-                    label={<span className="text-sm text-gray-700 mb-1 block">File Materi</span>}
+                    accept=".pdf,.doc,.docx,.ppt,.pptx"
+                    label={
+                      <span className="text-sm text-gray-700 mb-1 block">
+                        File Materi
+                      </span>
+                    }
                     name="fileMateri"
                     preview={fileToUpload ? fileToUpload.name : ""}
                     onDelete={() => setFileToUpload(null)}

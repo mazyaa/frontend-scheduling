@@ -40,7 +40,7 @@ export default function GridBackground() {
         line.setAttribute("x2", x.toString());
         line.setAttribute("y2", height.toString());
         line.setAttribute("stroke", "#e5e5e5");
-        line.setAttribute("stroke-width", "1");
+        line.setAttribute("stroke-width", "0.5");
         svg.appendChild(line);
       }
 
@@ -57,7 +57,7 @@ export default function GridBackground() {
         line.setAttribute("x2", width.toString());
         line.setAttribute("y2", y.toString());
         line.setAttribute("stroke", "#e5e5e5");
-        line.setAttribute("stroke-width", "1");
+        line.setAttribute("stroke-width", "0.5");
         svg.appendChild(line);
       }
 
@@ -86,7 +86,7 @@ export default function GridBackground() {
     function animateSquares() {
       squares.forEach((rect) => {
         if (Math.random() > 0.9) {
-          rect.setAttribute("opacity", (Math.random() * 0.3).toString());
+          rect.setAttribute("opacity", (Math.random() * 0.1).toString());
         } else {
           rect.setAttribute("opacity", "0");
         }

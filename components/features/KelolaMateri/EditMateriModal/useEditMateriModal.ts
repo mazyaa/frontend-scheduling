@@ -13,7 +13,9 @@ import { ToasterContext } from "@/context/ToasterContext";
 
 const schema = yup.object().shape({
   jadwalTrainingId: yup.string().required("Jadwal Training wajib dipilih"),
-  detailJadwalTrainingId: yup.string().required("Detail Hari Training wajib dipilih"),
+  detailJadwalTrainingId: yup
+    .string()
+    .required("Detail Hari Training wajib dipilih"),
   judul: yup.string().required("Judul wajib diisi"),
 });
 
@@ -39,44 +41,60 @@ const useEditMateriModal = (selectedId: string, currentData: any[]) => {
     },
   });
 
-  // Pre-fill form when selectedId changes
+  // Fetch data materi by ID untuk mendapatkan data lengkap
+  const { data: materiDetail, isLoading: isLoadingMateriDetail } = useQuery({
+    queryKey: ["MateriDetail", selectedId],
+    queryFn: async () => {
+      const response = await materiServices.getMateriById(selectedId);
+
+      return response.data.data;
+    },
+    enabled: !!selectedId,
+  });
+
+  // Pre-fill form ketika data materi sudah di-fetch
   useEffect(() => {
-    if (selectedId && currentData) {
-      const materi = currentData.find((item) => item.id === selectedId);
-      if (materi) {
-        // Karena respons materi tidak langsung memunculkan detailJadwalTrainingId 
-        // secara mentah melainkan string detailHariTraining, kita asumsikan 
-        // judul = namaMateri, dan kita harus set nilainya.
-        // Jika data aslinya punya referensi ID, ini akan berjalan sempurna
-        setValue("judul", materi.namaMateri || "");
-        // Ini merupakan limitasi jika backend tidak mengirim ID jadwal untuk mode edit. 
-        // Akan lebih baik jika backend mengirim referensi detailJadwalTrainingId pada res get all.
-        // Untuk sekarang kita biarkan logic standar
-      }
+    if (materiDetail) {
+      setValue("judul", materiDetail.judul || "");
+      setValue("jadwalTrainingId", materiDetail.jadwalTrainingId || "");
+      setValue(
+        "detailJadwalTrainingId",
+        materiDetail.detailJadwalTrainingId || "",
+      );
     }
-  }, [selectedId, currentData, setValue]);
+  }, [materiDetail, setValue]);
 
   const selectedJadwalTrainingId = watch("jadwalTrainingId");
 
-  const { data: dataJadwalTraining, isLoading: isLoadingJadwalTraining } = useQuery({
-    queryKey: ["JadwalTrainingOptions"],
-    queryFn: async () => {
-      const response = await kelolaJadwalServices.getAllSchedules("limit=100");
-      return response.data.data;
-    },
-  });
+  const { data: dataJadwalTraining, isLoading: isLoadingJadwalTraining } =
+    useQuery({
+      queryKey: ["JadwalTrainingOptions"],
+      queryFn: async () => {
+        const response =
+          await kelolaJadwalServices.getAllSchedules("limit=100");
 
-  const { data: dataDetailJadwal, isLoading: isLoadingDetailJadwal } = useQuery({
-    queryKey: ["DetailJadwalOptions", selectedJadwalTrainingId],
-    queryFn: async () => {
-      const response = await kelolaDetailJadwalServices.getAllDetailJadwal(selectedJadwalTrainingId, "limit=100");
-      return response.data.data;
+        return response.data.data;
+      },
+    });
+
+  const { data: dataDetailJadwal, isLoading: isLoadingDetailJadwal } = useQuery(
+    {
+      queryKey: ["DetailJadwalOptions", selectedJadwalTrainingId],
+      queryFn: async () => {
+        const response = await kelolaDetailJadwalServices.getAllDetailJadwal(
+          selectedJadwalTrainingId,
+          "limit=100",
+        );
+
+        return response.data.data;
+      },
+      enabled: !!selectedJadwalTrainingId,
     },
-    enabled: !!selectedJadwalTrainingId,
-  });
+  );
 
   const uploadFile = async (payload: IFormEditMateri) => {
     const formData = new FormData();
+
     formData.append("detailJadwalTrainingId", payload.detailJadwalTrainingId);
     formData.append("judul", payload.judul);
     if (fileToUpload) {
@@ -131,6 +149,7 @@ const useEditMateriModal = (selectedId: string, currentData: any[]) => {
     fileToUpload,
     setFileToUpload,
     setValue,
+    isLoadingMateriDetail,
   };
 };
 

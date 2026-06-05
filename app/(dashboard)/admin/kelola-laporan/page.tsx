@@ -1,5 +1,7 @@
+import KelolaLaporan from "@/components/features/KelolaLaporan/KelolaLaporan";
+
 const KelolaLaporanPage = () => {
-  return null;
+  return <KelolaLaporan />;
 };
 
 export default KelolaLaporanPage;
