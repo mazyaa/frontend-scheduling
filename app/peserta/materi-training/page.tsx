@@ -1,12 +1,7 @@
 import KelolaMateriGrid from "@/components/features/KelolaMateri/KelolaMateriGrid";
 
-export const metadata = {
-  title: "Materi Training",
-  description: "Unduh materi training yang sudah Anda ikuti",
-};
-
-const PesertaMateriPage = () => {
+const PesertaMateriTrainingPage = () => {
   return <KelolaMateriGrid />;
 };
 
-export default PesertaMateriPage;
+export default PesertaMateriTrainingPage;

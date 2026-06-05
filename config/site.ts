@@ -160,6 +160,7 @@ export const siteConfig = {
             { name: "Profile Saya", href: "/asesor/profile" },
             { name: "Daftar Peserta", href: "/daftar-peserta" },
             { name: "Kelola Penilaian", href: "/asesor/kelola-penilaian" },
+            { name: "Kelola E-Sertifikat", href: "/asesor/kelola-e-sertifikat" },
             { name: "Logout", href: "/", isButton: true },
           ],
         },

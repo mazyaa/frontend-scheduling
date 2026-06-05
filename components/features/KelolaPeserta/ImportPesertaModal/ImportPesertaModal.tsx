@@ -109,7 +109,7 @@ const ImportPesertaModal = ({
       <ModalContent>
         {() => (
           <>
-            <ModalHeader className="flex flex-col gap-1">
+            <ModalHeader className="flex flex-col gap-1 text-brand">
               Import Data Peserta
             </ModalHeader>
             <ModalBody>

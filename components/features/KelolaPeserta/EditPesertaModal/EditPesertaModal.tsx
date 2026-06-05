@@ -12,7 +12,6 @@ import {
 import { Input } from "@heroui/input";
 import { Button } from "@heroui/button";
 import { Spinner } from "@heroui/spinner";
-import { Select, SelectItem } from "@heroui/select";
 import { CiCircleInfo } from "react-icons/ci";
 
 import useEditPesertaModal from "./useEditPesertaModal";
@@ -38,8 +37,6 @@ const EditPesertaModal = (props: PropTypes) => {
     handleEditPeserta,
     isPendingMutateEditPeserta,
     isSuccessMutateEditPeserta,
-    scheduleData,
-    isLoadingSchedules,
     reset,
     handleUploadFile,
     handleDeleteFile,
@@ -163,42 +160,6 @@ const EditPesertaModal = (props: PropTypes) => {
                         type="text"
                         variant="bordered"
                       />
-                    )}
-                  />
-
-                  <Controller
-                    control={control}
-                    name="jadwalTrainingId"
-                    render={({ field: { value, onChange } }) => (
-                      <Select
-                        errorMessage={errors.jadwalTrainingId?.message}
-                        isInvalid={!!errors.jadwalTrainingId}
-                        isLoading={isLoadingSchedules}
-                        label="Jadwal Training"
-                        labelPlacement="outside"
-                        placeholder="Pilih Jadwal Training"
-                        selectedKeys={value ? new Set([value]) : new Set()}
-                        variant="bordered"
-                        onSelectionChange={(keys) => {
-                          const result = Array.from(keys).join("");
-
-                          onChange(result || "");
-                        }}
-                      >
-                        {Array.isArray(scheduleData)
-                          ? scheduleData.map((sked: any) => (
-                              <SelectItem key={sked.id}>
-                                {`${sked.training?.namaTraining || ""} - ${new Date(
-                                  sked.startDate,
-                                ).toLocaleDateString("id-ID", {
-                                  day: "2-digit",
-                                  month: "short",
-                                  year: "numeric",
-                                })}`}
-                              </SelectItem>
-                            ))
-                          : []}
-                      </Select>
                     )}
                   />
 

@@ -36,7 +36,6 @@ const schema = yup.object().shape({
   fileFoto: yup.string().notRequired(),
   fileBuktiBayar: yup.string().notRequired(),
   fileBuktiFollow: yup.string().notRequired(),
-  jadwalTrainingId: yup.string().required("Jadwal Training wajib dipilih"),
 });
 
 const useEditPesertaModal = (selectedData: IParticipant | null) => {
@@ -70,7 +69,6 @@ const useEditPesertaModal = (selectedData: IParticipant | null) => {
       fileFoto: "",
       fileBuktiBayar: "",
       fileBuktiFollow: "",
-      jadwalTrainingId: "",
     },
   });
 

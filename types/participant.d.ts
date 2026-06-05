@@ -1,3 +1,27 @@
+export interface IJadwalTrainingRingkas {
+  id: string;
+  trainingId: string;
+  startDate: string;
+  duration: number;
+  meetingLink: string;
+  batch: string;
+  training?: {
+    id: string;
+    namaTraining: string;
+  };
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface IPesertaTraining {
+  id: string;
+  userId: string;
+  jadwalTrainingId: string;
+  jadwalTraining: IJadwalTrainingRingkas;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 export interface IProfilPeserta {
   id: string;
   userId: string;
@@ -24,6 +48,7 @@ export interface IParticipant {
   password?: string | null;
   jadwalTrainingId?: string;
   profilPeserta?: IProfilPeserta;
+  pesertaTraining?: IPesertaTraining[];
   createdAt?: Date | string;
   updatedAt?: Date | string;
 }

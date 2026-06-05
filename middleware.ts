@@ -60,22 +60,52 @@ export const middleware = async (request: NextRequest) => {
   if (pathname.startsWith("/peserta")) {
     if (!token || token.role !== "peserta") {
       const url = new URL("/login", request.url);
+
       url.searchParams.set("callbackUrl", request.url);
       url.searchParams.set("error", "unauthorized");
+
       return NextResponse.redirect(url);
     }
   }
 
-  if (pathname.startsWith("/kelola-materi")) {
+  if (pathname.startsWith("/instruktur")) {
     if (!token || token.role !== "instruktur") {
       const url = new URL("/login", request.url);
+
       url.searchParams.set("callbackUrl", request.url);
       url.searchParams.set("error", "unauthorized");
+
       return NextResponse.redirect(url);
     }
+  }
+
+  if (pathname === "/instruktur") {
+    return NextResponse.redirect(new URL("/instruktur/dashboard", request.url));
+  }
+
+  if (pathname.startsWith("/asesor")) {
+    if (!token || token.role !== "asesor") {
+      const url = new URL("/login", request.url);
+
+      url.searchParams.set("callbackUrl", request.url);
+      url.searchParams.set("error", "unauthorized");
+
+      return NextResponse.redirect(url);
+    }
+  }
+
+  if (pathname === "/asesor") {
+    return NextResponse.redirect(new URL("/asesor/dashboard", request.url));
   }
 };
 
 export const config = {
-  matcher: ["/admin/:path*", "/direktur/:path*", "/peserta/:path*", "/kelola-materi/:path*", "/login"],
+  matcher: [
+    "/admin/:path*",
+    "/direktur/:path*",
+    "/peserta/:path*",
+    "/instruktur/:path*",
+    "/asesor/:path*",
+    "/login",
+  ],
 };

@@ -29,7 +29,7 @@ const useKelolaMateri = () => {
       role === "peserta"
         ? await materiServices.getMyMateri(params)
         : await materiServices.getAllMateri(params);
-        
+
     const { data, pagination } = response.data;
 
     return {

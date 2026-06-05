@@ -38,29 +38,26 @@ const DeleteMateriModal = (props: PropTypes) => {
     return await materiServices.deleteMateri(selectedId);
   };
 
-  const {
-    mutate: mutateDeleteMateri,
-    isPending: isPendingMutateDeleteMateri,
-  } = useMutation({
-    mutationFn: deleteMateri,
-    onSuccess: () => {
-      setToaster({
-        title: "Berhasil",
-        type: "success",
-        message: "Materi berhasil dihapus",
-      });
-      refetchKelolaMateri();
-      setSelectedId("");
-    },
-    onError: (error) => {
-      setToaster({
-        title: "Gagal",
-        type: "error",
-        message:
-          error instanceof Error ? error.message : "Terjadi kesalahan",
-      });
-    },
-  });
+  const { mutate: mutateDeleteMateri, isPending: isPendingMutateDeleteMateri } =
+    useMutation({
+      mutationFn: deleteMateri,
+      onSuccess: () => {
+        setToaster({
+          title: "Berhasil",
+          type: "success",
+          message: "Materi berhasil dihapus",
+        });
+        refetchKelolaMateri();
+        setSelectedId("");
+      },
+      onError: (error) => {
+        setToaster({
+          title: "Gagal",
+          type: "error",
+          message: error instanceof Error ? error.message : "Terjadi kesalahan",
+        });
+      },
+    });
 
   return (
     <Modal
@@ -82,8 +79,8 @@ const DeleteMateriModal = (props: PropTypes) => {
               <div className="flex flex-col items-center justify-center gap-3">
                 <IoWarningOutline className="text-danger" size={60} />
                 <p className="text-center font-medium">
-                  Apakah Anda yakin ingin menghapus materi ini? <br /> Data
-                  yang sudah dihapus tidak dapat dikembalikan.
+                  Apakah Anda yakin ingin menghapus materi ini? <br /> Data yang
+                  sudah dihapus tidak dapat dikembalikan.
                 </p>
               </div>
             </ModalBody>

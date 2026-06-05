@@ -1,5 +1,7 @@
+import KelolaPenilaian from "@/components/features/KelolaPenilaian/KelolaPenilaian";
+
 const KelolaPenilaianPage = () => {
-  return null;
+  return <KelolaPenilaian />;
 };
 
 export default KelolaPenilaianPage;

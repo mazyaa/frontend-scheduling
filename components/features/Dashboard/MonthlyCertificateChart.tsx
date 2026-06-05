@@ -1,0 +1,128 @@
+"use client";
+
+import { Card, CardBody } from "@heroui/card";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  Cell,
+} from "recharts";
+
+import type { ISertifikatPerBulan } from "@/types/dashboard";
+
+interface MonthlyCertificateChartProps {
+  data: ISertifikatPerBulan[];
+}
+
+const BAR_COLORS = [
+  "#6366f1",
+  "#f472b6",
+  "#38bdf8",
+  "#fb923c",
+  "#a3e635",
+  "#4ade80",
+  "#c084fc",
+  "#22d3ee",
+  "#3b82f6",
+  "#facc15",
+  "#2dd4bf",
+  "#a78bfa",
+];
+
+const CustomLegend = ({ payload }: any) => {
+  return (
+    <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 mt-2">
+      {payload?.map((entry: any, index: number) => (
+        <div key={index} className="flex items-center gap-1.5">
+          <div
+            className="w-3 h-3 rounded-sm"
+            style={{ backgroundColor: entry.color }}
+          />
+          <span className="text-xs text-gray-500">{entry.value}</span>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const MonthlyCertificateChart = ({
+  data,
+}: MonthlyCertificateChartProps) => {
+  const chartData = data.map((item) => ({
+    name: item.bulan.slice(0, 3),
+    value: item.total,
+  }));
+
+  return (
+    <div className="bg-gray-100 rounded-2xl p-6">
+      <h2 className="text-xl font-bold text-brand">
+        PENERBITAN E-SERTIFIKAT PERBULAN
+      </h2>
+      <p className="text-sm text-gray-500 mt-1 mb-5">
+        Total Penerbitan E-Sertifikat perbulan
+      </p>
+      <Card className="shadow-sm">
+        <CardBody className="p-6">
+          <div className="h-[400px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={chartData} barSize={32}>
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="#e5e7eb"
+                  vertical={false}
+                />
+                <XAxis
+                  dataKey="name"
+                  tick={{ fontSize: 12, fill: "#6b7280" }}
+                  axisLine={{ stroke: "#e5e7eb" }}
+                  tickLine={false}
+                />
+                <YAxis
+                  tick={{ fontSize: 12, fill: "#6b7280" }}
+                  axisLine={false}
+                  tickLine={false}
+                  allowDecimals={false}
+                />
+                <Tooltip
+                  cursor={{ fill: "rgba(0,0,0,0.04)" }}
+                  contentStyle={{
+                    borderRadius: "8px",
+                    border: "1px solid #e5e7eb",
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+                    fontSize: "13px",
+                  }}
+                  formatter={(value: number) => [value, "Total"]}
+                />
+                <Legend content={<CustomLegend />} />
+                <Bar
+                  dataKey="value"
+                  radius={[6, 6, 0, 0]}
+                  label={{
+                    position: "top",
+                    fontSize: 11,
+                    fill: "#6b7280",
+                    formatter: (v: number) => v,
+                  }}
+                >
+                  {chartData.map((_, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={BAR_COLORS[index % BAR_COLORS.length]}
+                    />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </CardBody>
+      </Card>
+    </div>
+  );
+};
+
+export default MonthlyCertificateChart;
