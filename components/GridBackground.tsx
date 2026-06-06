@@ -86,7 +86,7 @@ export default function GridBackground() {
     function animateSquares() {
       squares.forEach((rect) => {
         if (Math.random() > 0.9) {
-          rect.setAttribute("opacity", (Math.random() * 0.1).toString());
+          rect.setAttribute("opacity", (Math.random() * 0.2).toString());
         } else {
           rect.setAttribute("opacity", "0");
         }
