@@ -34,7 +34,7 @@ const useEditPenilaianModal = (selectedId: string, currentData: any[]) => {
     watch,
     setValue,
   } = useForm<IFormEditPenilaian>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(schema) as any,
     defaultValues: {
       jadwalTrainingId: "",
       userId: "",

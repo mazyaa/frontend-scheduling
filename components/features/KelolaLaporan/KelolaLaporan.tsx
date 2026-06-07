@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { Key, useCallback, useEffect, useMemo, useState } from "react";
+import { Key, ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import { useSession } from "next-auth/react";
 import { Tabs, Tab } from "@heroui/tabs";
 import { Chip } from "@heroui/chip";
@@ -130,36 +130,36 @@ const KelolaLaporan = () => {
   }, [dataKelolaLaporan, selectedTab]);
 
   const renderCellSertifikat = useCallback(
-    (item: Record<string, unknown>, columnKey: Key) => {
+    (item: Record<string, unknown>, columnKey: Key): ReactNode => {
       const cellValue = item[columnKey as keyof typeof item];
 
       switch (columnKey) {
         case "namaTraining":
-          return cellValue || "-";
+          return (cellValue as ReactNode) || "-";
         case "batch":
-          return cellValue || "-";
+          return (cellValue as ReactNode) || "-";
         case "totalSertifikat":
           return cellValue !== undefined && cellValue !== null
             ? Number(cellValue)
             : 0;
         default:
-          return cellValue as React.ReactNode;
+          return cellValue as ReactNode;
       }
     },
     [],
   );
 
   const renderCellPeserta = useCallback(
-    (item: Record<string, unknown>, columnKey: Key) => {
+    (item: Record<string, unknown>, columnKey: Key): ReactNode => {
       const cellValue = item[columnKey as keyof typeof item];
 
       switch (columnKey) {
         case "namaPeserta":
-          return cellValue || "-";
+          return (cellValue as ReactNode) || "-";
         case "namaTraining":
-          return cellValue || "-";
+          return (cellValue as ReactNode) || "-";
         case "batch":
-          return cellValue || "-";
+          return (cellValue as ReactNode) || "-";
         case "statusKompetensi":
           return (
             <Chip
@@ -175,7 +175,7 @@ const KelolaLaporan = () => {
             </Chip>
           );
         default:
-          return cellValue as React.ReactNode;
+          return cellValue as ReactNode;
       }
     },
     [],
@@ -200,18 +200,19 @@ const KelolaLaporan = () => {
         <SelectItem key="__all__" className="text-sm" textValue="Semua Batch">
           Semua Batch
         </SelectItem>
-        {isLoadingFilterJadwal ? (
+        {(isLoadingFilterJadwal ? (
           <SelectItem key="loading" className="text-sm" textValue="Loading...">
             Loading...
           </SelectItem>
         ) : (
           (() => {
-            const batches = [
-              ...new Set(
-                (dataFilterJadwal || []).map((jadwal: any) => jadwal.batch).filter(Boolean),
-              ),
-            ];
-            return batches.map((batch) => (
+            const allBatches = (dataFilterJadwal || [])
+              .map((jadwal: any) => jadwal.batch)
+              .filter(Boolean);
+            const batches = allBatches.filter(
+              (v: string, i: number, a: string[]) => a.indexOf(v) === i,
+            );
+            return batches.map((batch: string) => (
               <SelectItem
                 key={batch}
                 className="text-sm"
@@ -221,7 +222,7 @@ const KelolaLaporan = () => {
               </SelectItem>
             ));
           })()
-        )}
+        )) as any}
       </Select>
     ),
     [selectedBatch, setSelectedBatch, dataFilterJadwal, isLoadingFilterJadwal],

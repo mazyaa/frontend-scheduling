@@ -11,7 +11,6 @@ import {
   ModalHeader,
 } from "@heroui/modal";
 import { Spinner } from "@heroui/spinner";
-import { IoWarningOutline } from "react-icons/io5";
 
 import { materiServices } from "@/services/materi.service";
 import { ToasterContext } from "@/context/ToasterContext";
@@ -77,10 +76,8 @@ const DeleteMateriModal = (props: PropTypes) => {
 
             <ModalBody className="flex flex-col gap-5">
               <div className="flex flex-col items-center justify-center gap-3">
-                <IoWarningOutline className="text-danger" size={60} />
-                <p className="text-center font-medium">
-                  Apakah Anda yakin ingin menghapus materi ini? <br /> Data yang
-                  sudah dihapus tidak dapat dikembalikan.
+                <p className="font-medium">
+                  Apakah Anda yakin ingin menghapus materi ini?
                 </p>
               </div>
             </ModalBody>

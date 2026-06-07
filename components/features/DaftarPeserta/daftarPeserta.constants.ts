@@ -26,11 +26,6 @@ export const LIST_DAFTAR_PESERTA: DaftarPesertaColumn[] = [
     isSummary: true,
   },
   {
-    uid: "statusKompetensi",
-    label: "STATUS KOMPETENSI",
-    isSummary: true,
-  },
-  {
     uid: "aksi",
     label: "AKSI",
     isSummary: false,

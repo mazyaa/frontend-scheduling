@@ -57,10 +57,19 @@ const DataTable = (props: PropTypes) => {
     handleClearSearch,
   } = useChangeUrl();
 
+  const dataWithKeys = useMemo(
+    () =>
+      data.map((item, idx) => ({
+        ...item,
+        _rk: (item as any)?.id ?? `row-${idx}`,
+      })),
+    [data],
+  );
+
   const topContent = useMemo(() => {
     return (
-      <div className="justify-between flex flex-col-reverse items-start gap-y-4 lg:flex-row lg:items-center lg:justify-between">
-        <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+      <div className="justify-between flex flex-col items-start gap-y-4 lg:flex-row lg:items-center lg:justify-between">
+        <div className="flex flex-col lg:flex-row gap-4 w-full sm:w-auto">
           <Input
             isClearable // Enable the clear button
             className="max-w-64 lg:max-w-80"
@@ -69,10 +78,10 @@ const DataTable = (props: PropTypes) => {
             onChange={handleChangeSearch}
             onClear={handleClearSearch}
           />
+          {customTopContent}
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-2 items-center w-full sm:w-auto">
-          {customTopContent}
+        <div className="flex flex-col lg:flex-row gap-2 items-center w-full sm:w-auto">
           {buttonTopContentLabel && (
             <Button
               className="bg-brand text-white"
@@ -157,7 +166,7 @@ const DataTable = (props: PropTypes) => {
         className="h-100"
         emptyContent={emptyContent}
         isLoading={isLoading}
-        items={data}
+        items={dataWithKeys}
         loadingContent={
           <div className="flex h-full w-full items-center justify-center bg-foreground-300/70 backdrop-blur-sm z-999">
             <Spinner color="current" />
@@ -165,15 +174,14 @@ const DataTable = (props: PropTypes) => {
         }
       >
         {/* Table Row */}
-        {(item, index) => {
-          const itemId = (item as any)?.id;
-          const itemKey = itemId || `row-${index}`;
+        {(item) => {
+          const rk = (item as any)._rk;
 
           return (
-            <TableRow key={itemKey}>
+            <TableRow key={rk}>
               {(columnKey) => (
                 <TableCell
-                  key={`cell-${itemKey}-${columnKey}`}
+                  key={`cell-${rk}-${columnKey}`}
                   className="text-center"
                 >
                   {renderCell(item, columnKey)}

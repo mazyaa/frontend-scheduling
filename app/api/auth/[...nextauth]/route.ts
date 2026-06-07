@@ -4,7 +4,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import environtment from "@/config/env";
 import { authServices } from "@/services/auth.service";
 
-const authOptions: NextAuthOptions = {
+export const authOptions: NextAuthOptions = {
   // use session as storage
   session: {
     strategy: "jwt",

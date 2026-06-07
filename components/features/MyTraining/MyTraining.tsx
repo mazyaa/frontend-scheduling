@@ -38,7 +38,11 @@ const MyTraining = ({ isGridUI = false }: MyTrainingProps) => {
 
       setTrainings(response.data?.data || []);
     } catch (error) {
-      console.error("Error fetching my training:", error);
+      alert(
+        error instanceof Error
+          ? error.message
+          : "Terjadi kesalahan saat memuat data",
+      );
     } finally {
       setLoading(false);
     }

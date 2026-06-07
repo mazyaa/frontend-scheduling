@@ -6,19 +6,89 @@ import Link from "next/link";
 import GridBackground from "@/components/GridBackground";
 
 const leftIcons = [
-  { src: "/flying-icon/certificateIcon.png", size: 56, left: "2%", top: "8%", delay: 0, duration: 4.2 },
-  { src: "/flying-icon/online-learningIcon.png", size: 64, left: "7%", top: "26%", delay: 1.3, duration: 5.0 },
-  { src: "/flying-icon/calendarIcon.png", size: 48, left: "1%", top: "44%", delay: 0.5, duration: 3.8 },
-  { src: "/flying-icon/clockIcon.png", size: 44, left: "8%", top: "62%", delay: 2.1, duration: 4.6 },
-  { src: "/flying-icon/assesement.png", size: 60, left: "3%", top: "80%", delay: 0.8, duration: 5.4 },
+  {
+    src: "/flying-icon/certificateIcon.png",
+    size: 100,
+    left: "25%",
+    top: "5%",
+    delay: 0,
+    duration: 4.2,
+  },
+  {
+    src: "/flying-icon/online-learningIcon.png",
+    size: 64,
+    left: "7%",
+    top: "26%",
+    delay: 1.3,
+    duration: 5.0,
+  },
+  {
+    src: "/flying-icon/calendarIcon.png",
+    size: 100,
+    left: "-1%",
+    top: "44%",
+    delay: 0.5,
+    duration: 3.8,
+  },
+  {
+    src: "/flying-icon/clockIcon.png",
+    size: 75,
+    left: "15%",
+    top: "62%",
+    delay: 2.1,
+    duration: 4.6,
+  },
+  {
+    src: "/flying-icon/assesement.png",
+    size: 60,
+    left: "3%",
+    top: "80%",
+    delay: 0.8,
+    duration: 5.4,
+  },
 ];
 
 const rightIcons = [
-  { src: "/flying-icon/presentationIcon.png", size: 58, right: "3%", top: "12%", delay: 0.7, duration: 4.8 },
-  { src: "/flying-icon/open-bookIcon.png", size: 50, right: "8%", top: "30%", delay: 1.8, duration: 3.6 },
-  { src: "/flying-icon/validateIcon.png", size: 46, right: "2%", top: "48%", delay: 0.2, duration: 5.2 },
-  { src: "/flying-icon/trueIcon.png", size: 54, right: "7%", top: "65%", delay: 2.4, duration: 4.0 },
-  { src: "/flying-icon/fast-timeIcon.png", size: 62, right: "4%", top: "82%", delay: 1.0, duration: 4.4 },
+  {
+    src: "/flying-icon/presentationIcon.png",
+    size: 100,
+    right: "25%",
+    top: "4%",
+    delay: 0.7,
+    duration: 4.8,
+  },
+  {
+    src: "/flying-icon/open-bookIcon.png",
+    size: 50,
+    right: "8%",
+    top: "30%",
+    delay: 1.8,
+    duration: 3.6,
+  },
+  {
+    src: "/flying-icon/validateIcon.png",
+    size: 100,
+    right: "-1%",
+    top: "44%",
+    delay: 0.2,
+    duration: 5.2,
+  },
+  {
+    src: "/flying-icon/trueIcon.png",
+    size: 75,
+    right: "15%",
+    top: "62%",
+    delay: 2.4,
+    duration: 4.0,
+  },
+  {
+    src: "/flying-icon/fast-timeIcon.png",
+    size: 62,
+    right: "4%",
+    top: "80%",
+    delay: 1.0,
+    duration: 4.4,
+  },
 ];
 
 const HomeSection = () => {
@@ -66,7 +136,7 @@ const HomeSection = () => {
               Pelatihan Terjadwal
             </span>
 
-            <span className="block text-2xl md:text-5xl lg:text-6xl leading-tight text-teal-600 mt-2">
+            <span className="block text-2xl md:text-5xl lg:text-6xl leading-tight text-teal-600">
               Sertifikat Terbit Digital
             </span>
           </h1>
