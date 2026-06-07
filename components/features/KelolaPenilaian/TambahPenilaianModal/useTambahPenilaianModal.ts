@@ -34,7 +34,7 @@ const useTambahPenilaianModal = () => {
     watch,
     setValue,
   } = useForm<IFormTambahPenilaian>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(schema) as any,
     defaultValues: {
       jadwalTrainingId: "",
       userId: "",

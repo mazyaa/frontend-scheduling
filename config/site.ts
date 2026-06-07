@@ -112,7 +112,7 @@ export const siteConfig = {
         { name: "Beranda", href: "/", icon: IoHomeOutline },
         {
           name: "Jadwal Training",
-          href: "/jadwal-training",
+          href: "/peserta/jadwal-training",
           icon: GrSchedules,
         },
         {
@@ -130,7 +130,7 @@ export const siteConfig = {
         { name: "Beranda", href: "/", icon: IoHomeOutline },
         {
           name: "Jadwal Training",
-          href: "/jadwal-training",
+          href: "/instruktur/jadwal-training",
           icon: GrSchedules,
         },
         {
@@ -151,7 +151,7 @@ export const siteConfig = {
         { name: "Beranda", href: "/asesor", icon: IoHomeOutline },
         {
           name: "Jadwal Training",
-          href: "/jadwal-training",
+          href: "/asesor/jadwal-training",
           icon: GrSchedules,
         },
         {
@@ -160,7 +160,6 @@ export const siteConfig = {
             { name: "Profile Saya", href: "/asesor/profile" },
             { name: "Daftar Peserta", href: "/daftar-peserta" },
             { name: "Kelola Penilaian", href: "/asesor/kelola-penilaian" },
-            { name: "Kelola E-Sertifikat", href: "/asesor/kelola-e-sertifikat" },
             { name: "Logout", href: "/", isButton: true },
           ],
         },
@@ -171,7 +170,7 @@ export const siteConfig = {
         { name: "Beranda", href: "/", icon: IoHomeOutline },
         {
           name: "Jadwal Training",
-          href: "/jadwal-training",
+          href: "/admin/kelola-jadwal-training",
           icon: GrSchedules,
         },
         {
@@ -188,7 +187,7 @@ export const siteConfig = {
         { name: "Beranda", href: "/", icon: IoHomeOutline },
         {
           name: "Jadwal Training",
-          href: "/jadwal-training",
+          href: "/direktur/dashboard",
           icon: GrSchedules,
         },
         {

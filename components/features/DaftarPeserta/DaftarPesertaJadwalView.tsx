@@ -9,7 +9,6 @@ import { FaArrowLeftLong, FaUsers } from "react-icons/fa6";
 
 import useMyJadwalTraining from "@/components/features/MyJadwalTraining/useMyJadwalTraining";
 import LISTS_MY_JADWAL_TRAINING from "@/components/features/MyJadwalTraining/myJadwalTraining.constants";
-
 import useChangeUrl from "@/hooks/useChangeUrl";
 import DataTable from "@/components/ui/DataTable/DataTable";
 import { TablePageSkeleton } from "@/components/ui/Skeletons";
@@ -37,8 +36,13 @@ const DaftarPesertaJadwalView = ({ onSelectJadwal }: PropTypes) => {
       const cellValue = itemJadwal[columnKey as keyof typeof itemJadwal];
 
       switch (columnKey) {
-        case "namaTraining":
-          return <span>{cellValue as string}</span>;
+        case "nama_training":
+          return (
+            <span>
+              {(itemJadwal.namaTraining as any) ??
+                "Nama training tidak ditemukan"}
+            </span>
+          );
         case "startDate":
         case "endDate":
           if (!cellValue) return "-";
@@ -94,9 +98,7 @@ const DaftarPesertaJadwalView = ({ onSelectJadwal }: PropTypes) => {
             </p>
           </Link>
         </div>
-        <h1 className="text-3xl font-bold text-brand mb-2">
-          Daftar Peserta
-        </h1>
+        <h1 className="text-3xl font-bold text-brand mb-2">Daftar Peserta</h1>
         <p>Pilih jadwal training untuk melihat daftar peserta.</p>
       </div>
 

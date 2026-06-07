@@ -96,7 +96,7 @@ const MonthlyCertificateChart = ({
                     boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
                     fontSize: "13px",
                   }}
-                  formatter={(value: number) => [value, "Total"]}
+                  formatter={(value: any) => [value ?? 0, "Total"]}
                 />
                 <Legend content={<CustomLegend />} />
                 <Bar
@@ -106,7 +106,7 @@ const MonthlyCertificateChart = ({
                     position: "top",
                     fontSize: 11,
                     fill: "#6b7280",
-                    formatter: (v: number) => v,
+                    formatter: (v: any) => v,
                   }}
                 >
                   {chartData.map((_, index) => (

@@ -13,8 +13,8 @@ import { CiMenuKebab } from "react-icons/ci";
 import { useDisclosure } from "@heroui/modal";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import Link from "next/link";
 import { FaArrowLeftLong } from "react-icons/fa6";
+import Link from "next/link";
 
 import useKelolaMateri from "./useKelolaMateri";
 import LISTS_KELOLA_MATERI, { LISTS_PESERTA_MATERI } from "./materi.constants";
@@ -213,57 +213,52 @@ const KelolaMateri = ({ isGridUI = false }: { isGridUI?: boolean }) => {
 
   return (
     <section className={isGridUI ? "w-full max-w-6xl mx-auto px-4 z-10" : ""}>
+      {isGridUI && (
+        <div className="mb-6 z-[999]">
+          <div className="flex text-sm flex-row border-1 items-center border-brand justify-center rounded-2xl my-5 w-fit hover:bg-brand/10">
+            <Link
+              className="flex flex-row items-center gap-2 py-2 px-4 group"
+              href={`/`}
+            >
+              <FaArrowLeftLong className="text-brand transition-transform duration-300 group-hover:-translate-x-1" />
+              <p className="text-brand font-medium transition-transform duration-300 group-hover:scale-105">
+                Kembali Ke -{" "}
+                <span className="text-white bg-brand rounded-xl p-1.5 inline-block transition-transform duration-300 group-hover:scale-105">
+                  Beranda
+                </span>
+              </p>
+            </Link>
+          </div>
+          <h1 className="text-3xl font-bold text-brand mb-2">
+            Materi Training
+          </h1>
+          <p>
+            Mengelola informasi dan dokumen{" "}
+            <span className="text-brand">materi pelatihan</span> guna mendukung
+            proses pembelajaran yang terorganisir.
+          </p>
+        </div>
+      )}
       {isLoadingSession ? (
         <TablePageSkeleton />
       ) : (
-        <div
-          className={
-            isGridUI
-              ? "bg-white p-6 rounded-xl shadow-lg border border-gray-100"
-              : ""
+        <DataTable
+          buttonTopContentLabel={
+            role !== "peserta" ? "Tambah Materi" : undefined
           }
-        >
-          {isGridUI && (
-            <div className="mb-6">
-              <Link
-                className="flex flex-row items-center gap-2 py-2 px-4 group"
-                href="/"
-              >
-                <FaArrowLeftLong className="text-brand transition-transform duration-300 group-hover:-translate-x-1" />
-                <p className="text-brand font-medium transition-transform duration-300 group-hover:scale-105">
-                  Kembali Ke -{" "}
-                  <span className="text-white bg-brand rounded-xl p-1.5 inline-block transition-transform duration-300 group-hover:scale-105">
-                    Beranda
-                  </span>
-                </p>
-              </Link>
-              <h1 className="text-3xl font-bold text-brand mb-2">
-                Materi Training
-              </h1>
-              <p className="text-gray-600">
-                Lihat dan unduh materi training yang sudah diikuti.
-              </p>
-            </div>
-          )}
-
-          <DataTable
-            buttonTopContentLabel={
-              role !== "peserta" ? "Tambah Materi" : undefined
-            }
-            columns={columns}
-            data={dataKelolaMateri?.data || []}
-            emptyContent="Materi tidak ditemukan"
-            isLoading={isLoadingKelolaMateri || isRefetchingKelolaMateri}
-            placeholderTopContent="Cari Berdasarkan Nama Materi..."
-            renderCell={renderCell}
-            totalPages={
-              dataKelolaMateri ? dataKelolaMateri.pagination.totalPages : 1
-            }
-            onClickButtonTopContent={
-              role !== "peserta" ? () => tambahMateriModal.onOpen() : undefined
-            }
-          />
-        </div>
+          columns={columns}
+          data={dataKelolaMateri?.data || []}
+          emptyContent="Materi tidak ditemukan"
+          isLoading={isLoadingKelolaMateri || isRefetchingKelolaMateri}
+          placeholderTopContent="Cari Berdasarkan Nama Materi..."
+          renderCell={renderCell}
+          totalPages={
+            dataKelolaMateri ? dataKelolaMateri.pagination.totalPages : 1
+          }
+          onClickButtonTopContent={
+            role !== "peserta" ? () => tambahMateriModal.onOpen() : undefined
+          }
+        />
       )}
 
       {role !== "peserta" && (

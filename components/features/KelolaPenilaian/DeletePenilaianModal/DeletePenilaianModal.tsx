@@ -11,7 +11,6 @@ import {
   ModalHeader,
 } from "@heroui/modal";
 import { Spinner } from "@heroui/spinner";
-import { IoWarningOutline } from "react-icons/io5";
 
 import { assesmentServices } from "@/services/assesment.service";
 import { ToasterContext } from "@/context/ToasterContext";
@@ -80,10 +79,8 @@ const DeletePenilaianModal = (props: PropTypes) => {
 
             <ModalBody className="flex flex-col gap-5">
               <div className="flex flex-col items-center justify-center gap-3">
-                <IoWarningOutline className="text-danger" size={60} />
                 <p className="text-center font-medium">
-                  Apakah Anda yakin ingin menghapus penilaian ini? <br /> Data
-                  yang sudah dihapus tidak dapat dikembalikan.
+                  Apakah Anda yakin ingin menghapus penilaian ini?
                 </p>
               </div>
             </ModalBody>

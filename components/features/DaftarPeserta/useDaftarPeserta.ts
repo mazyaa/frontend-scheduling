@@ -15,11 +15,10 @@ const useDaftarPeserta = (jadwalTrainingId: string) => {
       params += `&search=${currentSearch}`;
     }
 
-    const response =
-      await participantServices.getParticipantBySchedule(
-        jadwalTrainingId,
-        params,
-      );
+    const response = await participantServices.getParticipantBySchedule(
+      jadwalTrainingId,
+      params,
+    );
     const { results, pagination, instruktur, asesor } = response.data;
 
     return { results, pagination, instruktur, asesor };

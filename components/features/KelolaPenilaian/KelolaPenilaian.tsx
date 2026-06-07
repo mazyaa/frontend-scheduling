@@ -13,6 +13,8 @@ import { CiMenuKebab } from "react-icons/ci";
 import { useDisclosure } from "@heroui/modal";
 import { useSession } from "next-auth/react";
 import { Select, SelectItem } from "@heroui/select";
+import Link from "next/link";
+import { FaArrowLeftLong } from "react-icons/fa6";
 
 import useKelolaPenilaian from "./useKelolaPenilaian";
 import LISTS_KELOLA_PENILAIAN from "./penilaian.constants";
@@ -26,9 +28,13 @@ import { TablePageSkeleton } from "@/components/ui/Skeletons";
 
 interface KelolaPenilaianProps {
   scheduleId?: string;
+  isGridUI?: boolean;
 }
 
-const KelolaPenilaian = ({ scheduleId }: KelolaPenilaianProps) => {
+const KelolaPenilaian = ({
+  scheduleId,
+  isGridUI = false,
+}: KelolaPenilaianProps) => {
   const searchParams = useSearchParams();
   const { status } = useSession();
   const isLoadingSession = status === "loading";
@@ -40,7 +46,6 @@ const KelolaPenilaian = ({ scheduleId }: KelolaPenilaianProps) => {
     refetchKelolaPenilaian,
     selectedId,
     setSelectedId,
-    role,
     selectedJadwalTrainingId,
     setSelectedJadwalTrainingId,
     dataFilterJadwal,
@@ -180,7 +185,29 @@ const KelolaPenilaian = ({ scheduleId }: KelolaPenilaianProps) => {
   );
 
   return (
-    <section>
+    <section className={isGridUI ? "w-full max-w-6xl mx-auto px-4 z-10" : ""}>
+      {isGridUI && (
+        <div className="mb-6 z-[999]">
+          <div className="flex text-sm flex-row border-1 items-center border-brand justify-center rounded-2xl my-5 w-fit hover:bg-brand/10">
+            <Link
+              className="flex flex-row items-center gap-2 py-2 px-4 group"
+              href="/"
+            >
+              <FaArrowLeftLong className="text-brand transition-transform duration-300 group-hover:-translate-x-1" />
+              <p className="text-brand font-medium transition-transform duration-300 group-hover:scale-105">
+                Kembali Ke -{" "}
+                <span className="text-white bg-brand rounded-xl p-1.5 inline-block transition-transform duration-300 group-hover:scale-105">
+                  Beranda
+                </span>
+              </p>
+            </Link>
+          </div>
+          <h1 className="text-3xl font-bold text-brand mb-2">
+            Kelola Penilaian
+          </h1>
+          <p>Kelola penilaian peserta untuk setiap sesi training.</p>
+        </div>
+      )}
       {isLoadingSession ? (
         <TablePageSkeleton />
       ) : (

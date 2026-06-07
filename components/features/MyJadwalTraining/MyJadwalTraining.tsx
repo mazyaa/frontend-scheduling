@@ -46,10 +46,14 @@ const MyJadwalTraining = ({ role, isGridUI = false }: PropTypes) => {
       const cellValue = itemJadwal[columnKey as keyof typeof itemJadwal];
 
       switch (columnKey) {
-        case "namaTraining":
-          return <span>{cellValue as string}</span>;
+        case "nama_training":
+          return (
+            <span>
+              {(itemJadwal as any).namaTraining ??
+                "Nama training tidak ditemukan"}
+            </span>
+          );
         case "startDate":
-        case "endDate":
           if (!cellValue) return "-";
           const tanggal = new Date(cellValue as string);
 

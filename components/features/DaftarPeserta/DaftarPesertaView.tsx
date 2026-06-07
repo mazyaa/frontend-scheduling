@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { Key, ReactNode, useCallback, useEffect, useMemo, useState } from "react";
+import { Key, ReactNode, useCallback, useEffect, useState } from "react";
 import { Button } from "@heroui/button";
 import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
 import { Chip } from "@heroui/chip";
@@ -19,8 +19,8 @@ import Image from "next/image";
 
 import { LIST_DAFTAR_PESERTA } from "./daftarPeserta.constants";
 import useDaftarPeserta from "./useDaftarPeserta";
-import DetailPesertaModal from "@/components/features/KelolaPeserta/DetailPesertaModal/DetailPesertaModal";
 
+import DetailPesertaModal from "@/components/features/KelolaPeserta/DetailPesertaModal/DetailPesertaModal";
 import { LIMIT_LISTS } from "@/constants/list.constats";
 import useChangeUrl from "@/hooks/useChangeUrl";
 
@@ -96,7 +96,11 @@ const DaftarPesertaView = ({
           if (!status) return <span className="text-default-400">-</span>;
 
           return (
-            <Chip color={colorMap[status] || "warning"} size="sm" variant="flat">
+            <Chip
+              color={colorMap[status] || "warning"}
+              size="sm"
+              variant="flat"
+            >
               {status.replace("_", " ")}
             </Chip>
           );
@@ -179,10 +183,7 @@ const DaftarPesertaView = ({
         <CardBody className="px-4 py-4 overflow-hidden">
           <div className="grid grid-rows-2 gap-2">
             {LIST_DAFTAR_PESERTA.filter(
-              (col) =>
-                (col.isSummary === undefined || col.isSummary === true) &&
-                col.uid !== "image" &&
-                col.uid !== "aksi",
+              (col) => col.uid !== "image" && col.uid !== "aksi",
             ).map((column, index) => (
               <motion.div
                 key={column.uid}
@@ -407,10 +408,7 @@ const DaftarPesertaView = ({
         />
       </div>
 
-      <DetailPesertaModal
-        {...detailPesertaModal}
-        selectedData={selectedData}
-      />
+      <DetailPesertaModal {...detailPesertaModal} selectedData={selectedData} />
     </div>
   );
 };
