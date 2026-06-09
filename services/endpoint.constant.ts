@@ -4,6 +4,7 @@ export const endpoint = {
   KELOLA_INSTRUKTUR_ASESOR: "/instruktur-or-asesor",
   MEDIA: "/media",
   JADWAL: "/schedule",
+  JADWAL_MY_SCHEDULES: "/schedule/my-schedules",
   DETAIL_JADWAL: "/detail-schedule",
   NOTIFY: "notify",
   SESSIONSCHEDULE: "/session-detail-schedule",
