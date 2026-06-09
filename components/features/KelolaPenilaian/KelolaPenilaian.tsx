@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { Key, useCallback, useEffect, useMemo } from "react";
+import { Key, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import {
   Dropdown,
   DropdownItem,
@@ -9,10 +9,13 @@ import {
   DropdownTrigger,
 } from "@heroui/dropdown";
 import { Button } from "@heroui/button";
+import { Chip } from "@heroui/chip";
 import { CiMenuKebab } from "react-icons/ci";
 import { useDisclosure } from "@heroui/modal";
 import { useSession } from "next-auth/react";
 import { Select, SelectItem } from "@heroui/select";
+import { useMutation } from "@tanstack/react-query";
+import Image from "next/image";
 import Link from "next/link";
 import { FaArrowLeftLong } from "react-icons/fa6";
 
@@ -25,6 +28,9 @@ import DeletePenilaianModal from "./DeletePenilaianModal/DeletePenilaianModal";
 import useChangeUrl from "@/hooks/useChangeUrl";
 import DataTable from "@/components/ui/DataTable/DataTable";
 import { TablePageSkeleton } from "@/components/ui/Skeletons";
+import { revisiServices } from "@/services/revisi.service";
+import { ToasterContext } from "@/context/ToasterContext";
+import errorHandling from "@/utils/errrorHandling";
 
 interface KelolaPenilaianProps {
   scheduleId?: string;
@@ -39,6 +45,8 @@ const KelolaPenilaian = ({
   const { status } = useSession();
   const isLoadingSession = status === "loading";
 
+  const { setToaster } = useContext(ToasterContext);
+
   const {
     dataKelolaPenilaian,
     isLoadingKelolaPenilaian,
@@ -50,17 +58,162 @@ const KelolaPenilaian = ({
     setSelectedJadwalTrainingId,
     dataFilterJadwal,
     isLoadingFilterJadwal,
+    role,
   } = useKelolaPenilaian(scheduleId);
 
   const tambahPenilaianModal = useDisclosure();
   const editPenilaianModal = useDisclosure();
   const deletePenilaianModal = useDisclosure();
 
+  const [downloadingIds, setDownloadingIds] = useState<Record<string, boolean>>(
+    {},
+  );
+
   const { setUrl } = useChangeUrl();
 
   useEffect(() => {
     setUrl();
   }, [searchParams]);
+
+  const handleDownloadRevisiAdmin = async (penilaianId: string) => {
+    try {
+      const key = `revisi-admin-${penilaianId}`;
+
+      setDownloadingIds((prev) => ({ ...prev, [key]: true }));
+
+      const response = await revisiServices.downloadRevisiAdmin(penilaianId);
+
+      const contentType = response.headers["content-type"] || "application/pdf";
+      const blob = new Blob([response.data], { type: contentType });
+      const url = window.URL.createObjectURL(blob);
+
+      const contentDisposition = response.headers["content-disposition"];
+      let fileName = "revisi-admin.pdf";
+
+      if (contentDisposition && contentDisposition.includes("filename")) {
+        const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+        const matches = filenameRegex.exec(contentDisposition);
+
+        if (matches?.[1]) {
+          fileName = matches[1].replace(/['"]/g, "");
+        }
+      }
+
+      const link = document.createElement("a");
+
+      link.href = url;
+      link.setAttribute("download", fileName);
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode?.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch {
+      setToaster({
+        title: "Gagal",
+        type: "error",
+        message: "Gagal mendownload file revisi admin",
+      });
+    } finally {
+      setTimeout(() => {
+        const key = `revisi-admin-${penilaianId}`;
+
+        setDownloadingIds((prev) => ({ ...prev, [key]: false }));
+      }, 1000);
+    }
+  };
+
+  const handleDownloadRevisiPeserta = async (penilaianId: string) => {
+    try {
+      const key = `revisi-peserta-${penilaianId}`;
+
+      setDownloadingIds((prev) => ({ ...prev, [key]: true }));
+
+      const response = await revisiServices.downloadRevisiPeserta(penilaianId);
+
+      const contentType = response.headers["content-type"] || "application/pdf";
+      const blob = new Blob([response.data], { type: contentType });
+      const url = window.URL.createObjectURL(blob);
+
+      const contentDisposition = response.headers["content-disposition"];
+      let fileName = "revisi-peserta.pdf";
+
+      if (contentDisposition && contentDisposition.includes("filename")) {
+        const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+        const matches = filenameRegex.exec(contentDisposition);
+
+        if (matches?.[1]) {
+          fileName = matches[1].replace(/['"]/g, "");
+        }
+      }
+
+      const link = document.createElement("a");
+
+      link.href = url;
+      link.setAttribute("download", fileName);
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode?.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch {
+      setToaster({
+        title: "Gagal",
+        type: "error",
+        message: "Gagal mendownload file revisi peserta",
+      });
+    } finally {
+      setTimeout(() => {
+        const key = `revisi-peserta-${penilaianId}`;
+
+        setDownloadingIds((prev) => ({ ...prev, [key]: false }));
+      }, 1000);
+    }
+  };
+
+  const { mutate: mutateSetujuiRevisi, isPending: isPendingSetujuiRevisi } =
+    useMutation({
+      mutationFn: (penilaianId: string) =>
+        revisiServices.setujuiRevisi(penilaianId),
+      onSuccess: () => {
+        setToaster({
+          title: "Berhasil",
+          type: "success",
+          message: "Revisi berhasil disetujui",
+        });
+        refetchKelolaPenilaian();
+      },
+      onError: (error) => {
+        const message = errorHandling(error);
+
+        setToaster({
+          title: "Gagal",
+          type: "error",
+          message: message || "Terjadi kesalahan",
+        });
+      },
+    });
+
+  const { mutate: mutateTolakRevisi, isPending: isPendingTolakRevisi } =
+    useMutation({
+      mutationFn: (penilaianId: string) =>
+        revisiServices.tolakRevisi(penilaianId),
+      onSuccess: () => {
+        setToaster({
+          title: "Berhasil",
+          type: "success",
+          message: "Revisi berhasil ditolak",
+        });
+        refetchKelolaPenilaian();
+      },
+      onError: (error) => {
+        const message = errorHandling(error);
+
+        setToaster({
+          title: "Gagal",
+          type: "error",
+          message: message || "Terjadi kesalahan",
+        });
+      },
+    });
 
   const customTopContent = useMemo(() => {
     if (scheduleId) return null;
@@ -93,9 +246,9 @@ const KelolaPenilaian = ({
             <SelectItem
               key={jadwal.id}
               className="text-sm"
-              textValue={`${jadwal.training?.namaTraining || "Tanpa Nama"} - ${jadwal.batch}`}
+              textValue={jadwal._displayLabel || `${jadwal.training?.namaTraining || "Tanpa Nama"} - ${jadwal.batch}`}
             >
-              {jadwal.training?.namaTraining || "Tanpa Nama"} - {jadwal.batch}
+              {jadwal._displayLabel || `${jadwal.training?.namaTraining || "Tanpa Nama"} - ${jadwal.batch}`}
             </SelectItem>
           ))
         )}
@@ -115,6 +268,7 @@ const KelolaPenilaian = ({
 
       const itemId =
         (itemPenilaian as any)?.penilaianId || (itemPenilaian as any)?.id;
+      const penilaianId = (itemPenilaian as any)?.penilaianId || (itemPenilaian as any)?.id;
 
       switch (columnKey) {
         case "namaPeserta":
@@ -140,6 +294,73 @@ const KelolaPenilaian = ({
           );
         case "catatan":
           return cellValue || "-";
+        case "fileRevisiAdmin": {
+          const hasFile = (itemPenilaian as any)?.fileRevisiAdmin;
+          if (!hasFile) return <span className="text-xs text-gray-400">-</span>;
+
+          const key = `revisi-admin-${penilaianId}`;
+          const isDownloading = downloadingIds[key];
+
+          return (
+            <button
+              className="flex flex-row gap-1 text-blue-600 underline text-sm hover:text-blue-800 cursor-pointer"
+              onClick={() => handleDownloadRevisiAdmin(penilaianId)}
+            >
+              <Image
+                alt="Doc Icon"
+                height={20}
+                src="/images/general/docIcon.png"
+                width={20}
+              />
+              {isDownloading ? "Mengunduh..." : "Download"}
+            </button>
+          );
+        }
+        case "fileRevisiPeserta": {
+          const hasFile = (itemPenilaian as any)?.fileRevisiPeserta;
+          if (!hasFile) return <span className="text-xs text-gray-400">-</span>;
+
+          const key = `revisi-peserta-${penilaianId}`;
+          const isDownloading = downloadingIds[key];
+
+          return (
+            <button
+              className="flex flex-row gap-1 text-blue-600 underline text-sm hover:text-blue-800 cursor-pointer"
+              onClick={() => handleDownloadRevisiPeserta(penilaianId)}
+            >
+              <Image
+                alt="Doc Icon"
+                height={20}
+                src="/images/general/docIcon.png"
+                width={20}
+              />
+              {isDownloading ? "Mengunduh..." : "Download"}
+            </button>
+          );
+        }
+        case "statusRevisi": {
+          const statusRev = (itemPenilaian as any)?.statusRevisi as string;
+          const colorMapRev: Record<
+            string,
+            "success" | "danger" | "warning" | "default"
+          > = {
+            pending: "warning",
+            disetujui: "success",
+            ditolak: "danger",
+          };
+
+          if (!statusRev) return <span className="text-xs text-gray-400">-</span>;
+
+          return (
+            <Chip
+              color={colorMapRev[statusRev] || "default"}
+              size="sm"
+              variant="flat"
+            >
+              {statusRev}
+            </Chip>
+          );
+        }
         case "aksi":
           return (
             <Dropdown>
@@ -174,6 +395,38 @@ const KelolaPenilaian = ({
                 >
                   Delete Penilaian
                 </DropdownItem>
+                <DropdownItem
+                  key="setujui-revisi-button"
+                  className="text-green-700"
+                  isDisabled={
+                    !(itemPenilaian as any)?.fileRevisiPeserta ||
+                    isPendingSetujuiRevisi ||
+                    isPendingTolakRevisi
+                  }
+                  onPress={() => {
+                    if (penilaianId) {
+                      mutateSetujuiRevisi(penilaianId);
+                    }
+                  }}
+                >
+                  Setujui Revisi
+                </DropdownItem>
+                <DropdownItem
+                  key="tolak-revisi-button"
+                  className="text-red-700"
+                  isDisabled={
+                    !(itemPenilaian as any)?.fileRevisiPeserta ||
+                    isPendingSetujuiRevisi ||
+                    isPendingTolakRevisi
+                  }
+                  onPress={() => {
+                    if (penilaianId) {
+                      mutateTolakRevisi(penilaianId);
+                    }
+                  }}
+                >
+                  Tolak Revisi
+                </DropdownItem>
               </DropdownMenu>
             </Dropdown>
           );
@@ -181,7 +434,7 @@ const KelolaPenilaian = ({
           return cellValue as React.ReactNode;
       }
     },
-    [editPenilaianModal, deletePenilaianModal, setSelectedId],
+    [editPenilaianModal, deletePenilaianModal, setSelectedId, downloadingIds, isPendingSetujuiRevisi, isPendingTolakRevisi],
   );
 
   return (
@@ -218,7 +471,12 @@ const KelolaPenilaian = ({
             customTopContent={customTopContent}
             data={dataKelolaPenilaian?.data || []}
             emptyContent="Penilaian tidak ditemukan"
-            isLoading={isLoadingKelolaPenilaian || isRefetchingKelolaPenilaian}
+            isLoading={
+              isLoadingKelolaPenilaian ||
+              isRefetchingKelolaPenilaian ||
+              isPendingSetujuiRevisi ||
+              isPendingTolakRevisi
+            }
             placeholderTopContent="Cari Berdasarkan Nama Peserta..."
             renderCell={renderCell}
             totalPages={

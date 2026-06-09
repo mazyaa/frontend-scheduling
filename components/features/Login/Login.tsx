@@ -90,7 +90,7 @@ export default function Login() {
                     className="mb-4"
                     errorMessage={errors.email?.message}
                     isInvalid={errors.email !== undefined}
-                    label="Email or Username"
+                    label="Email"
                     type="text"
                     variant="bordered"
                   />

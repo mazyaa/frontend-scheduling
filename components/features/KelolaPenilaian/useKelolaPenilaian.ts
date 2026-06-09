@@ -61,13 +61,24 @@ const useKelolaPenilaian = (scheduleId?: string) => {
 
   const { data: dataFilterJadwal, isLoading: isLoadingFilterJadwal } = useQuery(
     {
-      queryKey: ["JadwalTrainingFilterPenilaian"],
+      queryKey: ["JadwalTrainingFilterPenilaian", role],
       queryFn: async () => {
+        if (role === "asesor") {
+          const response =
+            await kelolaJadwalServices.getMySchedules();
+
+          return (response.data.data || []).map((item: any) => ({
+            id: item.value,
+            _displayLabel: item.label,
+          }));
+        }
+
         const response =
           await kelolaJadwalServices.getAllSchedules("limit=100&page=1");
 
         return response.data.data;
       },
+      enabled: !!role,
     },
   );
 

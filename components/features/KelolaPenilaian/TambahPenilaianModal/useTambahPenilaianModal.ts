@@ -5,6 +5,7 @@ import { useContext } from "react";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
+import { useSession } from "next-auth/react";
 
 import { assesmentServices } from "@/services/assesment.service";
 import { participantServices } from "@/services/participant.service";
@@ -25,6 +26,8 @@ export type IFormTambahPenilaian = yup.InferType<typeof schema>;
 
 const useTambahPenilaianModal = () => {
   const { setToaster } = useContext(ToasterContext);
+  const { data: session } = useSession();
+  const role = session?.user?.role;
 
   const {
     control,
@@ -47,13 +50,24 @@ const useTambahPenilaianModal = () => {
 
   const { data: dataJadwalTraining, isLoading: isLoadingJadwalTraining } =
     useQuery({
-      queryKey: ["JadwalTrainingOptions"],
+      queryKey: ["JadwalTrainingOptions", role],
       queryFn: async () => {
+        if (role === "asesor") {
+          const response =
+            await kelolaJadwalServices.getMySchedules();
+
+          return (response.data.data || []).map((item: any) => ({
+            id: item.value,
+            _displayLabel: item.label,
+          }));
+        }
+
         const response =
           await kelolaJadwalServices.getAllSchedules("limit=100");
 
         return response.data.data;
       },
+      enabled: !!role,
     });
 
   const { data: dataPeserta, isLoading: isLoadingPeserta } = useQuery({

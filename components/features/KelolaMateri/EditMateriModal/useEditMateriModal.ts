@@ -5,6 +5,7 @@ import { useState, useContext, useEffect } from "react";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
+import { useSession } from "next-auth/react";
 
 import { materiServices } from "@/services/materi.service";
 import { kelolaJadwalServices } from "@/services/kelolaJadwal.service";
@@ -23,6 +24,8 @@ export type IFormEditMateri = yup.InferType<typeof schema>;
 
 const useEditMateriModal = (selectedId: string, currentData: any[]) => {
   const { setToaster } = useContext(ToasterContext);
+  const { data: session } = useSession();
+  const role = session?.user?.role;
   const [fileToUpload, setFileToUpload] = useState<File | null>(null);
 
   const {
@@ -68,13 +71,24 @@ const useEditMateriModal = (selectedId: string, currentData: any[]) => {
 
   const { data: dataJadwalTraining, isLoading: isLoadingJadwalTraining } =
     useQuery({
-      queryKey: ["JadwalTrainingOptions"],
+      queryKey: ["JadwalTrainingOptions", role],
       queryFn: async () => {
+        if (role === "instruktur") {
+          const response =
+            await kelolaJadwalServices.getMySchedules();
+
+          return (response.data.data || []).map((item: any) => ({
+            id: item.value,
+            _displayLabel: item.label,
+          }));
+        }
+
         const response =
           await kelolaJadwalServices.getAllSchedules("limit=100");
 
         return response.data.data;
       },
+      enabled: !!role,
     });
 
   const { data: dataDetailJadwal, isLoading: isLoadingDetailJadwal } = useQuery(
