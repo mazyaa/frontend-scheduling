@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useQuery } from "@tanstack/react-query";
 
@@ -14,6 +14,14 @@ const useKelolaLaporan = (tabType: "sertifikat" | "peserta") => {
   const { currentLimit, currentPage, currentSearch } = useChangeUrl();
 
   const [selectedBatch, setSelectedBatch] = useState<string>("");
+  const [selectedTahun, setSelectedTahun] = useState<string>("");
+  const [selectedStatus, setSelectedStatus] = useState<string>("");
+
+  useEffect(() => {
+    setSelectedBatch("");
+    setSelectedTahun("");
+    setSelectedStatus("");
+  }, [tabType]);
 
   const getLaporan = async () => {
     let params = `limit=${currentLimit}&page=${currentPage}`;
@@ -22,8 +30,16 @@ const useKelolaLaporan = (tabType: "sertifikat" | "peserta") => {
       params += `&search=${currentSearch}`;
     }
 
-    if (tabType === "peserta" && selectedBatch) {
+    if (selectedBatch) {
       params += `&batch=${selectedBatch}`;
+    }
+
+    if (selectedTahun) {
+      params += `&tahun=${selectedTahun}`;
+    }
+
+    if (tabType === "peserta" && selectedStatus) {
+      params += `&status=${selectedStatus}`;
     }
 
     const response =
@@ -52,8 +68,11 @@ const useKelolaLaporan = (tabType: "sertifikat" | "peserta") => {
       currentLimit,
       currentSearch,
       selectedBatch,
+      selectedTahun,
+      selectedStatus,
     ],
     queryFn: getLaporan,
+    gcTime: 0,
     enabled: !!currentPage && !!currentLimit && !!token,
   });
 
@@ -76,6 +95,10 @@ const useKelolaLaporan = (tabType: "sertifikat" | "peserta") => {
     refetchKelolaLaporan,
     selectedBatch,
     setSelectedBatch,
+    selectedTahun,
+    setSelectedTahun,
+    selectedStatus,
+    setSelectedStatus,
     dataFilterJadwal,
     isLoadingFilterJadwal,
   };

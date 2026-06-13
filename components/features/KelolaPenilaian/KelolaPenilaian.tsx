@@ -1,7 +1,14 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { Key, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import {
+  Key,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import {
   Dropdown,
   DropdownItem,
@@ -246,9 +253,13 @@ const KelolaPenilaian = ({
             <SelectItem
               key={jadwal.id}
               className="text-sm"
-              textValue={jadwal._displayLabel || `${jadwal.training?.namaTraining || "Tanpa Nama"} - ${jadwal.batch}`}
+              textValue={
+                jadwal._displayLabel ||
+                `${jadwal.training?.namaTraining || "Tanpa Nama"} - ${jadwal.batch}`
+              }
             >
-              {jadwal._displayLabel || `${jadwal.training?.namaTraining || "Tanpa Nama"} - ${jadwal.batch}`}
+              {jadwal._displayLabel ||
+                `${jadwal.training?.namaTraining || "Tanpa Nama"} - ${jadwal.batch}`}
             </SelectItem>
           ))
         )}
@@ -268,7 +279,8 @@ const KelolaPenilaian = ({
 
       const itemId =
         (itemPenilaian as any)?.penilaianId || (itemPenilaian as any)?.id;
-      const penilaianId = (itemPenilaian as any)?.penilaianId || (itemPenilaian as any)?.id;
+      const penilaianId =
+        (itemPenilaian as any)?.penilaianId || (itemPenilaian as any)?.id;
 
       switch (columnKey) {
         case "namaPeserta":
@@ -296,6 +308,7 @@ const KelolaPenilaian = ({
           return cellValue || "-";
         case "fileRevisiAdmin": {
           const hasFile = (itemPenilaian as any)?.fileRevisiAdmin;
+
           if (!hasFile) return <span className="text-xs text-gray-400">-</span>;
 
           const key = `revisi-admin-${penilaianId}`;
@@ -318,6 +331,7 @@ const KelolaPenilaian = ({
         }
         case "fileRevisiPeserta": {
           const hasFile = (itemPenilaian as any)?.fileRevisiPeserta;
+
           if (!hasFile) return <span className="text-xs text-gray-400">-</span>;
 
           const key = `revisi-peserta-${penilaianId}`;
@@ -349,7 +363,8 @@ const KelolaPenilaian = ({
             ditolak: "danger",
           };
 
-          if (!statusRev) return <span className="text-xs text-gray-400">-</span>;
+          if (!statusRev)
+            return <span className="text-xs text-gray-400">-</span>;
 
           return (
             <Chip
@@ -434,7 +449,14 @@ const KelolaPenilaian = ({
           return cellValue as React.ReactNode;
       }
     },
-    [editPenilaianModal, deletePenilaianModal, setSelectedId, downloadingIds, isPendingSetujuiRevisi, isPendingTolakRevisi],
+    [
+      editPenilaianModal,
+      deletePenilaianModal,
+      setSelectedId,
+      downloadingIds,
+      isPendingSetujuiRevisi,
+      isPendingTolakRevisi,
+    ],
   );
 
   return (

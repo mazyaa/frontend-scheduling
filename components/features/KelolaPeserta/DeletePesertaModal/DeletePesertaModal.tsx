@@ -65,12 +65,12 @@ const DeletePesertaModal = (props: PropTypes) => {
               </ModalHeader>
 
               <ModalBody>
-                <p className="text-sm font-normal text-brand">
+                <p className="text-sm font-normal text-black">
                   Apakah Anda yakin ingin menghapus peserta{" "}
-                  <span className="font-semibold text-slate-900">
-                    {selectedData?.name}
+                  <span className="font-semibold text-danger">
+                    {selectedData?.name}?
                   </span>
-                  ? Data yang sudah dihapus tidak dapat dikembalikan.
+                  Data yang sudah dihapus tidak dapat dikembalikan.
                 </p>
               </ModalBody>
 

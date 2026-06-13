@@ -100,7 +100,9 @@ const TambahMateriModal = (props: PropTypes) => {
                         </SelectItem>
                       ) : (
                         (dataJadwalTraining || []).map((jadwal: any) => {
-                          const labelText = jadwal._displayLabel || `${jadwal.training?.namaTraining || "Tanpa Nama"} - BATCH-${jadwal.batch}`;
+                          const labelText =
+                            jadwal._displayLabel ||
+                            `${jadwal.training?.namaTraining || "Tanpa Nama"} - BATCH-${jadwal.batch}`;
 
                           return (
                             <SelectItem key={jadwal.id} textValue={labelText}>

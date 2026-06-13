@@ -17,7 +17,15 @@ const schema = yup.object().shape({
     .string()
     .email("Format email tidak valid")
     .required("Email wajib diisi"),
-  noWa: yup.string().required("Nomor WA wajib diisi"),
+  noWa: yup
+    .string()
+    .required("Nomor WA wajib diisi")
+    .matches(/^\d+$/, "Nomor WA hanya boleh berisi angka")
+    .test(
+      "no-leading-zero",
+      "Nomor WA tidak boleh diawali dengan 0",
+      (val) => !val || !val.startsWith("0"),
+    ),
   instansi: yup.string().required("Instansi wajib diisi"),
   fileCv: yup.string().required("File CV wajib diunggah"),
   fileIjazah: yup.string().required("File Ijazah wajib diunggah"),
@@ -125,7 +133,10 @@ const useTambahPesertaModal = () => {
     isSuccess: isSuccessMutateAddPeserta,
   } = useMutation({
     mutationFn: async (payload: Omit<IParticipant, "id">) => {
-      return await participantServices.createParticipant(payload);
+      return await participantServices.createParticipant({
+        ...payload,
+        noWa: `62${payload.noWa}`,
+      });
     },
     onSuccess: () => {
       setToaster({

@@ -5,7 +5,9 @@ import "./BorderGlow.css";
 
 function parseHSL(hslStr: string) {
   const match = hslStr.match(/([\d.]+)\s*([\d.]+)%?\s*([\d.]+)%?/);
+
   if (!match) return { h: 40, s: 80, l: 80 };
+
   return {
     h: parseFloat(match[1]),
     s: parseFloat(match[2]),
@@ -19,9 +21,12 @@ function buildGlowVars(glowColor: string, intensity: number) {
   const opacities = [100, 60, 50, 40, 30, 20, 10];
   const keys = ["", "-60", "-50", "-40", "-30", "-20", "-10"];
   const vars: Record<string, string> = {};
+
   for (let i = 0; i < opacities.length; i++) {
-    vars[`--glow-color${keys[i]}`] = `hsl(${base} / ${Math.min(opacities[i] * intensity, 100)}%)`;
+    vars[`--glow-color${keys[i]}`] =
+      `hsl(${base} / ${Math.min(opacities[i] * intensity, 100)}%)`;
   }
+
   return vars;
 }
 
@@ -47,11 +52,15 @@ const COLOR_MAP = [0, 1, 2, 0, 1, 2, 1];
 
 function buildGradientVars(colors: string[]) {
   const vars: Record<string, string> = {};
+
   for (let i = 0; i < 7; i++) {
     const c = colors[Math.min(COLOR_MAP[i], colors.length - 1)];
-    vars[GRADIENT_KEYS[i]] = `radial-gradient(at ${GRADIENT_POSITIONS[i]}, ${c} 0px, transparent 50%)`;
+
+    vars[GRADIENT_KEYS[i]] =
+      `radial-gradient(at ${GRADIENT_POSITIONS[i]}, ${c} 0px, transparent 50%)`;
   }
   vars["--gradient-base"] = `linear-gradient(${colors[0]} 0 100%)`;
+
   return vars;
 }
 
@@ -80,9 +89,11 @@ function animateValue({
   onEnd?: () => void;
 }) {
   const t0 = performance.now() + delay;
+
   function tick() {
     const elapsed = performance.now() - t0;
     const t = Math.min(elapsed / duration, 1);
+
     onUpdate(start + (end - start) * ease(t));
     if (t < 1) requestAnimationFrame(tick);
     else if (onEnd) onEnd();
@@ -123,6 +134,7 @@ const BorderGlow = ({
 
   const getCenterOfElement = useCallback((el: HTMLElement) => {
     const { width, height } = el.getBoundingClientRect();
+
     return [width / 2, height / 2];
   }, []);
 
@@ -133,8 +145,10 @@ const BorderGlow = ({
       const dy = y - cy;
       let kx = Infinity;
       let ky = Infinity;
+
       if (dx !== 0) kx = cx / Math.abs(dx);
       if (dy !== 0) ky = cy / Math.abs(dy);
+
       return Math.min(Math.max(1 / Math.min(kx, ky), 0), 1);
     },
     [getCenterOfElement],
@@ -145,10 +159,13 @@ const BorderGlow = ({
       const [cx, cy] = getCenterOfElement(el);
       const dx = x - cx;
       const dy = y - cy;
+
       if (dx === 0 && dy === 0) return 0;
       const radians = Math.atan2(dy, dx);
       let degrees = radians * (180 / Math.PI) + 90;
+
       if (degrees < 0) degrees += 360;
+
       return degrees;
     },
     [getCenterOfElement],
@@ -157,6 +174,7 @@ const BorderGlow = ({
   const handlePointerMove = useCallback(
     (e: React.PointerEvent<HTMLDivElement>) => {
       const card = cardRef.current;
+
       if (!card) return;
 
       const rect = card.getBoundingClientRect();
@@ -166,10 +184,7 @@ const BorderGlow = ({
       const edge = getEdgeProximity(card, x, y);
       const angle = getCursorAngle(card, x, y);
 
-      card.style.setProperty(
-        "--edge-proximity",
-        `${(edge * 100).toFixed(3)}`,
-      );
+      card.style.setProperty("--edge-proximity", `${(edge * 100).toFixed(3)}`);
       card.style.setProperty("--cursor-angle", `${angle.toFixed(3)}deg`);
     },
     [getEdgeProximity, getCursorAngle],
@@ -180,6 +195,7 @@ const BorderGlow = ({
     const card = cardRef.current;
     const angleStart = 110;
     const angleEnd = 465;
+
     card.classList.add("sweep-active");
     card.style.setProperty("--cursor-angle", `${angleStart}deg`);
 
@@ -228,17 +244,19 @@ const BorderGlow = ({
     <div
       ref={cardRef}
       className={`border-glow-card ${className}`}
+      style={
+        {
+          "--card-bg": backgroundColor,
+          "--edge-sensitivity": edgeSensitivity,
+          "--border-radius": `${borderRadius}px`,
+          "--glow-padding": `${glowRadius}px`,
+          "--cone-spread": coneSpread,
+          "--fill-opacity": fillOpacity,
+          ...glowVars,
+          ...buildGradientVars(colors),
+        } as React.CSSProperties
+      }
       onPointerMove={handlePointerMove}
-      style={{
-        "--card-bg": backgroundColor,
-        "--edge-sensitivity": edgeSensitivity,
-        "--border-radius": `${borderRadius}px`,
-        "--glow-padding": `${glowRadius}px`,
-        "--cone-spread": coneSpread,
-        "--fill-opacity": fillOpacity,
-        ...glowVars,
-        ...buildGradientVars(colors),
-      } as React.CSSProperties}
     >
       <span className="edge-light" />
       <div className="border-glow-inner">{children}</div>

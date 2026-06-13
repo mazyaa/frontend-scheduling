@@ -26,6 +26,13 @@ interface PropTypes {
   selectedData: IParticipant | null;
 }
 
+const Information = ({ message }: { message: string }) => (
+  <div className="flex bg-amber-100 p-1.5 rounded-sm items-center gap-1 text-blue-600 text-xs w-fit cursor-help">
+    <CiCircleInfo size={14} />
+    <span>{message}</span>
+  </div>
+);
+
 const EditPesertaModal = (props: PropTypes) => {
   const { isOpen, onOpenChange, refetchPeserta, selectedData } = props;
   const onCloseRef = useRef<() => void>();
@@ -129,6 +136,7 @@ const EditPesertaModal = (props: PropTypes) => {
                     )}
                   />
 
+                  <Information message="Input nomor tanpa 0, contoh: 8123456789" />
                   <Controller
                     control={control}
                     name="noWa"
@@ -140,6 +148,14 @@ const EditPesertaModal = (props: PropTypes) => {
                         label="No WhatsApp"
                         labelPlacement="outside"
                         placeholder="Nomor WhatsApp Peserta"
+                        startContent={
+                          <div className="flex items-center gap-1">
+                            <span className="text-default-500 text-small font-semibold">
+                              62
+                            </span>
+                            <div className="w-px h-4 bg-default-300" />
+                          </div>
+                        }
                         type="text"
                         variant="bordered"
                       />
