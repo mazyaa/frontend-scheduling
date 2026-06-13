@@ -19,7 +19,15 @@ const schema = yup.object().shape({
     .string()
     .email("Format email tidak valid")
     .required("Email wajib diisi"),
-  noWa: yup.string().required("Nomor WA wajib diisi"),
+  noWa: yup
+    .string()
+    .required("Nomor WA wajib diisi")
+    .matches(/^\d+$/, "Nomor WA hanya boleh berisi angka")
+    .test(
+      "no-leading-zero",
+      "Nomor WA tidak boleh diawali dengan 0",
+      (val) => !val || !val.startsWith("0"),
+    ),
   role: yup
     .string()
     .oneOf(["instruktur", "asesor"], "Role harus instruktur atau asesor")
@@ -64,7 +72,7 @@ const useEditInstrukturAsesorModal = (id: string, isOpen: boolean) => {
           name: instrukturAsesorDataById.data.name || "",
           image: instrukturAsesorDataById.data.image || "",
           email: instrukturAsesorDataById.data.email || "",
-          noWa: instrukturAsesorDataById.data.noWa || "",
+          noWa: (instrukturAsesorDataById.data.noWa || "").replace(/^62/, ""),
           role: instrukturAsesorDataById.data.role || "",
           keahlian: instrukturAsesorDataById.data.keahlian || "",
         }
@@ -165,7 +173,7 @@ const useEditInstrukturAsesorModal = (id: string, isOpen: boolean) => {
   const handleUpdateInstrukturAsesor = (
     payload: Omit<IKelolaInstrukturAsesor, "id">,
   ) => {
-    mutateEditInstrukturAsesor(payload);
+    mutateEditInstrukturAsesor({ ...payload, noWa: `62${payload.noWa}` });
   };
 
   return {

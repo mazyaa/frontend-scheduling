@@ -27,7 +27,15 @@ const schema = yup.object().shape({
     .string()
     .email("Format email tidak valid")
     .required("Email wajib diisi"),
-  noWa: yup.string().required("Nomor WA wajib diisi"),
+  noWa: yup
+    .string()
+    .required("Nomor WA wajib diisi")
+    .matches(/^\d+$/, "Nomor WA hanya boleh berisi angka")
+    .test(
+      "no-leading-zero",
+      "Nomor WA tidak boleh diawali dengan 0",
+      (val) => !val || !val.startsWith("0"),
+    ),
   instansi: yup.string().required("Instansi wajib diisi"),
   fileCv: yup.string().notRequired(),
   fileIjazah: yup.string().notRequired(),
@@ -76,7 +84,7 @@ const useEditPesertaModal = (selectedData: IParticipant | null) => {
     if (selectedData) {
       setValue("name", selectedData.name || "");
       setValue("email", selectedData.email || "");
-      setValue("noWa", selectedData.noWa || "");
+      setValue("noWa", (selectedData.noWa || "").replace(/^62/, ""));
       setValue("instansi", selectedData.profilPeserta?.instansi || "");
     }
   }, [selectedData, setValue]);
@@ -150,6 +158,10 @@ const useEditPesertaModal = (selectedData: IParticipant | null) => {
           delete cleanPayload[field];
         }
       });
+
+      if (cleanPayload.noWa) {
+        cleanPayload.noWa = `62${cleanPayload.noWa}`;
+      }
 
       return await participantServices.updateParticipant(
         selectedData.id,

@@ -81,8 +81,7 @@ const RevisiAdminModal = (props: PropTypes) => {
                     size={16}
                   />
                   <p>
-                    Format yang diizinkan: <strong>PDF</strong>. Maksimal
-                    10MB.
+                    Format yang diizinkan: <strong>PDF</strong>. Maksimal 10MB.
                   </p>
                 </div>
                 <InputFile

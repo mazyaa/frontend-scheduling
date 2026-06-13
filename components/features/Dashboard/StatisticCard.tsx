@@ -23,19 +23,14 @@ const StatisticCard = ({
         style={{ backgroundColor: borderColor }}
       />
       <div className="absolute right-0 top-0 bottom-0 w-[120px] opacity-15 pointer-events-none">
-        <Image
-          src={backgroundLine}
-          alt=""
-          fill
-          className="object-cover"
-        />
+        <Image fill alt="" className="object-cover" src={backgroundLine} />
       </div>
       <CardBody className="flex flex-row items-center gap-4 pl-7 pr-6 py-6">
         <div
           className="relative w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0"
           style={{ backgroundColor: `${borderColor}20` }}
         >
-          <Image src={icon} alt={title} width={36} height={36} />
+          <Image alt={title} height={36} src={icon} width={36} />
         </div>
         <div className="flex flex-col min-w-0">
           <p className="text-sm text-gray-500 font-medium">{title}</p>

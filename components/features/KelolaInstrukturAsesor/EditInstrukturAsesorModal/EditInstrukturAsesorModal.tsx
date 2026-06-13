@@ -14,6 +14,7 @@ import { Button } from "@heroui/button";
 import { Spinner } from "@heroui/spinner";
 import { Skeleton } from "@heroui/skeleton";
 import { Select, SelectItem } from "@heroui/select";
+import { FiInfo } from "react-icons/fi";
 
 import useEditInstrukturAsesorModal from "./useEditInstrukturAsesorModal";
 
@@ -25,6 +26,15 @@ interface PropTypes {
   onOpenChange: () => void; // for tracking open state of modal, because when user click cancel button, the state of isOpen will be set to false, but when user click add button, the state of isOpen will be set to true, so we need to track the state of modal open or close
   refetchInstrukturAsesor: () => void;
 }
+
+const Information = ({ message }: { message: string }) => {
+  return (
+    <div className="flex bg-amber-100 p-1.5 rounded-sm items-center gap-1 text-blue-600 text-xs w-fit cursor-help">
+      <FiInfo size={14} />
+      <span>{message}</span>
+    </div>
+  );
+};
 
 const EditInstrukturAsesorModal = (props: PropTypes) => {
   const { isOpen, onOpenChange, selectedId, refetchInstrukturAsesor } = props;
@@ -140,6 +150,7 @@ const EditInstrukturAsesorModal = (props: PropTypes) => {
                   className="rounded-sm"
                   isLoaded={!!instrukturAsesorDataById}
                 >
+                  <Information message="Input nomor tanpa 0, contoh: 8123456789" />
                   <Controller
                     control={controlUpdateInstrukturAsesor}
                     name="noWa"
@@ -157,6 +168,14 @@ const EditInstrukturAsesorModal = (props: PropTypes) => {
                           errorsUpdateInstrukturAsesor.noWa !== undefined
                         }
                         label="Nomor WA"
+                        startContent={
+                          <div className="flex items-center gap-1">
+                            <span className="text-default-500 text-small font-semibold">
+                              62
+                            </span>
+                            <div className="w-px h-4 bg-default-300" />
+                          </div>
+                        }
                         variant="bordered"
                       />
                     )}

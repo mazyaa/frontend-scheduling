@@ -6,8 +6,7 @@ import instance from "@/lib/axios/instance";
 export const kelolaJadwalServices = {
   getAllSchedules: (params?: string) =>
     instance.get(`${endpoint.JADWAL}?${params}`),
-  getMySchedules: () =>
-    instance.get(`${endpoint.JADWAL_MY_SCHEDULES}`),
+  getMySchedules: () => instance.get(`${endpoint.JADWAL_MY_SCHEDULES}`),
   getScheduleById: (id: string) => instance.get(`${endpoint.JADWAL}/${id}`),
   addSchedule: (payload: Omit<IKelolaJadwal, "id">) =>
     instance.post(`${endpoint.JADWAL}`, payload),

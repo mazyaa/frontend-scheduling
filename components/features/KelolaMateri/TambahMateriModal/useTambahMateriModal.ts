@@ -51,8 +51,7 @@ const useTambahMateriModal = () => {
       queryKey: ["JadwalTrainingOptions", role],
       queryFn: async () => {
         if (role === "instruktur") {
-          const response =
-            await kelolaJadwalServices.getMySchedules();
+          const response = await kelolaJadwalServices.getMySchedules();
 
           return (response.data.data || []).map((item: any) => ({
             id: item.value,

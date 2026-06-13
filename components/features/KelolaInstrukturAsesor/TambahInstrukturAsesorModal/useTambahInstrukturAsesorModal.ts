@@ -17,7 +17,15 @@ const schema = yup.object().shape({
     .string()
     .email("Format email tidak valid")
     .required("Email wajib diisi"),
-  noWa: yup.string().required("Nomor WA wajib diisi"),
+  noWa: yup
+    .string()
+    .required("Nomor WA wajib diisi")
+    .matches(/^\d+$/, "Nomor WA hanya boleh berisi angka")
+    .test(
+      "no-leading-zero",
+      "Nomor WA tidak boleh diawali dengan 0",
+      (val) => !val || !val.startsWith("0"),
+    ),
   role: yup
     .string()
     .oneOf(["instruktur", "asesor"], "Role harus instruktur atau asesor")
@@ -134,7 +142,7 @@ const useTambahInstrukturAsesorModal = () => {
   const handleAddInstrukturAsesor = (
     data: Omit<IKelolaInstrukturAsesor, "id">,
   ) => {
-    mutateAddInstrukturAsesor(data);
+    mutateAddInstrukturAsesor({ ...data, noWa: `62${data.noWa}` });
   };
 
   return {

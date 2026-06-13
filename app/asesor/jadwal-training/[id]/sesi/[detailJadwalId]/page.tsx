@@ -3,7 +3,6 @@
 import { Suspense } from "react";
 
 import SesiJadwal from "@/components/features/MyJadwalTraining/SesiJadwal/SesiJadwal";
-
 import GridBackground from "@/components/GridBackground";
 import Navbar from "@/components/layouts/Navbar/Navbar";
 

@@ -64,8 +64,7 @@ const useKelolaPenilaian = (scheduleId?: string) => {
       queryKey: ["JadwalTrainingFilterPenilaian", role],
       queryFn: async () => {
         if (role === "asesor") {
-          const response =
-            await kelolaJadwalServices.getMySchedules();
+          const response = await kelolaJadwalServices.getMySchedules();
 
           return (response.data.data || []).map((item: any) => ({
             id: item.value,

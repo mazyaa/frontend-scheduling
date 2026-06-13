@@ -110,7 +110,7 @@ const TambahInstrukturAsesorModal = (props: PropTypes) => {
                   )}
                 />
 
-                <Information message="No WhatsApp Harus diawali dengan 62" />
+                <Information message="Input nomor tanpa 0, contoh: 8123456789" />
                 <Controller
                   control={control}
                   name="noWa"
@@ -121,6 +121,14 @@ const TambahInstrukturAsesorModal = (props: PropTypes) => {
                       errorMessage={errors.noWa?.message}
                       isInvalid={errors.noWa !== undefined}
                       label="Nomor Whatsapp"
+                      startContent={
+                        <div className="flex items-center gap-1">
+                          <span className="text-default-500 text-small font-semibold">
+                            62
+                          </span>
+                          <div className="w-px h-4 bg-default-300" />
+                        </div>
+                      }
                       variant="bordered"
                     />
                   )}

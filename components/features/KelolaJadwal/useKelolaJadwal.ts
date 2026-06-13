@@ -5,9 +5,8 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 
-import useKelolaTraining from "../KelolaTraining/useKelolaTraining";
-
 import { kelolaJadwalServices } from "@/services/kelolaJadwal.service";
+import { kelolaTrainingServices } from "@/services/kelolaTraining.service";
 import useChangeUrl from "@/hooks/useChangeUrl";
 
 const useKelolaJadwal = () => {
@@ -16,7 +15,6 @@ const useKelolaJadwal = () => {
   const token = session?.accessToken;
   const [selectedId, setSelectedId] = useState<string>("");
   const { currentLimit, currentPage, currentSearch } = useChangeUrl();
-  const { dataKelolaTraining, isLoadingKelolaTraining } = useKelolaTraining();
 
   const getAllSchedules = async () => {
     let params = `limit=${currentLimit}&page=${currentPage}`;
@@ -33,6 +31,18 @@ const useKelolaJadwal = () => {
       pagination,
     };
   };
+
+  const { data: dataKelolaTraining, isLoading: isLoadingKelolaTraining } =
+    useQuery({
+      queryKey: ["KelolaTrainingAll"],
+      queryFn: async () => {
+        const response =
+          await kelolaTrainingServices.getAllTraining("limit=9999&page=1");
+
+        return response.data;
+      },
+      enabled: pathname === "/admin/kelola-jadwal-training" && !!token,
+    });
 
   const {
     data: dataKelolaJadwal,
