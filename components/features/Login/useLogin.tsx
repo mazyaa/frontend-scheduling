@@ -10,6 +10,7 @@ import { getSession, signIn, signOut } from "next-auth/react";
 
 import { ILogin } from "@/types/Auth";
 import { ToasterContext } from "@/context/ToasterContext";
+import errorHandling from "@/utils/errrorHandling";
 
 const loginSchema = yup.object().shape({
   email: yup
@@ -55,10 +56,11 @@ const useLogin = () => {
   const { mutate: mutateLogin, isPending: isPendingLogin } = useMutation({
     mutationFn: loginServices,
     onError(error) {
+      const message = errorHandling(error);
       setToaster({
         title: "Login Failed",
         type: "error",
-        message: (error as Error).message,
+        message: message || "Login gagal",
       });
     },
     onSuccess: async () => {

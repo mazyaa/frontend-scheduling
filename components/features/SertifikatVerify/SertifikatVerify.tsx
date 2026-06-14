@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Input } from "@heroui/input";
 import { Button } from "@heroui/button";
 import { Spinner } from "@heroui/spinner";
@@ -12,8 +12,11 @@ import { FaArrowLeftLong } from "react-icons/fa6";
 import { FaCertificate, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 
 import { sertifikatVerifyServices } from "@/services/sertifikatVerify.service";
+import { ToasterContext } from "@/context/ToasterContext";
+import errorHandling from "@/utils/errrorHandling";
 
 const SertifikatVerify = () => {
+  const { setToaster } = useContext(ToasterContext);
   const [nomorSertifikat, setNomorSertifikat] = useState("");
   const [verificationResult, setVerificationResult] = useState<any>(null);
 
@@ -28,8 +31,14 @@ const SertifikatVerify = () => {
     onSuccess: (response) => {
       setVerificationResult(response.data.data);
     },
-    onError: () => {
+    onError: (error) => {
+      const message = errorHandling(error);
       setVerificationResult(null);
+      setToaster({
+        title: "Gagal",
+        type: "error",
+        message: message || "Terjadi kesalahan",
+      });
     },
   });
 
@@ -163,9 +172,7 @@ const SertifikatVerify = () => {
           </CardHeader>
           <CardBody className="px-6 py-5">
             <p className="text-gray-700">
-              {error instanceof Error
-                ? error.message
-                : "Nomor sertifikat tidak ditemukan. Pastikan nomor yang Anda masukkan benar."}
+              {errorHandling(error) || "Nomor sertifikat tidak ditemukan. Pastikan nomor yang Anda masukkan benar."}
             </p>
           </CardBody>
         </Card>

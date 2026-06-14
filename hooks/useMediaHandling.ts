@@ -5,6 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 
 import { ToasterContext } from "@/context/ToasterContext";
 import { uploadServices } from "@/services/upload.service";
+import errorHandling from "@/utils/errrorHandling";
 
 const useMediaHandling = () => {
   const { setToaster } = useContext(ToasterContext);
@@ -32,13 +33,11 @@ const useMediaHandling = () => {
         callback: (fileUrl: string) => void;
       }) => uploadFile(varaibles.file, varaibles.callback),
       onError: (error) => {
+        const message = errorHandling(error);
         setToaster({
           title: "Upload Gagal",
           type: "error",
-          message:
-            error instanceof Error
-              ? error.message
-              : "Terjadi kesalahan saat mengupload file",
+          message: message || "Terjadi kesalahan saat mengupload file",
         });
       },
     });
@@ -56,13 +55,11 @@ const useMediaHandling = () => {
       mutationFn: (variables: { fileUrl: string; callback: () => void }) =>
         deleteFile(variables.fileUrl, variables.callback),
       onError: (error) => {
+        const message = errorHandling(error);
         setToaster({
           title: "Hapus Gagal",
           type: "error",
-          message:
-            error instanceof Error
-              ? error.message
-              : "Terjadi kesalahan saat menghapus file",
+          message: message || "Terjadi kesalahan saat menghapus file",
         });
       },
     });
