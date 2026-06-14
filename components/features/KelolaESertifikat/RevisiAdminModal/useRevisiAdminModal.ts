@@ -5,6 +5,7 @@ import { useContext, useState } from "react";
 
 import { revisiServices } from "@/services/revisi.service";
 import { ToasterContext } from "@/context/ToasterContext";
+import errorHandling from "@/utils/errrorHandling";
 
 const useRevisiAdminModal = (selectedPenilaianId: string) => {
   const { setToaster } = useContext(ToasterContext);
@@ -35,10 +36,11 @@ const useRevisiAdminModal = (selectedPenilaianId: string) => {
       });
     },
     onError: (error) => {
+      const message = errorHandling(error);
       setToaster({
         title: "Gagal",
         type: "error",
-        message: error instanceof Error ? error.message : "Terjadi kesalahan",
+        message: message || "Terjadi kesalahan",
       });
     },
   });

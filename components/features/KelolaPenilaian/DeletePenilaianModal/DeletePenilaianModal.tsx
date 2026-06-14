@@ -14,6 +14,7 @@ import { Spinner } from "@heroui/spinner";
 
 import { assesmentServices } from "@/services/assesment.service";
 import { ToasterContext } from "@/context/ToasterContext";
+import errorHandling from "@/utils/errrorHandling";
 
 interface PropTypes {
   isOpen: boolean;
@@ -52,10 +53,11 @@ const DeletePenilaianModal = (props: PropTypes) => {
       setSelectedId("");
     },
     onError: (error) => {
+      const message = errorHandling(error);
       setToaster({
         title: "Gagal",
         type: "error",
-        message: error instanceof Error ? error.message : "Terjadi kesalahan",
+        message: message || "Terjadi kesalahan",
       });
       setSelectedId("");
     },

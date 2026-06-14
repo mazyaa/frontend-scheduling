@@ -11,6 +11,7 @@ import { materiServices } from "@/services/materi.service";
 import { kelolaJadwalServices } from "@/services/kelolaJadwal.service";
 import { kelolaDetailJadwalServices } from "@/services/kelolaDetailJadwal.service";
 import { ToasterContext } from "@/context/ToasterContext";
+import errorHandling from "@/utils/errrorHandling";
 
 const schema = yup.object().shape({
   jadwalTrainingId: yup.string().required("Jadwal Training wajib dipilih"),
@@ -107,10 +108,11 @@ const useTambahMateriModal = () => {
       });
     },
     onError: (error) => {
+      const message = errorHandling(error);
       setToaster({
         title: "Gagal",
         type: "error",
-        message: error instanceof Error ? error.message : "Terjadi kesalahan",
+        message: message || "Terjadi kesalahan",
       });
     },
   });
