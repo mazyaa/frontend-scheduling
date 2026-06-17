@@ -69,7 +69,6 @@ const KelolaLaporan = () => {
     selectedStatus,
     setSelectedStatus,
     dataFilterJadwal,
-    isLoadingFilterJadwal,
   } = useKelolaLaporan(selectedTab);
 
   const { setUrl } = useChangeUrl();
@@ -420,7 +419,7 @@ const KelolaLaporan = () => {
 
   const customTopContentSertifikat = useMemo(
     () => (
-      <div className="flex flex-row flex-wrap gap-2">
+      <div className="flex flex-col lg:flex-row lg:w-100 gap-2">
         {filterSelect(
           "Batch",
           selectedBatch,
@@ -448,7 +447,7 @@ const KelolaLaporan = () => {
 
   const customTopContentPeserta = useMemo(
     () => (
-      <div className="flex flex-row flex-wrap gap-2">
+      <div className="flex flex-col lg:flex-row lg:w-150 gap-2">
         {filterSelect(
           "Batch",
           selectedBatch,

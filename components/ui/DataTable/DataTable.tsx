@@ -69,7 +69,7 @@ const DataTable = (props: PropTypes) => {
   const topContent = useMemo(() => {
     return (
       <div className="justify-between flex flex-col items-start gap-y-4 lg:flex-row lg:items-center lg:justify-between">
-        <div className="flex flex-col lg:flex-row gap-4 w-full sm:w-auto">
+        <div className="flex flex-col lg:flex-col gap-4 w-full sm:w-auto">
           <Input
             isClearable // Enable the clear button
             className="max-w-64 lg:max-w-80"
