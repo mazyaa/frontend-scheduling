@@ -39,12 +39,12 @@ const formatDate = (dateStr: string) => {
 
 const uniqueValues = (arr: any[], key: string): string[] => {
   const vals = arr
-    .map((item: any) => {
-      const v = key.split(".").reduce((obj, k) => obj?.[k], item);
+    .map((item) => {
+      const v = key.split(".").reduce<any>((obj, k) => obj?.[k], item);
 
-      return v ? String(v) : null;
+      return v != null ? String(v) : undefined;
     })
-    .filter(Boolean);
+    .filter((v): v is string => v !== undefined);
 
   return [...new Set(vals)].sort();
 };
@@ -382,18 +382,20 @@ const KelolaLaporan = () => {
           onChange(key === "__all__" ? "" : key);
         }}
       >
-        <SelectItem
-          key="__all__"
-          className="text-sm"
-          textValue={`Semua ${label}`}
-        >
-          Semua
-        </SelectItem>
-        {options.map((opt) => (
-          <SelectItem key={opt.key} className="text-sm" textValue={opt.label}>
-            {opt.label}
+        <>
+          <SelectItem
+            key="__all__"
+            className="text-sm"
+            textValue={`Semua ${label}`}
+          >
+            Semua
           </SelectItem>
-        ))}
+          {options.map((opt) => (
+            <SelectItem key={opt.key} className="text-sm" textValue={opt.label}>
+              {opt.label}
+            </SelectItem>
+          ))}
+        </>
       </Select>
     ),
     [],
