@@ -2,47 +2,43 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { cn } from "@heroui/theme";
 
 import GridBackground from "@/components/GridBackground";
 
 const leftIcons = [
   {
     src: "/flying-icon/certificateIcon.png",
-    size: 100,
-    left: "25%",
-    top: "5%",
+    className:
+      "w-14 md:w-20 lg:w-[100px] h-auto top-[10%] left-[15%] md:left-[12%] lg:left-[25%]",
     delay: 0,
     duration: 4.2,
   },
   {
     src: "/flying-icon/online-learningIcon.png",
-    size: 64,
-    left: "7%",
-    top: "26%",
+    className:
+      "w-10 md:w-12 lg:w-16 h-auto top-[24%] left-[2%] md:left-[4%] lg:left-[7%]",
     delay: 1.3,
     duration: 5.0,
   },
   {
     src: "/flying-icon/calendarIcon.png",
-    size: 100,
-    left: "-1%",
-    top: "44%",
+    className:
+      "w-14 md:w-20 lg:w-[100px] h-auto top-[44%] -left-6 md:-left-4 lg:left-[-1%]",
     delay: 0.5,
     duration: 3.8,
   },
   {
     src: "/flying-icon/clockIcon.png",
-    size: 75,
-    left: "15%",
-    top: "62%",
+    className:
+      "w-11 md:w-14 lg:w-[75px] h-auto top-[62%] left-[6%] md:left-[10%] lg:left-[15%]",
     delay: 2.1,
     duration: 4.6,
   },
   {
     src: "/flying-icon/assesement.png",
-    size: 60,
-    left: "3%",
-    top: "80%",
+    className:
+      "w-10 md:w-12 lg:w-[60px] h-auto top-[80%] left-[1%] md:left-[2%] lg:left-[3%] hidden lg:block md:block",
     delay: 0.8,
     duration: 5.4,
   },
@@ -51,41 +47,36 @@ const leftIcons = [
 const rightIcons = [
   {
     src: "/flying-icon/presentationIcon.png",
-    size: 100,
-    right: "25%",
-    top: "4%",
+    className:
+      "w-14 md:w-20 lg:w-[100px] h-auto top-[10%] right-[15%] md:right-[12%] lg:right-[25%]",
     delay: 0.7,
     duration: 4.8,
   },
   {
     src: "/flying-icon/open-bookIcon.png",
-    size: 50,
-    right: "8%",
-    top: "30%",
+    className:
+      "w-8 md:w-10 lg:w-[50px] h-auto top-[24%] right-[2%] md:right-[4%] lg:right-[7%]",
     delay: 1.8,
     duration: 3.6,
   },
   {
     src: "/flying-icon/validateIcon.png",
-    size: 100,
-    right: "-1%",
-    top: "44%",
+    className:
+      "w-14 md:w-20 lg:w-[100px] h-auto top-[44%] -right-6 md:-right-4 lg:right-[-1%]",
     delay: 0.2,
     duration: 5.2,
   },
   {
     src: "/flying-icon/trueIcon.png",
-    size: 75,
-    right: "15%",
-    top: "62%",
+    className:
+      "w-11 md:w-14 lg:w-[75px] h-auto top-[62%] right-[6%] md:right-[10%] lg:right-[15%]",
     delay: 2.4,
     duration: 4.0,
   },
   {
     src: "/flying-icon/fast-timeIcon.png",
-    size: 62,
-    right: "4%",
-    top: "80%",
+    className:
+      "w-10 md:w-12 lg:w-[62px] h-auto top-[80%] right-[2%] md:right-[3%] lg:right-[4%] hidden lg:block md:block",
     delay: 1.0,
     duration: 4.4,
   },
@@ -96,35 +87,38 @@ const HomeSection = () => {
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       <GridBackground />
 
-      <div className="hidden lg:block">
+      <div className="block">
         {leftIcons.map((icon, i) => (
           <Image
             key={`l-${i}`}
             alt=""
-            className="absolute pointer-events-none select-none opacity-80"
-            height={icon.size}
+            className={cn(
+              "absolute pointer-events-none select-none opacity-80",
+              icon.className,
+            )}
+            height={100}
             src={icon.src}
             style={{
-              left: icon.left,
-              top: icon.top,
               animation: `float ${icon.duration}s ease-in-out ${icon.delay}s infinite`,
             }}
-            width={icon.size}
+            width={100}
           />
         ))}
+
         {rightIcons.map((icon, i) => (
           <Image
-            key={`r-${i}`}
+            key={`l-${i}`}
             alt=""
-            className="absolute pointer-events-none select-none opacity-80"
-            height={icon.size}
+            className={cn(
+              "absolute pointer-events-none select-none opacity-80",
+              icon.className,
+            )}
+            height={100}
             src={icon.src}
             style={{
-              right: icon.right,
-              top: icon.top,
               animation: `float ${icon.duration}s ease-in-out ${icon.delay}s infinite`,
             }}
-            width={icon.size}
+            width={100}
           />
         ))}
       </div>

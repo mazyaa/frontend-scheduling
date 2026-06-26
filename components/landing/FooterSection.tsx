@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import {
   FaFacebookF,
   FaInstagram,
@@ -10,11 +11,31 @@ import {
 } from "react-icons/fa";
 
 const socialLinks = [
-  { icon: FaFacebookF, href: "#", label: "Facebook" },
-  { icon: FaInstagram, href: "#", label: "Instagram" },
-  { icon: FaTiktok, href: "#", label: "TikTok" },
-  { icon: FaLinkedinIn, href: "#", label: "LinkedIn" },
-  { icon: FaYoutube, href: "#", label: "YouTube" },
+  {
+    icon: FaFacebookF,
+    href: "https://www.facebook.com/veritrustacademy/",
+    label: "Facebook",
+  },
+  {
+    icon: FaInstagram,
+    href: "https://www.instagram.com/veritrustacademy/",
+    label: "Instagram",
+  },
+  {
+    icon: FaTiktok,
+    href: "https://www.tiktok.com/@veritrust",
+    label: "TikTok",
+  },
+  {
+    icon: FaLinkedinIn,
+    href: "https://id.linkedin.com/company/veritrust-global-solusindo",
+    label: "LinkedIn",
+  },
+  {
+    icon: FaYoutube,
+    href: "https://www.youtube.com/@veritrustacademy5498",
+    label: "YouTube",
+  },
 ];
 
 const menuLinks = [
@@ -67,11 +88,11 @@ const FooterSection = () => {
             <h4 className="font-semibold text-lg mb-3">Menu</h4>
             <ul className="space-y-2">
               {menuLinks.map((link) => (
-                <li key={link.label}>
+                <Link key={link.label} className="block" href={link.href}>
                   <span className="text-white/80 text-sm hover:text-white cursor-pointer transition-colors">
                     {link.label}
                   </span>
-                </li>
+                </Link>
               ))}
             </ul>
           </div>
