@@ -97,6 +97,32 @@ export const middleware = async (request: NextRequest) => {
   if (pathname === "/asesor") {
     return NextResponse.redirect(new URL("/asesor/dashboard", request.url));
   }
+
+  const redirectMapMateri: Record<string, string> = {
+    peserta: "/peserta/materi-training",
+    instruktur: "/instruktur/kelola-materi",
+    asesor: "/asesor/kelola-materi",
+  };
+
+  if (pathname === "/materi-training") {
+    const role = token?.role as string | undefined;
+
+    if (!token) {
+      const url = new URL("/login", request.url);
+
+      url.searchParams.set("callbackUrl", request.url);
+      url.searchParams.set("error", "unauthorized");
+
+      return NextResponse.redirect(url);
+    }
+
+    return NextResponse.redirect(
+      new URL(
+        redirectMapMateri[role ?? ""] || "/login?callbackUrl=/materi-training",
+        request.url,
+      ),
+    );
+  }
 };
 
 export const config = {
@@ -106,6 +132,7 @@ export const config = {
     "/peserta/:path*",
     "/instruktur/:path*",
     "/asesor/:path*",
+    "/materi-training",
     "/login",
   ],
 };

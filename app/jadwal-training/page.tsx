@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route"; // for getting the session on the server side
 
 export default async function JadwalTrainingPage() {
   const session = await getServerSession(authOptions);
