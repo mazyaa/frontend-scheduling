@@ -140,7 +140,7 @@ const EditSesiModal = ({
                         placeholder="Pilih PIC"
                       >
                         {[
-                          { value: "", label: "-" },
+                          { value: "-", label: "-" },
                           { value: "MC", label: "MC" },
                           ...(instrukturName
                             ? [

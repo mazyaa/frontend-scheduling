@@ -13,12 +13,13 @@ const useKelolaLaporan = (tabType: "sertifikat" | "peserta") => {
   const token = session?.accessToken;
   const { currentLimit, currentPage, currentSearch } = useChangeUrl();
 
-  const [selectedBatch, setSelectedBatch] = useState<string>("");
+  const [selectedJadwalTrainingId, setSelectedJadwalTrainingId] =
+    useState<string>("");
   const [selectedTahun, setSelectedTahun] = useState<string>("");
   const [selectedStatus, setSelectedStatus] = useState<string>("");
 
   useEffect(() => {
-    setSelectedBatch("");
+    setSelectedJadwalTrainingId("");
     setSelectedTahun("");
     setSelectedStatus("");
   }, [tabType]);
@@ -30,8 +31,8 @@ const useKelolaLaporan = (tabType: "sertifikat" | "peserta") => {
       params += `&search=${currentSearch}`;
     }
 
-    if (selectedBatch) {
-      params += `&batch=${selectedBatch}`;
+    if (selectedJadwalTrainingId) {
+      params += `&jadwalTrainingId=${selectedJadwalTrainingId}`;
     }
 
     if (selectedTahun) {
@@ -67,7 +68,7 @@ const useKelolaLaporan = (tabType: "sertifikat" | "peserta") => {
       currentPage,
       currentLimit,
       currentSearch,
-      selectedBatch,
+      selectedJadwalTrainingId,
       selectedTahun,
       selectedStatus,
     ],
@@ -93,8 +94,8 @@ const useKelolaLaporan = (tabType: "sertifikat" | "peserta") => {
     isLoadingKelolaLaporan,
     isRefetchingKelolaLaporan,
     refetchKelolaLaporan,
-    selectedBatch,
-    setSelectedBatch,
+    selectedJadwalTrainingId,
+    setSelectedJadwalTrainingId,
     selectedTahun,
     setSelectedTahun,
     selectedStatus,

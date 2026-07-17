@@ -236,6 +236,8 @@ const KelolaPenilaian = ({
         size="sm"
         variant="bordered"
         onSelectionChange={(keys) => {
+          if (typeof keys === "string") return;
+
           const key = Array.from(keys)[0] as string;
 
           setSelectedJadwalTrainingId(key === "__all__" ? "" : key);
@@ -255,11 +257,11 @@ const KelolaPenilaian = ({
               className="text-sm"
               textValue={
                 jadwal._displayLabel ||
-                `${jadwal.training?.namaTraining || "Tanpa Nama"} - ${jadwal.batch}`
+                `${jadwal.training?.namaTraining || jadwal.training || "Tanpa Nama"} - ${jadwal.batch}`
               }
             >
               {jadwal._displayLabel ||
-                `${jadwal.training?.namaTraining || "Tanpa Nama"} - ${jadwal.batch}`}
+                `${jadwal.training?.namaTraining || jadwal.training || "Tanpa Nama"} - ${jadwal.batch}`}
             </SelectItem>
           ))
         )}

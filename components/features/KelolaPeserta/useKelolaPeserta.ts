@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { usePathname } from "next/navigation";
 import { useMemo, useState } from "react";
 import { useSession } from "next-auth/react";
@@ -27,7 +27,17 @@ const useKelolaPeserta = () => {
       params += `&search=${currentSearch}`;
     }
 
-    const response = await participantServices.getAllParticipant(params);
+    let response;
+
+    if (selectedJadwalTrainingId) {
+      response = await participantServices.getParticipantBySchedule(
+        selectedJadwalTrainingId,
+        params,
+      );
+    } else {
+      response = await participantServices.getAllParticipant(params);
+    }
+
     const { results: rawData, pagination } = response.data;
 
     const data = Array.isArray(rawData)
@@ -50,8 +60,15 @@ const useKelolaPeserta = () => {
     isRefetching: isRefetchingKelolaPeserta,
     refetch: refetchKelolaPeserta,
   } = useQuery({
-    queryKey: ["KelolaPeserta", currentPage, currentLimit, currentSearch],
+    queryKey: [
+      "KelolaPeserta",
+      currentPage,
+      currentLimit,
+      currentSearch,
+      selectedJadwalTrainingId,
+    ],
     queryFn: getPeserta,
+    placeholderData: keepPreviousData,
     enabled:
       pathname === "/admin/kelola-peserta" &&
       !!currentPage &&
@@ -72,45 +89,32 @@ const useKelolaPeserta = () => {
     },
   );
 
-  const enrichedParticipants = useMemo(() => {
+  const enrichedData = useMemo(() => {
     const participants = dataKelolaPeserta?.data || [];
     const schedules = dataFilterJadwal || [];
 
-    const scheduleMap: Record<string, any> = {};
+    if (!schedules.length) return participants;
 
+    const scheduleMap: Record<string, any> = {};
     schedules.forEach((s: any) => {
       scheduleMap[s.id] = s;
     });
 
     return participants.map((p: IParticipant) => {
       const trainings = p.pesertaTraining || [];
-
       trainings.forEach((pt) => {
-        const schedule = scheduleMap[pt.jadwalTrainingId];
-
-        if (!pt.jadwalTraining.training && schedule?.training) {
-          pt.jadwalTraining.training = schedule.training;
+        if (!pt.jadwalTraining?.training && scheduleMap[pt.jadwalTrainingId]?.training) {
+          pt.jadwalTraining.training = scheduleMap[pt.jadwalTrainingId].training;
         }
       });
-
       return p;
     });
   }, [dataKelolaPeserta?.data, dataFilterJadwal]);
 
-  const filteredParticipants = useMemo(() => {
-    if (!selectedJadwalTrainingId) return enrichedParticipants;
-
-    return enrichedParticipants.filter((p: IParticipant) => {
-      const trainings = p.pesertaTraining || [];
-
-      return trainings.some(
-        (pt) => pt.jadwalTrainingId === selectedJadwalTrainingId,
-      );
-    });
-  }, [enrichedParticipants, selectedJadwalTrainingId]);
-
   return {
-    dataKelolaPeserta,
+    dataKelolaPeserta: dataKelolaPeserta
+      ? { data: enrichedData, pagination: dataKelolaPeserta.pagination }
+      : undefined,
     isLoadingKelolaPeserta,
     isRefetchingKelolaPeserta,
     refetchKelolaPeserta,
@@ -122,7 +126,6 @@ const useKelolaPeserta = () => {
     setSelectedJadwalTrainingId,
     dataFilterJadwal,
     isLoadingFilterJadwal,
-    filteredParticipants,
   };
 };
 

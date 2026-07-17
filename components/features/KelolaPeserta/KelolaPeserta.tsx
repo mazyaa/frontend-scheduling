@@ -50,7 +50,6 @@ const KelolaPeserta = () => {
     setSelectedJadwalTrainingId,
     dataFilterJadwal,
     isLoadingFilterJadwal,
-    filteredParticipants,
   } = useKelolaPeserta();
 
   const { handleKirimKredensial } = useKirimKredensial();
@@ -92,7 +91,7 @@ const KelolaPeserta = () => {
                   key={pt.id}
                   className="text-xs bg-default-100 px-2 py-0.5 rounded"
                 >
-                  {pt.jadwalTraining?.training?.namaTraining || "Training"} -{" "}
+                  {pt.jadwalTraining?.training?.namaTraining || pt.jadwalTraining?.training || "Training"} -{" "}
                   {pt.jadwalTraining?.batch || "-"}
                 </span>
               ))}
@@ -225,6 +224,8 @@ const KelolaPeserta = () => {
             size="sm"
             variant="bordered"
             onSelectionChange={(keys) => {
+              if (typeof keys === "string") return;
+
               const key = Array.from(keys)[0] as string;
 
               setSelectedJadwalTrainingId(key === ALL_KEY ? "" : key);
@@ -241,9 +242,9 @@ const KelolaPeserta = () => {
               (dataFilterJadwal || []).map((jadwal: any) => (
                 <SelectItem
                   key={jadwal.id}
-                  textValue={`${jadwal.training?.namaTraining || "Tanpa Nama"} - ${jadwal.batch}`}
+                  textValue={`${jadwal.training?.namaTraining || jadwal.training || "Tanpa Nama"} - ${jadwal.batch}`}
                 >
-                  {jadwal.training?.namaTraining || "Tanpa Nama"} -{" "}
+                  {jadwal.training?.namaTraining || jadwal.training || "Tanpa Nama"} -{" "}
                   {jadwal.batch}
                 </SelectItem>
               ))
@@ -455,7 +456,8 @@ const KelolaPeserta = () => {
       );
     }
 
-    if (filteredParticipants.length === 0) {
+    const pesertaList = dataKelolaPeserta?.data || [];
+    if (pesertaList.length === 0) {
       return (
         <motion.div
           animate={{ opacity: 1, y: 0 }}
@@ -523,7 +525,7 @@ const KelolaPeserta = () => {
 
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
-        {filteredParticipants.map((peserta: any) => renderCard(peserta))}
+        {pesertaList.map((peserta: any) => renderCard(peserta))}
       </div>
     );
   };

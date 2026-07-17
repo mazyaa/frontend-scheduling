@@ -59,7 +59,7 @@ const KelolaJadwal = () => {
         case "nama_training":
           return (
             <span>
-              {(itemJadwal as any)?.training?.namaTraining ??
+              {(itemJadwal as any)?.training?.namaTraining ?? (itemJadwal as any)?.training ??
                 "Nama training tidak ditemukan"}
             </span>
           );
