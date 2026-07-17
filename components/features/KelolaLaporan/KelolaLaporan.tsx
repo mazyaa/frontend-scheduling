@@ -62,8 +62,8 @@ const KelolaLaporan = () => {
     dataKelolaLaporan,
     isLoadingKelolaLaporan,
     isRefetchingKelolaLaporan,
-    selectedBatch,
-    setSelectedBatch,
+    selectedJadwalTrainingId,
+    setSelectedJadwalTrainingId,
     selectedTahun,
     setSelectedTahun,
     selectedStatus,
@@ -108,7 +108,17 @@ const KelolaLaporan = () => {
 
     const filterParts: string[] = [];
 
-    if (selectedBatch) filterParts.push(`Batch: ${selectedBatch}`);
+    if (selectedJadwalTrainingId) {
+      const selectedSchedule = (dataFilterJadwal || []).find(
+        (s: any) => s.id === selectedJadwalTrainingId,
+      );
+      const jadwalLabel =
+        selectedSchedule?.training?.namaTraining ||
+        selectedSchedule?.training ||
+        selectedSchedule?.batch ||
+        selectedJadwalTrainingId;
+      filterParts.push(`Jadwal: ${jadwalLabel}`);
+    }
     if (selectedTahun) filterParts.push(`Tahun: ${selectedTahun}`);
     if (selectedStatus)
       filterParts.push(
@@ -275,9 +285,10 @@ const KelolaLaporan = () => {
   }, [
     dataKelolaLaporan,
     selectedTab,
-    selectedBatch,
+    selectedJadwalTrainingId,
     selectedTahun,
     selectedStatus,
+    dataFilterJadwal,
   ]);
 
   const renderCellSertifikat = useCallback(
@@ -377,6 +388,8 @@ const KelolaLaporan = () => {
         size="sm"
         variant="bordered"
         onSelectionChange={(keys) => {
+          if (typeof keys === "string") return;
+
           const key = Array.from(keys)[0] as string;
 
           onChange(key === "__all__" ? "" : key);
@@ -401,11 +414,6 @@ const KelolaLaporan = () => {
     [],
   );
 
-  const batches = useMemo(
-    () => (dataFilterJadwal ? uniqueValues(dataFilterJadwal, "batch") : []),
-    [dataFilterJadwal],
-  );
-
   const years = useMemo(
     () =>
       dataFilterJadwal
@@ -422,12 +430,32 @@ const KelolaLaporan = () => {
   const customTopContentSertifikat = useMemo(
     () => (
       <div className="flex flex-col lg:flex-row lg:w-100 gap-2">
-        {filterSelect(
-          "Batch",
-          selectedBatch,
-          setSelectedBatch,
-          batches.map((b: string) => ({ key: b, label: b })),
-        )}
+        <Select
+          disallowEmptySelection
+          className="w-full sm:max-w-[280px]"
+          label="Filter Jadwal"
+          selectedKeys={[selectedJadwalTrainingId || "__all__"]}
+          size="sm"
+          variant="bordered"
+          onSelectionChange={(keys) => {
+            if (typeof keys === "string") return;
+            const key = Array.from(keys)[0] as string;
+            setSelectedJadwalTrainingId(key === "__all__" ? "" : key);
+          }}
+        >
+          <SelectItem key="__all__" textValue="Semua Jadwal">
+            Semua
+          </SelectItem>
+          {(dataFilterJadwal || []).map((jadwal: any) => (
+            <SelectItem
+              key={jadwal.id}
+              textValue={`${jadwal.training?.namaTraining || jadwal.training || "Tanpa Nama"} - ${jadwal.batch}`}
+            >
+              {jadwal.training?.namaTraining || jadwal.training || "Tanpa Nama"} -{" "}
+              {jadwal.batch}
+            </SelectItem>
+          ))}
+        </Select>
         {filterSelect(
           "Tahun",
           selectedTahun,
@@ -437,25 +465,45 @@ const KelolaLaporan = () => {
       </div>
     ),
     [
-      selectedBatch,
-      setSelectedBatch,
+      selectedJadwalTrainingId,
+      setSelectedJadwalTrainingId,
       selectedTahun,
       setSelectedTahun,
-      batches,
       years,
       filterSelect,
+      dataFilterJadwal,
     ],
   );
 
   const customTopContentPeserta = useMemo(
     () => (
       <div className="flex flex-col lg:flex-row lg:w-150 gap-2">
-        {filterSelect(
-          "Batch",
-          selectedBatch,
-          setSelectedBatch,
-          batches.map((b: string) => ({ key: b, label: b })),
-        )}
+        <Select
+          disallowEmptySelection
+          className="w-full sm:max-w-[280px]"
+          label="Filter Jadwal"
+          selectedKeys={[selectedJadwalTrainingId || "__all__"]}
+          size="sm"
+          variant="bordered"
+          onSelectionChange={(keys) => {
+            if (typeof keys === "string") return;
+            const key = Array.from(keys)[0] as string;
+            setSelectedJadwalTrainingId(key === "__all__" ? "" : key);
+          }}
+        >
+          <SelectItem key="__all__" textValue="Semua Jadwal">
+            Semua
+          </SelectItem>
+          {(dataFilterJadwal || []).map((jadwal: any) => (
+            <SelectItem
+              key={jadwal.id}
+              textValue={`${jadwal.training?.namaTraining || jadwal.training || "Tanpa Nama"} - ${jadwal.batch}`}
+            >
+              {jadwal.training?.namaTraining || jadwal.training || "Tanpa Nama"} -{" "}
+              {jadwal.batch}
+            </SelectItem>
+          ))}
+        </Select>
         {filterSelect(
           "Tahun",
           selectedTahun,
@@ -469,15 +517,15 @@ const KelolaLaporan = () => {
       </div>
     ),
     [
-      selectedBatch,
-      setSelectedBatch,
+      selectedJadwalTrainingId,
+      setSelectedJadwalTrainingId,
       selectedTahun,
       setSelectedTahun,
       selectedStatus,
       setSelectedStatus,
-      batches,
       years,
       filterSelect,
+      dataFilterJadwal,
     ],
   );
 
