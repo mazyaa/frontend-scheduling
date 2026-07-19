@@ -79,7 +79,9 @@ const DaftarPesertaView = ({
                   key={pt.id}
                   className="text-xs bg-default-100 px-2 py-0.5 rounded"
                 >
-                  {pt.jadwalTraining?.training?.namaTraining || pt.jadwalTraining?.training || "Training"} -{" "}
+                  {pt.jadwalTraining?.training?.namaTraining ||
+                    pt.jadwalTraining?.training ||
+                    "Training"}{" "}
                   {pt.jadwalTraining?.batch || "-"}
                 </span>
               ))}

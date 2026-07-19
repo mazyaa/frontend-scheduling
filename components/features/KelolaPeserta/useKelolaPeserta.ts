@@ -96,17 +96,24 @@ const useKelolaPeserta = () => {
     if (!schedules.length) return participants;
 
     const scheduleMap: Record<string, any> = {};
+
     schedules.forEach((s: any) => {
       scheduleMap[s.id] = s;
     });
 
     return participants.map((p: IParticipant) => {
       const trainings = p.pesertaTraining || [];
+
       trainings.forEach((pt) => {
-        if (!pt.jadwalTraining?.training && scheduleMap[pt.jadwalTrainingId]?.training) {
-          pt.jadwalTraining.training = scheduleMap[pt.jadwalTrainingId].training;
+        if (
+          !pt.jadwalTraining?.training &&
+          scheduleMap[pt.jadwalTrainingId]?.training
+        ) {
+          pt.jadwalTraining.training =
+            scheduleMap[pt.jadwalTrainingId].training;
         }
       });
+
       return p;
     });
   }, [dataKelolaPeserta?.data, dataFilterJadwal]);

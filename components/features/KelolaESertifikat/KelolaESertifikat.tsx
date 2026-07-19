@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { Key, useCallback, useContext, useEffect, useState } from "react";
+import { Key, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import {
   Dropdown,
   DropdownItem,
@@ -12,6 +12,7 @@ import { Button } from "@heroui/button";
 import { CiMenuKebab } from "react-icons/ci";
 import { useSession } from "next-auth/react";
 import { Chip } from "@heroui/chip";
+import { Select, SelectItem } from "@heroui/select";
 import { useDisclosure } from "@heroui/modal";
 import { useMutation } from "@tanstack/react-query";
 import Image from "next/image";
@@ -47,6 +48,10 @@ const KelolaESertifikat = () => {
     isRefetchingKelolaESertifikat,
     refetchKelolaESertifikat,
     role,
+    selectedJadwalTrainingId,
+    setSelectedJadwalTrainingId,
+    dataFilterJadwal,
+    isLoadingFilterJadwal,
   } = useKelolaESertifikat();
 
   const { setUrl } = useChangeUrl();
@@ -319,6 +324,54 @@ const KelolaESertifikat = () => {
     [downloadingIds, role, mutatePublish, uploadRevisiModal],
   );
 
+  const customTopContent = useMemo(
+    () => (
+      <Select
+        disallowEmptySelection
+        className="w-full sm:max-w-[200px]"
+        label="Filter Jadwal"
+        selectedKeys={[selectedJadwalTrainingId || "__all__"]}
+        size="sm"
+        variant="bordered"
+        onSelectionChange={(keys) => {
+          if (typeof keys === "string") return;
+
+          const key = Array.from(keys)[0] as string;
+
+          setSelectedJadwalTrainingId(key === "__all__" ? "" : key);
+        }}
+      >
+        <SelectItem key="__all__" textValue="Semua Jadwal">
+          Semua Jadwal
+        </SelectItem>
+        {isLoadingFilterJadwal ? (
+          <SelectItem key="loading" textValue="Loading...">
+            Loading...
+          </SelectItem>
+        ) : (
+          (dataFilterJadwal || []).map((jadwal: any) => (
+            <SelectItem
+              key={jadwal.id}
+              textValue={
+                jadwal._displayLabel ||
+                `${jadwal.training?.namaTraining || jadwal.training || "Tanpa Nama"} - ${jadwal.batch}`
+              }
+            >
+              {jadwal._displayLabel ||
+                `${jadwal.training?.namaTraining || jadwal.training || "Tanpa Nama"} - ${jadwal.batch}`}
+            </SelectItem>
+          ))
+        )}
+      </Select>
+    ),
+    [
+      selectedJadwalTrainingId,
+      setSelectedJadwalTrainingId,
+      dataFilterJadwal,
+      isLoadingFilterJadwal,
+    ],
+  );
+
   return (
     <section>
       {isLoadingSession ? (
@@ -326,6 +379,7 @@ const KelolaESertifikat = () => {
       ) : (
         <DataTable
           columns={LISTS_KELOLA_E_SERTIFIKAT}
+          customTopContent={customTopContent}
           data={dataKelolaESertifikat?.data || []}
           emptyContent="E-Sertifikat tidak ditemukan"
           isLoading={

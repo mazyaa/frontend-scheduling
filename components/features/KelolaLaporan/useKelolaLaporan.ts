@@ -32,7 +32,7 @@ const useKelolaLaporan = (tabType: "sertifikat" | "peserta") => {
     }
 
     if (selectedJadwalTrainingId) {
-      params += `&jadwalTrainingId=${selectedJadwalTrainingId}`;
+      params += `&scheduleId=${selectedJadwalTrainingId}`;
     }
 
     if (selectedTahun) {
