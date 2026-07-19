@@ -91,7 +91,9 @@ const KelolaPeserta = () => {
                   key={pt.id}
                   className="text-xs bg-default-100 px-2 py-0.5 rounded"
                 >
-                  {pt.jadwalTraining?.training?.namaTraining || pt.jadwalTraining?.training || "Training"} -{" "}
+                  {pt.jadwalTraining?.training?.namaTraining ||
+                    pt.jadwalTraining?.training ||
+                    "Training"}{" "}
                   {pt.jadwalTraining?.batch || "-"}
                 </span>
               ))}
@@ -244,7 +246,9 @@ const KelolaPeserta = () => {
                   key={jadwal.id}
                   textValue={`${jadwal.training?.namaTraining || jadwal.training || "Tanpa Nama"} - ${jadwal.batch}`}
                 >
-                  {jadwal.training?.namaTraining || jadwal.training || "Tanpa Nama"} -{" "}
+                  {jadwal.training?.namaTraining ||
+                    jadwal.training ||
+                    "Tanpa Nama"}{" "}
                   {jadwal.batch}
                 </SelectItem>
               ))
@@ -457,6 +461,7 @@ const KelolaPeserta = () => {
     }
 
     const pesertaList = dataKelolaPeserta?.data || [];
+
     if (pesertaList.length === 0) {
       return (
         <motion.div

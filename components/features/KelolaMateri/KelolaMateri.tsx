@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { Key, useCallback, useEffect, useState } from "react";
+import { Key, useCallback, useEffect, useMemo, useState } from "react";
 import {
   Dropdown,
   DropdownItem,
@@ -11,6 +11,7 @@ import {
 import { Button } from "@heroui/button";
 import { CiMenuKebab } from "react-icons/ci";
 import { useDisclosure } from "@heroui/modal";
+import { Select, SelectItem } from "@heroui/select";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { FaArrowLeftLong } from "react-icons/fa6";
@@ -45,6 +46,10 @@ const KelolaMateri = ({ isGridUI = false }: { isGridUI?: boolean }) => {
     selectedId,
     setSelectedId,
     role,
+    selectedJadwalTrainingId,
+    setSelectedJadwalTrainingId,
+    dataFilterJadwal,
+    isLoadingFilterJadwal,
   } = useKelolaMateri();
 
   const tambahMateriModal = useDisclosure();
@@ -211,6 +216,54 @@ const KelolaMateri = ({ isGridUI = false }: { isGridUI?: boolean }) => {
   const columns =
     role === "peserta" ? LISTS_PESERTA_MATERI : LISTS_KELOLA_MATERI;
 
+  const customTopContent = useMemo(
+    () => (
+      <Select
+        disallowEmptySelection
+        className="w-full sm:max-w-[200px]"
+        label="Filter Jadwal"
+        selectedKeys={[selectedJadwalTrainingId || "__all__"]}
+        size="sm"
+        variant="bordered"
+        onSelectionChange={(keys) => {
+          if (typeof keys === "string") return;
+
+          const key = Array.from(keys)[0] as string;
+
+          setSelectedJadwalTrainingId(key === "__all__" ? "" : key);
+        }}
+      >
+        <SelectItem key="__all__" textValue="Semua Jadwal">
+          Semua Jadwal
+        </SelectItem>
+        {isLoadingFilterJadwal ? (
+          <SelectItem key="loading" textValue="Loading...">
+            Loading...
+          </SelectItem>
+        ) : (
+          (dataFilterJadwal || []).map((jadwal: any) => (
+            <SelectItem
+              key={jadwal.id}
+              textValue={
+                jadwal._displayLabel ||
+                `${jadwal.training?.namaTraining || jadwal.training || "Tanpa Nama"} - ${jadwal.batch}`
+              }
+            >
+              {jadwal._displayLabel ||
+                `${jadwal.training?.namaTraining || jadwal.training || "Tanpa Nama"} - ${jadwal.batch}`}
+            </SelectItem>
+          ))
+        )}
+      </Select>
+    ),
+    [
+      selectedJadwalTrainingId,
+      setSelectedJadwalTrainingId,
+      dataFilterJadwal,
+      isLoadingFilterJadwal,
+    ],
+  );
+
   return (
     <section className={isGridUI ? "w-full max-w-6xl mx-auto px-4 z-10" : ""}>
       {isGridUI && (
@@ -247,6 +300,7 @@ const KelolaMateri = ({ isGridUI = false }: { isGridUI?: boolean }) => {
             role !== "peserta" ? "Tambah Materi" : undefined
           }
           columns={columns}
+          customTopContent={customTopContent}
           data={dataKelolaMateri?.data || []}
           emptyContent="Materi tidak ditemukan"
           isLoading={isLoadingKelolaMateri || isRefetchingKelolaMateri}

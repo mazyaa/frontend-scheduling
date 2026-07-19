@@ -65,7 +65,6 @@ const KelolaPenilaian = ({
     setSelectedJadwalTrainingId,
     dataFilterJadwal,
     isLoadingFilterJadwal,
-    role,
   } = useKelolaPenilaian(scheduleId);
 
   const tambahPenilaianModal = useDisclosure();

@@ -117,6 +117,7 @@ const KelolaLaporan = () => {
         selectedSchedule?.training ||
         selectedSchedule?.batch ||
         selectedJadwalTrainingId;
+
       filterParts.push(`Jadwal: ${jadwalLabel}`);
     }
     if (selectedTahun) filterParts.push(`Tahun: ${selectedTahun}`);
@@ -440,6 +441,7 @@ const KelolaLaporan = () => {
           onSelectionChange={(keys) => {
             if (typeof keys === "string") return;
             const key = Array.from(keys)[0] as string;
+
             setSelectedJadwalTrainingId(key === "__all__" ? "" : key);
           }}
         >
@@ -451,7 +453,7 @@ const KelolaLaporan = () => {
               key={jadwal.id}
               textValue={`${jadwal.training?.namaTraining || jadwal.training || "Tanpa Nama"} - ${jadwal.batch}`}
             >
-              {jadwal.training?.namaTraining || jadwal.training || "Tanpa Nama"} -{" "}
+              {jadwal.training?.namaTraining || jadwal.training || "Tanpa Nama"}{" "}
               {jadwal.batch}
             </SelectItem>
           ))}
@@ -488,6 +490,7 @@ const KelolaLaporan = () => {
           onSelectionChange={(keys) => {
             if (typeof keys === "string") return;
             const key = Array.from(keys)[0] as string;
+
             setSelectedJadwalTrainingId(key === "__all__" ? "" : key);
           }}
         >
@@ -499,8 +502,8 @@ const KelolaLaporan = () => {
               key={jadwal.id}
               textValue={`${jadwal.training?.namaTraining || jadwal.training || "Tanpa Nama"} - ${jadwal.batch}`}
             >
-              {jadwal.training?.namaTraining || jadwal.training || "Tanpa Nama"} -{" "}
-              {jadwal.batch}
+              {jadwal.training?.namaTraining || jadwal.training || "Tanpa Nama"}{" "}
+              - {jadwal.batch}
             </SelectItem>
           ))}
         </Select>
