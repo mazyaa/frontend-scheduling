@@ -371,10 +371,7 @@ const KelolaPeserta = () => {
         <CardBody className="px-4 py-4 overflow-hidden">
           <div className="grid grid-rows-2 gap-2">
             {LIST_KELOLA_PESERTA.filter(
-              (col) =>
-                (col.isSummary === undefined || col.isSummary === true) &&
-                col.uid !== "image" &&
-                col.uid !== "aksi",
+              (col) => col.uid !== "image" && col.uid !== "aksi",
             ).map((column, index) => (
               <motion.div
                 key={column.uid}
