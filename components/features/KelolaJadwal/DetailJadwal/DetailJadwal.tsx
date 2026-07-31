@@ -68,7 +68,8 @@ const DetailJadwal = () => {
         case "nama_training":
           return (
             <span>
-              {itemDetailJadwal?.jadwalTraining?.training?.namaTraining || itemDetailJadwal?.jadwalTraining?.training ||
+              {itemDetailJadwal?.jadwalTraining?.training?.namaTraining ||
+                itemDetailJadwal?.jadwalTraining?.training ||
                 "Nama training tidak ditemukan"}
             </span>
           );

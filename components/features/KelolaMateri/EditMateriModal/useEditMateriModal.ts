@@ -23,7 +23,7 @@ const schema = yup.object().shape({
 
 export type IFormEditMateri = yup.InferType<typeof schema>;
 
-const useEditMateriModal = (selectedId: string, currentData: any[]) => {
+const useEditMateriModal = (selectedId: string) => {
   const { setToaster } = useContext(ToasterContext);
   const { data: session } = useSession();
   const role = session?.user?.role;
@@ -132,6 +132,7 @@ const useEditMateriModal = (selectedId: string, currentData: any[]) => {
     },
     onError: (error) => {
       const message = errorHandling(error);
+
       setToaster({
         title: "Gagal",
         type: "error",

@@ -25,7 +25,7 @@ const schema = yup.object().shape({
 
 export type IFormEditPenilaian = yup.InferType<typeof schema>;
 
-const useEditPenilaianModal = (selectedId: string, currentData: any[]) => {
+const useEditPenilaianModal = (selectedId: string) => {
   const { setToaster } = useContext(ToasterContext);
   const { data: session } = useSession();
   const role = session?.user?.role;
@@ -136,6 +136,7 @@ const useEditPenilaianModal = (selectedId: string, currentData: any[]) => {
     },
     onError: (error) => {
       const message = errorHandling(error);
+
       setToaster({
         title: "Gagal",
         type: "error",

@@ -37,6 +37,7 @@ const useUploadRevisiPesertaModal = (selectedPenilaianId: string) => {
     },
     onError: (error) => {
       const message = errorHandling(error);
+
       setToaster({
         title: "Gagal",
         type: "error",

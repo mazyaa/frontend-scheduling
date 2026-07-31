@@ -52,7 +52,8 @@ const DetailJadwal = ({ role }: PropTypes) => {
         case "nama_training":
           return (
             <span>
-              {(itemDetail as any)?.jadwalTraining?.training?.namaTraining || (itemDetail as any)?.jadwalTraining?.training ||
+              {(itemDetail as any)?.jadwalTraining?.training?.namaTraining ||
+                (itemDetail as any)?.jadwalTraining?.training ||
                 "-"}
             </span>
           );
