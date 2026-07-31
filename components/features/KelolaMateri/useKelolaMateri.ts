@@ -1,7 +1,6 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 
@@ -10,7 +9,6 @@ import { kelolaJadwalServices } from "@/services/kelolaJadwal.service";
 import useChangeUrl from "@/hooks/useChangeUrl";
 
 const useKelolaMateri = () => {
-  const pathname = usePathname();
   const { data: session } = useSession();
   const token = session?.accessToken;
   const role = session?.user?.role;

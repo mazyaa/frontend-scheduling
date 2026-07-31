@@ -109,6 +109,7 @@ const useTambahPenilaianModal = () => {
     },
     onError: (error) => {
       const message = errorHandling(error);
+
       setToaster({
         title: "Gagal",
         type: "error",

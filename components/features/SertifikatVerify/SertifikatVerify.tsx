@@ -33,6 +33,7 @@ const SertifikatVerify = () => {
     },
     onError: (error) => {
       const message = errorHandling(error);
+
       setVerificationResult(null);
       setToaster({
         title: "Gagal",
@@ -172,7 +173,8 @@ const SertifikatVerify = () => {
           </CardHeader>
           <CardBody className="px-6 py-5">
             <p className="text-gray-700">
-              {errorHandling(error) || "Nomor sertifikat tidak ditemukan. Pastikan nomor yang Anda masukkan benar."}
+              {errorHandling(error) ||
+                "Nomor sertifikat tidak ditemukan. Pastikan nomor yang Anda masukkan benar."}
             </p>
           </CardBody>
         </Card>

@@ -34,6 +34,7 @@ const useMediaHandling = () => {
       }) => uploadFile(varaibles.file, varaibles.callback),
       onError: (error) => {
         const message = errorHandling(error);
+
         setToaster({
           title: "Upload Gagal",
           type: "error",
@@ -56,6 +57,7 @@ const useMediaHandling = () => {
         deleteFile(variables.fileUrl, variables.callback),
       onError: (error) => {
         const message = errorHandling(error);
+
         setToaster({
           title: "Hapus Gagal",
           type: "error",

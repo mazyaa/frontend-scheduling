@@ -52,6 +52,7 @@ const DeleteMateriModal = (props: PropTypes) => {
       },
       onError: (error) => {
         const message = errorHandling(error);
+
         setToaster({
           title: "Gagal",
           type: "error",
