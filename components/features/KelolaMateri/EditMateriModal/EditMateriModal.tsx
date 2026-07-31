@@ -28,8 +28,7 @@ interface PropTypes {
 }
 
 const EditMateriModal = (props: PropTypes) => {
-  const { isOpen, onOpenChange, refetchKelolaMateri, selectedId, currentData } =
-    props;
+  const { isOpen, onOpenChange, refetchKelolaMateri, selectedId } = props;
   const onCloseRef = useRef<() => void>();
 
   const {
@@ -47,7 +46,7 @@ const EditMateriModal = (props: PropTypes) => {
     setFileToUpload,
     setValue,
     isLoadingMateriDetail,
-  } = useEditMateriModal(selectedId, currentData);
+  } = useEditMateriModal(selectedId);
 
   const disabledSubmit = isPendingMutateEditMateri || isLoadingMateriDetail;
 
