@@ -66,9 +66,11 @@ const StatusKompetensi = ({ isGridUI = false }: { isGridUI?: boolean }) => {
         response = await revisiServices.downloadRevisiPeserta(penilaianId);
       }
 
-      const contentType = response.headers["content-type"] || "application/pdf";
+      const contentType =
+        typeof response.headers["content-type"] === "string"
+          ? response.headers["content-type"]
+          : "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
-      // Buat blob dengan tipe file yang benar
       const blob = new Blob([response.data], {
         type: contentType,
       });
