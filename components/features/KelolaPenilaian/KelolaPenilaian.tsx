@@ -89,8 +89,15 @@ const KelolaPenilaian = ({
 
       const response = await revisiServices.downloadRevisiAdmin(penilaianId);
 
-      const contentType = response.headers["content-type"] || "application/pdf";
-      const blob = new Blob([response.data], { type: contentType });
+      const contentType =
+        typeof response.headers["content-type"] === "string"
+          ? response.headers["content-type"]
+          : "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+
+      const blob = new Blob([response.data], {
+        type: contentType,
+      });
+
       const url = window.URL.createObjectURL(blob);
 
       const contentDisposition = response.headers["content-disposition"];
@@ -136,8 +143,15 @@ const KelolaPenilaian = ({
 
       const response = await revisiServices.downloadRevisiPeserta(penilaianId);
 
-      const contentType = response.headers["content-type"] || "application/pdf";
-      const blob = new Blob([response.data], { type: contentType });
+      const contentType =
+        typeof response.headers["content-type"] === "string"
+          ? response.headers["content-type"]
+          : "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+
+      const blob = new Blob([response.data], {
+        type: contentType,
+      });
+
       const url = window.URL.createObjectURL(blob);
 
       const contentDisposition = response.headers["content-disposition"];
