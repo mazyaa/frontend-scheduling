@@ -62,61 +62,74 @@ const KelolaMateri = ({ isGridUI = false }: { isGridUI?: boolean }) => {
     setUrl();
   }, [searchParams]);
 
-  const handleDownload = async (fileUrl: string, id: string) => {
+  const handleDownload = async (_fileUrl: string, id: string) => {
     try {
       setDownloadingIds((prev) => ({ ...prev, [id]: true }));
 
       const response = await materiServices.downloadMateri(id);
 
-      // Dapatkan tipe konten untuk memastikan OS/Browser mengenali format file
-      const contentType = response.headers["content-type"] || "application/pdf";
+      const rawContentType = response.headers["content-type"];
+      const contentType =
+        typeof rawContentType === "string"
+          ? rawContentType
+          : "application/octet-stream";
 
-      // Ambil blob dari response data dengan tipe yang jelas
-      const blob = new Blob([response.data], { type: contentType });
+      const blob = new Blob([response.data], {
+        type: contentType,
+      });
+
       const url = window.URL.createObjectURL(blob);
 
-      // Ambil nama file dari header content-disposition jika ada, atau gunakan default
-      const contentDisposition = response.headers["content-disposition"];
+      const rawContentDisposition = response.headers["content-disposition"];
+      const contentDisposition =
+        typeof rawContentDisposition === "string" ? rawContentDisposition : "";
+
       let fileName = "materi-training";
 
-      if (contentDisposition && contentDisposition.includes("filename")) {
+      if (contentDisposition.includes("filename")) {
         const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+
         const matches = filenameRegex.exec(contentDisposition);
 
-        if (matches != null && matches[1]) {
+        if (matches?.[1]) {
           fileName = matches[1].replace(/['"]/g, "");
         }
       } else {
-        // Fallback ekstensi jika backend tidak mengirim disposition
-        if (contentType.includes("pdf")) fileName += ".pdf";
-        else if (
+        if (contentType.includes("pdf")) {
+          fileName += ".pdf";
+        } else if (
           contentType.includes("wordprocessingml") ||
           contentType.includes("msword")
-        )
+        ) {
           fileName += ".docx";
-        else if (
+        } else if (
           contentType.includes("presentationml") ||
           contentType.includes("ms-powerpoint")
-        )
+        ) {
           fileName += ".pptx";
-        else fileName += ".pdf"; // Default fallback assumption for abstract %PDF text
+        } else {
+          fileName += ".pdf";
+        }
       }
 
       const link = document.createElement("a");
 
       link.href = url;
-      link.setAttribute("download", fileName);
+      link.download = fileName;
+
       document.body.appendChild(link);
       link.click();
 
-      // Cleanup
-      link.parentNode?.removeChild(link);
+      document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
     } catch {
       alert("Gagal mengunduh materi. Silakan coba lagi.");
     } finally {
       setTimeout(() => {
-        setDownloadingIds((prev) => ({ ...prev, [id]: false }));
+        setDownloadingIds((prev) => ({
+          ...prev,
+          [id]: false,
+        }));
       }, 1000);
     }
   };
