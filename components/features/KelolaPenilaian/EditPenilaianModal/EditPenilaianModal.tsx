@@ -25,13 +25,7 @@ interface PropTypes {
 }
 
 const EditPenilaianModal = (props: PropTypes) => {
-  const {
-    isOpen,
-    onOpenChange,
-    refetchKelolaPenilaian,
-    selectedId,
-    currentData,
-  } = props;
+  const { isOpen, onOpenChange, refetchKelolaPenilaian, selectedId } = props;
   const onCloseRef = useRef<() => void>();
 
   const {
@@ -47,7 +41,7 @@ const EditPenilaianModal = (props: PropTypes) => {
     isLoadingPeserta,
     isLoadingPenilaianDetail,
     setValue,
-  } = useEditPenilaianModal(selectedId, currentData);
+  } = useEditPenilaianModal(selectedId);
 
   const disabledSubmit =
     isPendingMutateEditPenilaian || isLoadingPenilaianDetail;
